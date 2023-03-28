@@ -45,15 +45,15 @@ def save_evaluation_result(file_name, evaluations):
                                          header=False)
 
 
-def thread_function(start, end, result_queue, simulation_function, file_name=None):
+def thread_function(start, end, result_queue, simulation_function, file_name=None, combination=None):
     results = []
     for i in range(start, end):
-        result = simulation_function(file_name)
+        result = simulation_function(file_name, combination)
         results.append(result)
     result_queue.put(results)
 
 
-def execute_multithreading(simulation_function, iterations=10, num_threads=5, file_name=None):
+def execute_multithreading(simulation_function, iterations=10, num_threads=5, file_name=None, combination=None):
     # Define the range of the for loop
     start = 0
     end = iterations
@@ -77,7 +77,8 @@ def execute_multithreading(simulation_function, iterations=10, num_threads=5, fi
         if i == num_threads - 1:
             end_index = end  # Make sure the last thread takes care of the remaining items
         thread = threading.Thread(target=thread_function, args=(start_index, end_index,
-                                                                result_queue, simulation_function, file_name))
+                                                                result_queue, simulation_function,
+                                                                file_name, combination))
         threads.append(thread)
 
     # Start the threads
@@ -136,7 +137,7 @@ def construct_experiment_result(name, mtd_interval, item, network_size):
     }
 
 
-def single_mtd_simulation(file_name):
+def single_mtd_simulation(file_name, combination):
     """
     Simulations for single mtd and no mtd
     """
@@ -163,7 +164,7 @@ def single_mtd_simulation(file_name):
     return evaluations
 
 
-def dap_mtd_simulation(file_name):
+def dap_mtd_simulation(file_name, combination):
     """
     Simulation for DAP MTD with different number of variants.
     """
@@ -188,19 +189,18 @@ def dap_mtd_simulation(file_name):
     return evaluations
 
 
-def multiple_mtd_simulation(file_name):
+def multiple_mtd_simulation(file_name, combination):
     """
     simulations for multiple mtd using three different execution schemes.
     """
     evaluations = []
+
     for scheme in ['random', 'alternative', 'simultaneous']:
         mtd_evaluation = []
         for mtd_interval in [100, 200]:
             for network_size in [25, 50, 75, 100]:
-                scheme_interval = mtd_interval
-                if scheme == 'simultaneous':
-                    scheme_interval *= 2
-                evaluation = execute_simulation(scheme=scheme, mtd_interval=scheme_interval, total_nodes=network_size)
+                evaluation = execute_simulation(scheme=scheme, mtd_interval=mtd_interval,
+                                                custom_strategies=combination, total_nodes=network_size)
                 evaluation_results = evaluation.evaluation_result_by_compromise_checkpoint()
                 for item in evaluation_results:
                     result = construct_experiment_result(scheme, mtd_interval, item, network_size)

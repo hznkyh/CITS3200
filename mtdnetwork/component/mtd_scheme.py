@@ -37,6 +37,8 @@ class MTDScheme:
         """
         assign an MTD scheme based on the parameter
         """
+        if self._mtd_custom_strategies is None:
+            self._mtd_custom_strategies = self._mtd_strategies
         if self._mtd_trigger_interval is None:
             self._mtd_trigger_interval, self._mtd_trigger_std = MTD_TRIGGER_INTERVAL[scheme]
         if scheme == 'simultaneous':
@@ -44,8 +46,8 @@ class MTDScheme:
         elif scheme == 'random':
             self._mtd_register_scheme = self._register_mtd_randomly
         elif scheme == 'alternative':
-            if self._mtd_custom_strategies is None:
-                self._mtd_custom_strategies = deque(self._mtd_strategies)
+
+            self._mtd_custom_strategies = deque(self._mtd_custom_strategies)
             self._mtd_register_scheme = self._register_mtd_alternatively
         elif scheme == 'single':
             self._mtd_register_scheme = self._register_mtd_single
@@ -64,7 +66,7 @@ class MTDScheme:
         """
         register all MTDs for simultaneous scheme
         """
-        for mtd in self._mtd_strategies:
+        for mtd in self._mtd_custom_strategies:
             self._mtd_register(mtd=mtd)
         return self.network.get_mtd_queue()
 
@@ -72,7 +74,7 @@ class MTDScheme:
         """
         register an MTD for random scheme
         """
-        self._mtd_register(mtd=random.choice(self._mtd_strategies))
+        self._mtd_register(mtd=random.choice(self._mtd_custom_strategies))
 
     def _register_mtd_alternatively(self):
         """
