@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+}
+.navigation{
+    overflow: hidden;
+    background-color: rgba(0, 85, 255, 0.862);
+}
+.navigation a{
+    float: left;
+    color: white;
+    text-align: center;
+    padding: auto;
+    font: 20px;
+}
+.navigation a:hover{
+    background-color: white;
+    color: black;
+}
+.navigation a.active{
+    background-color: aqua;
+    color: white;
+}
+
