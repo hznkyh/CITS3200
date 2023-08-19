@@ -1,7 +1,6 @@
 name: mtdsimtime
 dependencies:
     - python=3.9.13
-    - pywin32
     - pip
     - pip:
         - adal==1.2.7
