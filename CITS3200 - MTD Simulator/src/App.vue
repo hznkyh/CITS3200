@@ -1,47 +1,72 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script>
+  import {ref, computed} from 'vue'
+  import Home from './Home.vue'
+  import MTDSimulator from './MTDSimulator.vue'
+
+  const routes = {
+    '/' : Home,
+    '/mtd simulator': MTDSimulator
+  }
+
+  const currentPath = ref(window.location.hash)
+
+  window.addEventListener('hashchange', () => {
+    currentPath.value - window.location.hash
+  })
+
+  const currentView = computed(() => {
+    return routes[currentPath.value.slice(1) || '/'] || NotFound
+  })
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="navbar">
+    <img class="logo" src="CITS3200\CITS3200 - MTD Simulator\src\components\icons\logo.jpg">
+    <a href="#/">Home</a>
+    <a href="#/mtd simulator">MTD Simulator</a>
+    <component :is="currentView"/>
+  </div>
+  
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<style>
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  body{
+    margin: 0;
+  }
+  
+  .navbar {
+    width: 100%;
+    background-color: #173590;
+    overflow: auto;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  .navbar a {
+    float: left;
+    text-align: center;
+    padding: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  .navbar a:hover {
+    background-color: #000;
   }
-}
+
+  @media screen and (max-width: 500px) {
+    .navbar a {
+      float: none;
+      display: block;
+    }
+  }
+
+  .logo{
+    height: auto;
+    width: auto;
+    float: left;
+    padding-left: 2%;
+    margin: 0 auto;
+    padding-right: 20px;
+  }
 </style>
