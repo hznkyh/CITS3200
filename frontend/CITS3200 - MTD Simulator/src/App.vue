@@ -1,15 +1,32 @@
 <template>
   <div class="navbar">
     <img class="logo" src="CITS3200\CITS3200 - MTD Simulator\src\components\icons\logo.jpg">
-    <a href="#/">Home</a>
-    <a href="#/mtd simulator">MTD Simulator</a>
-    <component :is="currentView"/>
+    <button @click="toggleComponent">Home</button>
+    <button @click="toggleComponent">Simulator</button>
   </div>
-  <home/>
-  <mtd-simulator/>
+  <component :is="currentView"/>
 </template>
 
 <script>
+import Home from './components/Home.vue';
+import MTDSimulator from './components/MTDSimulator.vue';
+
+export default {
+  data() {
+    return {
+      currentView: 'Home' // Initial component name
+    };
+  },
+  methods: {
+    toggleComponent() {
+      this.currentView = this.currentView === 'Home' ? 'MTDSimulator' : 'Home';
+    }
+  },
+  components: {
+    Home,
+    MTDSimulator
+  }
+};
 </script>
 
 <style>
@@ -23,17 +40,16 @@
     overflow: auto;
   }
 
-  .navbar a {
+  button {
     float: left;
+    display: block;
+    color: #f2f2f2;
     text-align: center;
-    padding: 12px;
-    color: white;
+    padding: 14px 16px;
     text-decoration: none;
-    font-size: 20px;
-  }
-
-  .navbar a:hover {
-    background-color: #000;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
   }
 
   @media screen and (max-width: 500px) {
