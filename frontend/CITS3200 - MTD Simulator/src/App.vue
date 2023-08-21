@@ -52,6 +52,11 @@ export default {
     cursor: pointer;
   }
 
+  button:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
   @media screen and (max-width: 500px) {
     .navbar a {
       float: none;
