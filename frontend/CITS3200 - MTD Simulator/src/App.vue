@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
     <img class="logo" src="CITS3200\CITS3200 - MTD Simulator\src\components\icons\logo.jpg">
-    <button @click="toggleComponent">Home</button>
-    <button @click="toggleComponent">Simulator</button>
+    <button @click="toggleHome">Home</button>
+    <button @click="toggleSimulator">Simulator</button>
   </div>
   <component :is="currentView"/>
 </template>
@@ -18,8 +18,11 @@ export default {
     };
   },
   methods: {
-    toggleComponent() {
-      this.currentView = this.currentView === 'Home' ? 'MTDSimulator' : 'Home';
+    toggleHome() {
+      this.currentView = 'Home';
+    },
+    toggleSimulator() {
+      this.currentView = 'MTDSimulator';
     }
   },
   components: {
@@ -35,21 +38,22 @@ export default {
   }
   
   .navbar {
+    overflow: hidden;
+    background-color: #333;
+    top: 0;
     width: 100%;
-    background-color: #173590;
-    overflow: auto;
+    z-index: 1;
   }
 
   button {
-    float: left;
-    display: block;
-    color: #f2f2f2;
+    color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 17px;
     border: none;
-    cursor: pointer;
+    background-color: inherit;
+    font-size: 17px;
+    margin-right: 2%;
   }
 
   button:hover {
@@ -58,18 +62,13 @@ export default {
   }
 
   @media screen and (max-width: 500px) {
-    .navbar a {
-      float: none;
-      display: block;
+    .logo{
+      height: auto;
+      width: auto;
+      float: left;
+      padding-left: 2%;
+      margin: 0 auto;
+      padding-right: 20px;
     }
-  }
-
-  .logo{
-    height: auto;
-    width: auto;
-    float: left;
-    padding-left: 2%;
-    margin: 0 auto;
-    padding-right: 20px;
   }
 </style>
