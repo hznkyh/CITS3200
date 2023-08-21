@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <img class="logo" src="CITS3200\CITS3200 - MTD Simulator\src\components\icons\logo.jpg">
+    <img class="logo" src="@/assets/logo.png">
     <button @click="toggleHome">Home</button>
     <button @click="toggleSimulator">Simulator</button>
   </div>
@@ -35,6 +35,13 @@ export default {
 <style>
   body{
     margin: 0;
+  }
+
+  .logo{
+    height: 30px;
+    width: 30px;
+    float: left;
+    margin: 10px;
   }
   
   .navbar {
