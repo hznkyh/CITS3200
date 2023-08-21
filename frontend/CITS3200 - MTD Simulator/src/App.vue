@@ -1,24 +1,3 @@
-<script>
-  import {ref, computed} from 'vue'
-  import Home from './Home.vue'
-  import MTDSimulator from './MTDSimulator.vue'
-
-  const routes = {
-    '/' : Home,
-    '/mtd simulator': MTDSimulator
-  }
-
-  const currentPath = ref(window.location.hash)
-
-  window.addEventListener('hashchange', () => {
-    currentPath.value - window.location.hash
-  })
-
-  const currentView = computed(() => {
-    return routes[currentPath.value.slice(1) || '/'] || NotFound
-  })
-</script>
-
 <template>
   <div class="navbar">
     <img class="logo" src="CITS3200\CITS3200 - MTD Simulator\src\components\icons\logo.jpg">
@@ -26,11 +5,14 @@
     <a href="#/mtd simulator">MTD Simulator</a>
     <component :is="currentView"/>
   </div>
-  
+  <home/>
+  <mtd-simulator/>
 </template>
 
-<style>
+<script>
+</script>
 
+<style>
   body{
     margin: 0;
   }
