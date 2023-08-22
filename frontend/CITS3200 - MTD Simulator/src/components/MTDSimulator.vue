@@ -3,19 +3,66 @@
   <h2>MTD Simultor</h2>
 </header>
 
-<section>
+<div id="container">
+  <section>
   <form>
     <h2> Parameters Panel</h2>
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
   </form>
   
   <article>
-    <h1>London</h1>
+    <h1>Network Display</h1>
   </article>
-</section>
+  </section>
 
-<footer>
-  <p>Footer</p>
-</footer>
+  <footer>
+    <p>Footer</p>
+  </footer>
+</div>
+
+
 </template>
 
 <script>
@@ -29,7 +76,6 @@ export default {
   box-sizing: border-box;
 }
 
-/* Style the header */
 header {
   background-color: rgb(12, 69, 225);
   padding: 30px;
@@ -51,6 +97,24 @@ article {
   width: 70%;
   background-color: #f1f1f1;
   height: auto;
+}
+
+input[type=text] {
+   width: 100%;
+   margin: 5px 0 10px 0;
+   display: inline-block;
+   border: none;
+   background: #f1f1f1;
+}
+
+input[type=text]:focus {
+   background-color: #ddd;
+   outline: none;
+}
+
+#container{
+  position: relative;
+  min-height: 100vh;
 }
 
 footer {
