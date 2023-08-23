@@ -1,9 +1,19 @@
 <template>
-  <div class="navbar">
-    <img class="logo" src="@/assets/logo.png">
-    <button @click="toggleHome">Home</button>
-    <button @click="toggleSimulator">Simulator</button>
-  </div>
+  <nav class="navbar navbar-expand-sm">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <a class="navbar-brand" href="#">
+          <img src="@/assets/logo.png" alt="UWA Logo" style="width:40px;" class="">  
+        </a>
+        <li class="nav-item">
+          <a class="nav-link" href="#" @click="toggleHome">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" @click="toggleSimulator">Simulator</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <component :is="currentView"/>
 </template>
 
@@ -33,49 +43,4 @@ export default {
 </script>
 
 <style>
-  body{
-    margin: 0;
-  }
-
-  .logo{
-    height: 30px;
-    width: 30px;
-    float: left;
-    margin: 10px;
-  }
-  
-  .navbar {
-    overflow: hidden;
-    background-color: #333;
-    top: 0;
-    width: 100%;
-    z-index: 1;
-  }
-
-  button {
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    border: none;
-    background-color: inherit;
-    font-size: 17px;
-    margin-right: 2%;
-  }
-
-  button:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
-  @media screen and (max-width: 500px) {
-    .logo{
-      height: auto;
-      width: auto;
-      float: left;
-      padding-left: 2%;
-      margin: 0 auto;
-      padding-right: 20px;
-    }
-  }
 </style>
