@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <ul class="navbar-nav">
         <a class="navbar-brand" href="#">
-          <img src="@/assets/logo.png" alt="UWA Logo" style="width:40px;" class="">  
+          <img src="@/assets/logo.png" alt="UWA Logo" style="width:30px;" class="">  
         </a>
         <li class="nav-item">
           <a class="nav-link" href="#" @click="toggleHome">Home</a>
