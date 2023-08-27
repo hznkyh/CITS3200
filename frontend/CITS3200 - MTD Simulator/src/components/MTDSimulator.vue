@@ -52,22 +52,8 @@
 
     <label>Number of Nodes: </label>
     <input type="text" placeholder="Number of Nodes...">
+
     
-    <label>Number of Nodes: </label>
-    <input type="text" placeholder="Number of Nodes...">
-
-    <label>Number of Nodes: </label>
-    <input type="text" placeholder="Number of Nodes...">
-
-    <label>Number of Nodes: </label>
-    <input type="text" placeholder="Number of Nodes...">
-
-    <label>Number of Nodes: </label>
-    <input type="text" placeholder="Number of Nodes...">
-
-    <label>Number of Nodes: </label>
-    <input type="text" placeholder="Number of Nodes...">
-
 
     <input type="submit" value="Submit">
 
@@ -78,9 +64,9 @@
   </article>
   </section>
 
-  <!-- <footer>
+  <footer>
     <p>Footer</p>
-  </footer> -->
+  </footer>
 </div>
 
 
@@ -111,6 +97,7 @@ form {
   width: 30%;
   background: #ccc;
   padding: 20px;
+  position: static;
 }
 
 article {
@@ -141,7 +128,7 @@ input[type=text]:focus {
 
 footer {
   background-color: #777;
-  padding: 10px;
+  padding: 20px;
   text-align: center;
   color: white;
   position: absolute;
