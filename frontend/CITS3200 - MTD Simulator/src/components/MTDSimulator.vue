@@ -1,6 +1,6 @@
 <template>
     <header>
-  <h2>MTD Simultor</h2>
+  <h2>MTD Simulator</h2>
 </header>
 
 <div id="container">
@@ -50,6 +50,27 @@
     <label>Number of Nodes: </label>
     <input type="text" placeholder="Number of Nodes...">
 
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+    
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+    <label>Number of Nodes: </label>
+    <input type="text" placeholder="Number of Nodes...">
+
+
+    <input type="submit" value="Submit">
+
   </form>
   
   <article>
@@ -57,9 +78,9 @@
   </article>
   </section>
 
-  <footer>
+  <!-- <footer>
     <p>Footer</p>
-  </footer>
+  </footer> -->
 </div>
 
 
@@ -75,6 +96,7 @@ export default {
   * {
   box-sizing: border-box;
 }
+
 
 header {
   background-color: rgb(12, 69, 225);
