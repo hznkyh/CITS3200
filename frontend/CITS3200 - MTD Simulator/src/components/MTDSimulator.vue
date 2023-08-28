@@ -7,75 +7,21 @@
   <div id="container">
     <section class="content">
       <div class="scroll">
-        <form>
+        <form class="paramForm" v-on:submit.prevent="submitForm" >
           <h2> Parameters Panel</h2>
 
           <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
+          <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber">
 
           <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
+          <input id="param" type="text" placeholder="Number of Nodes..." v-model="node1">
 
           <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
+          <input id="param" type="text" placeholder="Number of Nodes..." v-model="node2">
 
           <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
+          <input id="param" type="text" placeholder="Number of Nodes..." v-model="node3">
 
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-
-          <label>Number of Nodes: </label>
-          <input type="text" placeholder="Number of Nodes...">
-          
           <input type="submit" value="Submit">
 
           </form>
@@ -99,7 +45,31 @@
 <script>
 export default {
   name: 'MTDSimulator',
-}
+  data(){
+    return{
+      nodeNumber:'',
+      node1:'',
+      node2:'',
+      node3:'',
+    };
+  },
+  methods: {
+    submitForm(){
+      if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
+        && this.validateInput(this.node2) && this.validateInput(this.node3)){
+        console.log('All values are valid')
+        console.log(this.nodeNumber, this.node1, this.node2, this.node3)
+      }
+      else{
+        console.log('Invalid inputs have been detected')
+      }
+    },
+    validateInput(value){
+      const parsedValue = parseFloat(value);
+      return !isNaN(parsedValue) && parsedValue >= 0;
+    },
+  },
+};
 </script>
 
 <style>
