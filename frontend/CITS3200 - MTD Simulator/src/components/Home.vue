@@ -1,16 +1,29 @@
 <template>
-    <div>
-      <header>
-        <h2>Home</h2>
-      </header>
+  <div class="container">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col">
+        <h1 class="heading">Moving</h1>
+        <h1 class="heading">Target</h1>
+        <h1 class="heading">Defence</h1>
+      </div>
+      <div class="col"></div>
     </div>
-    <p>This is a test sentence.</p>
-    <p>This is a test sentence.</p>
-    <p>This is a test sentence.</p>
-    <p>This is a test sentence.</p>
-    <p>This is a test sentence.</p>
-    <p>This is a test sentence.</p>
-    <footer></footer>
+  </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1 class="description">Description</h1>
+    </div>
+    <div class="col"></div>
+  </div>
+  <p>This is a test sentence.</p>
+  <p>This is a test sentence.</p>
+  <p>This is a test sentence.</p>
+  <p>This is a test sentence.</p>
+  <p>This is a test sentence.</p>
+  <p>This is a test sentence.</p>
+  <footer></footer>
 </template>
 
 <script>
