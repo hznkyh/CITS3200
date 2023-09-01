@@ -1,7 +1,7 @@
 import random, uuid
 import networkx as nx
 import mtdnetwork.data.constants as constants
-
+import json
 
 class Host:
     def __init__(self, operating_system, os_version, host_id, host_ip, users_list,
@@ -675,3 +675,17 @@ class Host:
         #
 
         return shortest_path
+
+    def toJson(self):
+        return {
+            "os_type": self.os_type, 
+            "os_version": self.os_version,
+            "host_ip": self.ip,
+            "host_id":self.host_id, 
+            "p_u_compromise": self.p_u_compromise,
+            "total_users": self.total_users,
+            "uuid": self.uuid,
+            "total_services": self.total_services,
+            "total_nodes": self.total_nodes,
+            "compromised": self.compromised
+        }
