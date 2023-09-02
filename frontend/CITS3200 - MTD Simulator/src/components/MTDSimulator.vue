@@ -78,15 +78,6 @@ export default {
   box-sizing: border-box; 
 }
 
-
-header {
-  background-color: rgb(12, 69, 225);
-  padding: 30px;
-  text-align: center;
-  font-size: 35px;
-  color: white;
-}
-
 #app{
   display: flex;
   flex-direction: column;
