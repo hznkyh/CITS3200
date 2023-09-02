@@ -1,40 +1,45 @@
 <template>
   <div id="web">
-    <header>
-      <h2>MTD Simulator</h2>
-    </header>
+    <div id="container">
+      <section class="content">
+        <div class="panel">
+          <form class="paramForm" v-on:submit.prevent="submitForm" >
+            <h2> Parameters Panel</h2>
 
-  <div id="container">
-    <section class="content">
-      <div class="scroll">
-        <form class="paramForm" v-on:submit.prevent="submitForm" >
-          <h2> Parameters Panel</h2>
+            <label>Number of Nodes: </label>
+            <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber">
 
-          <label>Number of Nodes: </label>
-          <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber">
+            <label>Number of Nodes: </label>
+            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node1">
 
-          <label>Number of Nodes: </label>
-          <input id="param" type="text" placeholder="Number of Nodes..." v-model="node1">
+            <label>Number of Nodes: </label>
+            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node2">
 
-          <label>Number of Nodes: </label>
-          <input id="param" type="text" placeholder="Number of Nodes..." v-model="node2">
+            <label>Number of Nodes: </label>
+            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node3">
 
-          <label>Number of Nodes: </label>
-          <input id="param" type="text" placeholder="Number of Nodes..." v-model="node3">
+            <label>Number of Nodes: </label>
+            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node4">
 
-          <input type="submit" value="Submit">
+            <button class="advanced" @click="toggleAdvanced()">Advanced</button>
+            <div id="advancedPanel" class="hidden">
+              <label>Number of Nodes: </label>
+              <input id="param" type="text" placeholder="Number of Nodes..." v-model="node5">
+              <label>Number of Nodes: </label>
+              <input id="param" type="text" placeholder="Number of Nodes..." v-model="node6">
+              <label>Number of Nodes: </label>
+              <input id="param" type="text" placeholder="Number of Nodes..." v-model="node7">
+            </div>
 
-          </form>
-      </div>
-  
-  
-      <article>
-        <h1>Network Display</h1>
-      </article>
+            <input type="submit" value="Submit">
+
+            </form>
+        </div>
+        <div class="network">
+          <h1>Network</h1>
+          <network></network>
+        </div>
       </section>
-
-      <footer>
-      </footer>
     </div>
   </div>
     
@@ -43,8 +48,13 @@
 </template>
 
 <script>
+import network from './Network.vue';
+
 export default {
   name: 'MTDSimulator',
+  components: {
+    network,
+  },
   data(){
     return{
       nodeNumber:'',
@@ -54,6 +64,16 @@ export default {
     };
   },
   methods: {
+    toggleAdvanced(){
+      var advancedContent = document.getElementById("advancedPanel");
+      if (advancedContent.classList.contains("hidden")) {
+        advancedContent.classList.remove("hidden");
+      }  else {
+        advancedContent.classList.add("hidden");
+      }
+    },
+  
+
     submitForm(){
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
         && this.validateInput(this.node2) && this.validateInput(this.node3)){
@@ -77,15 +97,6 @@ export default {
   box-sizing: border-box; 
 }
 
-
-header {
-  background-color: rgb(12, 69, 225);
-  padding: 30px;
-  text-align: center;
-  font-size: 35px;
-  color: white;
-}
-
 #app{
   display: flex;
   flex-direction: column;
@@ -96,18 +107,40 @@ header {
 .content{
   display: flex;
   flex: 1;
+  min-height: 90vh;
+  max-height: 90vh;
 }
 
-div.scroll{
+.panel{
   float: left;
   width: 30%;
   background: #ccc;
-  padding: 20px;
-  overflow: auto;
-  max-height: calc(100vh - 10px);
+  padding: 2em;
+  max-height: 100%;
+  border-radius: 35px;
+  margin:2em;
+  overflow-y: scroll;
 }
 
-article {
+.panel::-webkit-scrollbar {
+  border: 0;
+}
+
+.advanced {
+  border: 0px;
+  background-color: #ccc;
+  display: inline-block;
+  padding: 0;
+  margin: 0 0 0.5em 0;
+  width: 100%;
+  text-align: left;
+}
+
+.hidden{
+  display: none;
+}
+
+.network {
   float: left;
   padding: 20px;
   width: 70%;
@@ -130,16 +163,6 @@ input[type=text]:focus {
 
 #container{
   flex: 1;
-  overflow: auto;
-}
-
-footer {
-  flex-shrink: 0;
-  background-color: #777;
-  text-align: center;
-  color: white;
-  bottom: 0;
-  padding: 10px;
 }
 
 @media (max-width: 600px) {
