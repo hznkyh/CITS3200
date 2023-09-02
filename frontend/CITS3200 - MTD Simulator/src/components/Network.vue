@@ -1,3 +1,5 @@
+<!-- Ignore the error message, it works fine. -->
+
 <script setup lang="ts">
 import { ref } from "vue"
 import * as vNG from "v-network-graph"
@@ -13,7 +15,7 @@ const nodeSize = 40
 const configs = vNG.defineConfigs({
   view: {
     autoPanAndZoomOnLoad: "fit-content",
-    onBeforeInitialDisplay: () => layout("LR"),
+    onBeforeInitialDisplay: () => layout(),
   },
   node: {
     normal: { radius: nodeSize / 2 },
@@ -37,7 +39,7 @@ const configs = vNG.defineConfigs({
 
 const graph = ref<vNG.VNetworkGraphInstance>()
 
-function layout(direction: "TB" | "LR") {
+function layout() {
   if (Object.keys(data.nodes).length <= 1 || Object.keys(data.edges).length == 0) {
     return
   }
@@ -47,7 +49,7 @@ function layout(direction: "TB" | "LR") {
   const g = new dagre.graphlib.Graph()
   // Set an object for the graph label
   g.setGraph({
-    rankdir: direction,
+    rankdir: "LR",
     nodesep: nodeSize * 2,
     edgesep: nodeSize,
     ranksep: nodeSize * 2,
@@ -74,13 +76,6 @@ function layout(direction: "TB" | "LR") {
     const x = g.node(nodeId).x
     const y = g.node(nodeId).y
     data.layouts.nodes[nodeId] = { x, y }
-  })
-}
-
-function updateLayout(direction: "TB" | "LR") {
-  // Animates the movement of an element.
-  graph.value?.transitionWhile(() => {
-    layout(direction)
   })
 }
 </script>
