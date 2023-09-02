@@ -134,15 +134,6 @@ input[type=text]:focus {
   overflow: auto;
 }
 
-footer {
-  flex-shrink: 0;
-  background-color: #777;
-  text-align: center;
-  color: white;
-  bottom: 0;
-  padding: 10px;
-}
-
 @media (max-width: 600px) {
   form, article {
     width: 100%;
