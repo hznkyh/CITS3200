@@ -30,6 +30,7 @@
   
       <article>
         <h1>Network Display</h1>
+        <network></network>
       </article>
       </section>
 
@@ -43,8 +44,13 @@
 </template>
 
 <script>
+import network from './Network.vue';
+
 export default {
   name: 'MTDSimulator',
+  components: {
+    network,
+  },
   data(){
     return{
       nodeNumber:'',
