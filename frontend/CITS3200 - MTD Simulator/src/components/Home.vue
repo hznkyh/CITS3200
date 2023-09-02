@@ -23,7 +23,6 @@
   <p>This is a test sentence.</p>
   <p>This is a test sentence.</p>
   <p>This is a test sentence.</p>
-  <footer></footer>
 </template>
 
 <script>

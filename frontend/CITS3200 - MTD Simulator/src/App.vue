@@ -15,6 +15,7 @@
     </div>
   </nav>
   <component :is="currentView"/>
+  <footer></footer>
 </template>
 
 <script>

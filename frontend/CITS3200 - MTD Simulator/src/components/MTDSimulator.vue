@@ -26,16 +26,11 @@
 
           </form>
       </div>
-  
-  
       <article>
         <h1>Network Display</h1>
         <network></network>
       </article>
       </section>
-
-      <footer>
-      </footer>
     </div>
   </div>
     
