@@ -1,11 +1,7 @@
 <template>
   <div id="web">
-    <header>
-      <h2>MTD Simulator</h2>
-    </header>
-
-  <div id="container">
-    <section class="content">
+    <div id="container">
+      <section class="content">
         <div class="panel">
           <form class="paramForm" v-on:submit.prevent="submitForm" >
             <h2> Parameters Panel</h2>
@@ -39,10 +35,10 @@
 
             </form>
         </div>
-        <article>
-          <h1>Network Display</h1>
+        <div class="network">
+          <h1>Network</h1>
           <network></network>
-        </article>
+        </div>
       </section>
     </div>
   </div>
@@ -111,29 +107,40 @@ export default {
 .content{
   display: flex;
   flex: 1;
+  min-height: 90vh;
+  max-height: 90vh;
 }
 
 .panel{
   float: left;
   width: 30%;
   background: #ccc;
-  padding: 20px;
-  overflow: auto;
-  max-height: calc(100vh - 10px);
+  padding: 2em;
+  max-height: 100%;
+  border-radius: 35px;
+  margin:2em;
+  overflow-y: scroll;
+}
+
+.panel::-webkit-scrollbar {
+  border: 0;
 }
 
 .advanced {
   border: 0px;
   background-color: #ccc;
   display: inline-block;
-  margin: 0;
+  padding: 0;
+  margin: 0 0 0.5em 0;
+  width: 100%;
+  text-align: left;
 }
 
 .hidden{
   display: none;
 }
 
-article {
+.network {
   float: left;
   padding: 20px;
   width: 70%;

@@ -15,7 +15,9 @@
     </div>
   </nav>
   <component :is="currentView"/>
-  <footer></footer>
+  <footer>
+    <p>&copy; 2023 Semester 1 CITS3200 Project</p>
+  </footer>
 </template>
 
 <script>
@@ -45,18 +47,15 @@ export default {
 
 <style>
 header {
-  background-color: rgb(12, 69, 225);
   padding: 30px;
   text-align: center;
   font-size: 35px;
   color: white;
 }
 footer {
-  flex-shrink: 0;
-  background-color: #777;
   text-align: center;
+  padding: 1em 0 0.5em 0;
   color: white;
-  bottom: 0;
-  padding: 10px;
+  background-color: rgb(33,33,33);
 }
 </style>
