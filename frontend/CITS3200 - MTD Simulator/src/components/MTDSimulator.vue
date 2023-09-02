@@ -156,7 +156,6 @@ input[type=text]:focus {
 
 #container{
   flex: 1;
-  overflow: auto;
 }
 
 @media (max-width: 600px) {
