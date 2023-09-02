@@ -16,6 +16,9 @@ const configs = vNG.defineConfigs({
   view: {
     autoPanAndZoomOnLoad: "fit-content",
     onBeforeInitialDisplay: () => layout(),
+    minZoomLevel: 1.0,
+    maxZoomLevel: 1.0,
+
   },
   node: {
     normal: { radius: nodeSize / 2 },
