@@ -38,6 +38,7 @@ class GraphEncoder(json.JSONEncoder):
 def sim_params(num_nodes=50,num_endpoints=50,num_subnets=8,num_layers=4,target_layer=4): 
     print("Working")
     test = execute_sim(start_time=0, finish_time=200, mtd_interval=20, scheme='random',total_nodes=num_nodes,total_endpoints=num_endpoints,total_subnets=num_subnets,total_layers=num_layers)
+    return test
     # print(test.get_network().get_hosts())
     # for i,host in test.get_network().get_hosts().items():
     #     print(host.ip)
@@ -58,13 +59,14 @@ def checks():
 def get_time(event):
     print('Called at ',event.env.now) 
 
-def get_results(time_network,env,start_time,finish_time): 
+def get_results(time_network,env,start_time,finish_time,res): 
     for i in range(start_time,finish_time+1,5): 
         yield env.timeout(i-env.now)
         print("GRAPH STATE AT " + str(i))
         # print(time_network.get_host(1).toJson())
-        print(json_graph.node_link_data(time_network.get_graph(),attrs={"host":"toJson"}))
-        print(json.dumps(time_network.get_graph(),default=json_graph.node_link_data))
+        # print(json_graph.node_link_data(time_network.get_graph(),attrs={"host":"toJson"}))
+        res.append(json_graph.node_link_data(time_network.get_graph(),attrs={"host":"toJson"}))
+        # print(json.dumps(time_network.get_graph(),default=json_graph.node_link_data))
         # print(time_network.get_hosts())
 
 
@@ -97,7 +99,7 @@ def execute_sim(start_time=0, finish_time=None, scheme='random', mtd_interval=No
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
     adversary = None
-
+    res = list()
     if start_time > 0:
         try:
             time_network, adversary = snapshot_checkpoint.load_snapshots_by_time(start_time)
@@ -132,7 +134,7 @@ def execute_sim(start_time=0, finish_time=None, scheme='random', mtd_interval=No
     # save snapshot by time
     if checkpoints is not None:
         snapshot_checkpoint.proceed_save(time_network, adversary)
-    env.process(get_results(time_network=time_network,env=env,start_time=start_time,finish_time=finish_time)) 
+    env.process(get_results(time_network=time_network,env=env,start_time=start_time,finish_time=finish_time,res=res)) 
     # start simulation
     if finish_time is not None:
         env.run(until=(finish_time - start_time))
@@ -149,5 +151,4 @@ def execute_sim(start_time=0, finish_time=None, scheme='random', mtd_interval=No
     #     sim_item = 'NoMTD'
     # time_network.get_mtd_stats().save_record(sim_time=mtd_interval, scheme=sim_item)
     # adversary.get_attack_stats().save_record(sim_time=mtd_interval, scheme=sim_item)
-
-    return evaluation
+    return res
