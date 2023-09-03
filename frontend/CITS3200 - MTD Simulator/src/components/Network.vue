@@ -42,9 +42,13 @@ const configs = vNG.defineConfigs({
 })
 
 const graph = ref<vNG.VNetworkGraphInstance>()
+const nodes: Nodes = reactive({ ...data.nodes })
+const edges: Edges = reactive({ ...data.edges })
+const nextNodeIndex = ref(Object.keys(nodes).length + 1)
+const nextEdgeIndex = ref(Object.keys(edges).length + 1)
 
 function layout() {
-  if (Object.keys(data.nodes).length <= 1 || Object.keys(data.edges).length == 0) {
+  if (Object.keys(nodes).length <= 1 || Object.keys(edges).length == 0) {
     return
   }
 
@@ -64,12 +68,12 @@ function layout() {
   // Add nodes to the graph. The first argument is the node id. The second is
   // metadata about the node. In this case we're going to add labels to each of
   // our nodes.
-  Object.entries(data.nodes).forEach(([nodeId, node]) => {
+  Object.entries(nodes).forEach(([nodeId, node]) => {
     g.setNode(nodeId, { label: node.name, width: nodeSize, height: nodeSize })
   })
 
   // Add edges to the graph.
-  Object.values(data.edges).forEach(edge => {
+  Object.values(edges).forEach(edge => {
     g.setEdge(edge.source, edge.target)
   })
 
@@ -83,24 +87,21 @@ function layout() {
   })
 }
 
-const nodes: Nodes = reactive({ ...data.nodes })
-const edges: Edges = reactive({ ...data.edges })
-const nextNodeIndex = ref(Object.keys(nodes).length + 1)
-const nextEdgeIndex = ref(Object.keys(edges).length + 1)
-
 function addNode() {
   const nodeId = `node${nextNodeIndex.value}`
   const name = `N${nextNodeIndex.value}`
   nodes[nodeId] = { name }
   nextNodeIndex.value++
   addEdge(`node${nextNodeIndex.value - 2}`, `node${nextNodeIndex.value-1}`)
+  graph.value?.transitionWhile(() => {
+    layout()
+  })
 }
 
 function addEdge(source, target) {
   const edgeId = `edge${nextEdgeIndex.value}`
   edges[edgeId] = { source, target }
   nextEdgeIndex.value++
-
 }
 </script>
 
