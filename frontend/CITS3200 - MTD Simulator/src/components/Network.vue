@@ -93,9 +93,8 @@ function addNode() {
   nodes[nodeId] = { name }
   nextNodeIndex.value++
   addEdge(`node${nextNodeIndex.value - 2}`, `node${nextNodeIndex.value-1}`)
-  graph.value?.transitionWhile(() => {
-    layout()
-  })
+  layout()
+  graph.value?.fitToContents()
 }
 
 function addEdge(source, target) {
@@ -110,6 +109,7 @@ function addEdge(source, target) {
     <div>
       <label>Node:</label>
       <button @click="addNode">add</button>
+      <button @click="graph?.fitToContents()">Fit</button>
     </div>
   </div>
   <v-network-graph
