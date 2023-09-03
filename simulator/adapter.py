@@ -21,11 +21,20 @@ from mtdnetwork.component.time_network import TimeNetwork
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
 from mtdnetwork.component.adversary import Adversary
+from mtdnetwork.component.host import Host
 from mtdnetwork.operation.attack_operation import AttackOperation
 from mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
 from mtdnetwork.statistic.evaluation import Evaluation# create_experiment_snapshots([25, 50, 75, 100])
 from networkx.readwrite import json_graph
+import json
 import simpy
+
+class GraphEncoder(json.JSONEncoder): 
+    def default(self,obj): 
+        if isinstance(obj,Host):
+            return obj.toJson()
+        return json.JSONEncoder.default(self,obj)
+
 def sim_params(num_nodes=50,num_endpoints=50,num_subnets=8,num_layers=4,target_layer=4): 
     print("Working")
     test = execute_sim(start_time=0, finish_time=200, mtd_interval=20, scheme='random',total_nodes=num_nodes,total_endpoints=num_endpoints,total_subnets=num_subnets,total_layers=num_layers)
@@ -53,8 +62,9 @@ def get_results(time_network,env,start_time,finish_time):
     for i in range(start_time,finish_time+1,5): 
         yield env.timeout(i-env.now)
         print("GRAPH STATE AT " + str(i))
-        print(time_network.get_host(1).toJson())
-        # print(json_graph.node_link_data(time_network.get_graph(),attrs={"host":"toJson"}))
+        # print(time_network.get_host(1).toJson())
+        print(json_graph.node_link_data(time_network.get_graph(),attrs={"host":"toJson"}))
+        print(json.dumps(time_network.get_graph(),default=json_graph.node_link_data))
         # print(time_network.get_hosts())
 
 
