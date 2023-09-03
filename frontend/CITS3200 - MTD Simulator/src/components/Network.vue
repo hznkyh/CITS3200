@@ -1,8 +1,9 @@
 <!-- Ignore the error message, it works fine. -->
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { reactive, ref } from "vue"
 import * as vNG from "v-network-graph"
+import { Nodes, Edges } from "v-network-graph"
 import data from "./data"
 
 // dagre: Directed graph layout for JavaScript
@@ -81,14 +82,33 @@ function layout() {
     data.layouts.nodes[nodeId] = { x, y }
   })
 }
+
+const nodes: Nodes = reactive({ ...data.nodes })
+const edges: Edges = reactive({ ...data.edges })
+const nextNodeIndex = ref(Object.keys(nodes).length + 1)
+const nextEdgeIndex = ref(Object.keys(edges).length + 1)
+
+function addNode() {
+  const nodeId = `node${nextNodeIndex.value}`
+  const name = `N${nextNodeIndex.value}`
+  nodes[nodeId] = { name }
+  nextNodeIndex.value++
+  console.log("add node", nodeId)
+}
 </script>
 
 <template>
+  <div class="demo-control-panel">
+    <div>
+      <label>Node:</label>
+      <button @click="addNode">add</button>
+    </div>
+  </div>
   <v-network-graph
     ref="graph"
     class="graph"
-    :nodes="data.nodes"
-    :edges="data.edges"
+    :nodes="nodes"
+    :edges="edges"
     :layouts="data.layouts"
     :configs="configs"
   />
