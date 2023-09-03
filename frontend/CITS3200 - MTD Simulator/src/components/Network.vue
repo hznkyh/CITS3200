@@ -93,7 +93,14 @@ function addNode() {
   const name = `N${nextNodeIndex.value}`
   nodes[nodeId] = { name }
   nextNodeIndex.value++
-  console.log("add node", nodeId)
+  addEdge(`node${nextNodeIndex.value - 2}`, `node${nextNodeIndex.value-1}`)
+}
+
+function addEdge(source, target) {
+  const edgeId = `edge${nextEdgeIndex.value}`
+  edges[edgeId] = { source, target }
+  nextEdgeIndex.value++
+
 }
 </script>
 
