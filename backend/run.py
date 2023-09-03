@@ -11,5 +11,6 @@ s_directory = os.path.join(current_script_dir, "..", "simulator")
 # Add the "s" directory to the Python path
 sys.path.append(s_directory)
 from adapter import *
-sim_params()
+a= sim_params()
+print(a)
 # checks()
