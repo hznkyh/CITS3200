@@ -106,7 +106,8 @@
 
   function getGraph() {
     axios.get("/network/graph").then((res) => {
-      console.log(res.data);       
+      var number_of_nodes = res.data.nodes.length;
+      console.log(number_of_nodes);     
     });
   }
 </script>
