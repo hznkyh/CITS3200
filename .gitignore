@@ -147,3 +147,5 @@ research-analysis/results/.~lock.3-combinations-ip-and-port-z-statistics.ods#
 
 # Node 
 node_modules/
+simulator/adapter.py
+backend/mtdgui/

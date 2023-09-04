@@ -1,4 +1,5 @@
 import json
+import threading
 import networkx as nx
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, HTTPException
@@ -26,24 +27,8 @@ router = APIRouter(prefix="/network",
 env = simpy.Environment()
 simulation_thread = None
 simulation_speed = 1.0
+
 _attrs = dict(source="source", target="target", name="id", key="key", link="links")
-
-
-class CustomNode:
-    def __init__(self, name, attribute):
-        self.name = name
-        self.attribute = attribute
-
-    def to_dict(self):
-        #    return {"name": self.name, "attribute": self.attribute}
-        return self.__dict__
-    
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4)
-
-
-
 
 def serialize_graph(G:nx.Graph, attrs=None):
     """Returns data in node-link format that is suitable for JSON serialization
@@ -102,58 +87,57 @@ def serialize_graph(G:nx.Graph, attrs=None):
         "directed": G.is_directed(),
         "multigraph": multigraph,
         "graph": G.graph,
-        "nodes": [dict(chain(G.nodes[n].items(), [(name, n.to_dict())])) for n in G],
+        "nodes": [serialize_class(G,n,name)  for n in G],
+        # "nodes": [dict(chain(G.nodes[n].items(), [(name, n)])) for n in G],
     }
+        
     if multigraph:
         data[links] = [
-            dict(chain(d.items(), [(source, u.to_dict()), (target, v), (key, k)]))
+            dict(chain(d.items(), [(source, u), (target, v), (key, k)]))
             for u, v, k, d in G.edges(keys=True, data=True)
         ]
     else:            
         data[links] = [
-            dict(chain(d.items(), [(source, u.to_dict()), (target, v.to_dict())]))
+            dict(chain(d.items(), [(source, u), (target, v)]))
             for u, v, d in G.edges(data=True)
         ]
     return data
+    # return data
 
-
-
-
-
-def serialize_class(jsonObj):
-    serialized_nodes = [node.to_dict() for node in jsonObj.nodes()]
-    # data["nodes"] = serialized_nodes
-    return jsonObj
-
-G = nx.Graph()
-node1 = CustomNode("Node1", "Attribute1")
-node2 = CustomNode("Node2", "Attribute2")
-G.add_edge(node1, node2)
+def serialize_class(G,n,name):
+    node = dict(chain(G.nodes[n].items(), [(name, n)]))
+    node['host'] = node['host'].toJson()
+    return node
 
 
 @router.get("/")
 async def read_items():
     return "Hello World"
 
-
-@router.get("/graphDemo")
-def get_graph_demo():
-    graph_data = serialize_graph(G)
-    return JSONResponse(content=graph_data)
-
-
 @router.get("/graph")
-def get_graph():
-    graph_data = sim_params()
-    return JSONResponse(content=graph_data)
-
-@router.get("/graphDev")
-def get_graph():
+async def get_graph():
     global simulation_thread, env
     if simulation_thread is not None:
+        simulation_thread.join()
         raise HTTPException(
             status_code=400, detail="Simulation already running")
-    evaluation , res = run_sim(env)
-    graph_data = serialize_graph(res)
-    # graph_data = run_sim()
+    
+    print('init',env)
+    evaluation , res = create_sim(env, start_time=0, finish_time= 4, new_network=True)
+    simulation_thread = threading.Thread(target=env.run, args=(([2])))
+    simulation_thread.start()
+    simulation_thread.join()
+    graph_data = serialize_graph(evaluation.get_network().graph)
     return JSONResponse(content=graph_data)
+    
+@router.get("/graphDevEnd")
+async def get_graph():
+    global simulation_thread, env
+    if simulation_thread is None:
+        raise HTTPException(status_code=400, detail=f"No simulation running and is alive : {simulation_thread.is_alive()}")
+    env.timeout(0)
+    simulation_thread.join()
+    simulation_thread = None
+    env = simpy.Environment()  # create a new environment
+    return JSONResponse(content="Simulation stopped", status_code=400)
+    
