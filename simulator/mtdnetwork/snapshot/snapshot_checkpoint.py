@@ -7,6 +7,8 @@ class SnapshotCheckpoint:
 
     def __init__(self, env=None, checkpoints=None):
         self.env = env
+        print("check env is ")
+        print(env)
         self._proceed_time = 0
         self._checkpoint_stack = checkpoints
 
@@ -51,6 +53,26 @@ class SnapshotCheckpoint:
     def save_initialised(self, time_network, adversary):
         NetworkSnapshot().save_network(time_network, str(self._proceed_time))
         AdversarySnapshot().save_adversary(adversary, str(self._proceed_time))
+ 
+    def save_to_array(self, time_network, adversary,  graph_array: list):
+        '''The `save_to_array` function saves a network snapshot and an adversary snapshot to an array.
+        
+        Parameters
+        ----------
+        time_network
+            The `time_network` parameter is the network object that you want to save to an array.
+        graph_array : list
+            The `graph_array` parameter is a list that represents a graph. It is used as an argument to the
+        `save_network_array` method of the `NetworkSnapshot` class.
+        adversary
+            The `adversary` parameter is an optional argument that represents an adversary object. It is used
+        to save the adversary snapshot in the `save_to_array` method. If an adversary object is provided, it
+        will be saved using the `AdversarySnapshot().save_adversary` method.
+        
+        '''
+        # NetworkSnapshot().save_network(time_network, str(self._proceed_time))
+        NetworkSnapshot().save_network_array(time_network, str(self.env.now), graph_array)
+        # AdversarySnapshot().save_adversary(adversary, str(self._proceed_time))
 
     def set_proceed_time(self, proceed_time):
         self._proceed_time = proceed_time

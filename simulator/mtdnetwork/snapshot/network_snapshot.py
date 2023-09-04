@@ -19,3 +19,7 @@ class NetworkSnapshot(Snapshot):
         with open(file_name, 'rb') as f:
             network = pickle.load(f)
             return network
+
+    def save_network_array(self, network: TimeNetwork, suffix: str, graph_array: list):
+        graph_array.append(network.graph)
+        

@@ -235,6 +235,8 @@ def execute_simulation(start_time=0, finish_time=None, scheme='random', mtd_inte
     # initialise the simulation
     env = simpy.Environment()
     end_event = env.event()
+    print("env is ")
+    print(env)
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
     adversary = None
@@ -277,8 +279,10 @@ def execute_simulation(start_time=0, finish_time=None, scheme='random', mtd_inte
     # start simulation
     if finish_time is not None:
         env.run(until=(finish_time - start_time))
+        print("ENDED1")
     else:
         env.run(until=end_event)
+        print("ENDED2")
     evaluation = Evaluation(network=time_network, adversary=adversary)
 
     # sim_item = scheme
