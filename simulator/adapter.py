@@ -187,7 +187,7 @@ def create_sim(
     total_database=2,
     terminate_compromise_ratio=0.8,
     new_network=False
-) -> tuple(Evaluation, list):
+):
     '''The `create_sim` function creates a simulation environment for a network attack and defense
     scenario, with options for different attack and defense strategies, network parameters, and
     checkpointing.
