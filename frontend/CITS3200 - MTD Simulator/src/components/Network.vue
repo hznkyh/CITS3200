@@ -11,6 +11,7 @@
   // https://github.com/dagrejs/dagre
   //@ts-ignore
   import dagre from "dagre/dist/dagre.min.js"
+import { add } from "v-network-graph/lib/modules/vector2d";
 
   const nodeSize = 40
 
@@ -93,9 +94,6 @@
     const name = `N${nextNodeIndex.value}`
     nodes[nodeId] = { name }
     nextNodeIndex.value++
-    addEdge(`node${nextNodeIndex.value - 2}`, `node${nextNodeIndex.value-1}`)
-    layout()
-    graph.value?.fitToContents()
   }
 
   function addEdge(source, target) {
@@ -106,8 +104,16 @@
 
   function getGraph() {
     axios.get("/network/graph").then((res) => {
+      console.log (res.data);
       var number_of_nodes = res.data.nodes.length;
-      console.log(number_of_nodes);     
+      for (var i = 0; i < number_of_nodes; i++) {
+        addNode();
+      }
+      var number_of_edges = res.data.links.length;
+      for (var i = 0; i < number_of_edges; i++) {
+        addEdge(`node${res.data.links[i].source}`, `node${res.data.links[i].target}`);
+      }
+      layout()
     });
   }
 </script>
