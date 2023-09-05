@@ -5,29 +5,79 @@
         <div class="panel">
           <form class="paramForm" v-on:submit.prevent="submitForm" >
             <h2> Parameters Panel</h2>
+            <div>
+              <label>Number of Nodes *:</label>
+              <button id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">Hello!</span>
+              </button>
+              <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" required>
+            </div>
+            
+            <div>
+              <label>Number of Exposed Nodes *: </label>
+              <button id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+              </button>
+              <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" required>
+            </div>
 
-            <label>Number of Nodes: </label>
-            <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber">
+            <div>
+             <label>Number of Layers *: </label>
+             <button id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+              </button>
+              <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" required>
+            </div>
 
-            <label>Number of Exposed Nodes: </label>
-            <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed">
+            <div>
+              <label>Compromise Ratio *: </label>
+              <button id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+              </button>
+              <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" required>
+            </div>
 
-            <label>Number of Layers: </label>
-            <input id="param" type="text" placeholder="Number of Layers..." v-model="layers">
+            <div>
+              <label>Scheme *: </label>
+              <button id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+              </button>
+              <input id="param" type="text" placeholder="Scheme..." v-model="scheme" required>
+            </div>
 
-            <label>Compromise Ratio: </label>
-            <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio">
-
-            <label>Scheme: </label>
-            <input id="param" type="text" placeholder="Scheme..." v-model="scheme">
-
-            <label>MTD Interval: </label>
-            <input id="param" type="text" placeholder="MTD Interval..." v-model="interval">
+            <div>
+              <label>MTD Interval *: </label>
+              <button id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+              </button>
+              <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" required>
+            </div>
 
             <button class="advanced" @click="toggleAdvanced()">Advanced</button>
             <div id="advancedPanel" class="hidden">
-              <h3>MTD Priority</h3>
-              <label>Complete Topology Shuffle </label>
+              <div>
+                <button id="tooltip">
+                  <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                </button>
+                <h4>MTD Priority</h4>
+              </div>
+
+              <label>Complete Topology Shuffle: </label>
               <input id="param" type="text" placeholder="Complete Topology Shuffle..." v-model="compTopoShuffle">
 
               <label>Host Topology Shuffle: </label>
@@ -191,4 +241,30 @@ input[type=text]:focus {
   }
 }
 
+#tooltip{
+    text-align: center;
+    background-color: transparent;
+    border: 0px !important;
+    width: auto;
+    color: #666666;
+    font-size: 14px;
+}
+
+button .info {
+      text-decoration: underline;
+     font-style: Italic;
+}
+
+button .tip { 
+     display: none; 
+}
+
+button:hover .info {
+      display: none;
+ }
+
+button:hover .tip { 
+     display: inline;
+     color: #222525;
+ }
 </style>
