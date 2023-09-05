@@ -9,26 +9,45 @@
             <label>Number of Nodes: </label>
             <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber">
 
-            <label>Number of Nodes: </label>
-            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node1">
+            <label>Number of Exposed Nodes: </label>
+            <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed">
 
-            <label>Number of Nodes: </label>
-            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node2">
+            <label>Number of Layers: </label>
+            <input id="param" type="text" placeholder="Number of Layers..." v-model="layers">
 
-            <label>Number of Nodes: </label>
-            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node3">
+            <label>Compromise Ratio: </label>
+            <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio">
 
-            <label>Number of Nodes: </label>
-            <input id="param" type="text" placeholder="Number of Nodes..." v-model="node4">
+            <label>Scheme: </label>
+            <input id="param" type="text" placeholder="Scheme..." v-model="scheme">
+
+            <label>MTD Interval: </label>
+            <input id="param" type="text" placeholder="MTD Interval..." v-model="interval">
 
             <button class="advanced" @click="toggleAdvanced()">Advanced</button>
             <div id="advancedPanel" class="hidden">
-              <label>Number of Nodes: </label>
-              <input id="param" type="text" placeholder="Number of Nodes..." v-model="node5">
-              <label>Number of Nodes: </label>
-              <input id="param" type="text" placeholder="Number of Nodes..." v-model="node6">
-              <label>Number of Nodes: </label>
-              <input id="param" type="text" placeholder="Number of Nodes..." v-model="node7">
+              <h3>MTD Priority</h3>
+              <label>Complete Topology Shuffle </label>
+              <input id="param" type="text" placeholder="Complete Topology Shuffle..." v-model="compTopoShuffle">
+
+              <label>Host Topology Shuffle: </label>
+              <input id="param" type="text" placeholder="Host Topology Shuffle..." v-model="hostTopoShuffle">
+
+              <label>IP Shuffle: </label>
+              <input id="param" type="text" placeholder="IP Shuffle..." v-model="ipShuffle">
+
+              <label>OS Diversity: </label>
+              <input id="param" type="text" placeholder="OS Diversity..." v-model="osDiveristy">
+
+              <label>Port Shuffle: </label>
+              <input id="param" type="text" placeholder="Port Shuffle..." v-model="portShuffle">
+
+              <label>Service Diversity: </label>
+              <input id="param" type="text" placeholder="Service Diversity..." v-model="ServDiversity">
+
+              <label>User Shuffle: </label>
+              <input id="param" type="text" placeholder="User Shuffle..." v-model="userShuffle">
+
             </div>
 
             <input type="submit" value="Submit">
