@@ -71,10 +71,10 @@
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
                         return d3
                             .forceSimulation(nodes)
-                            .force("edge", forceLink.distance(1000).strength(2.0))
-                            .force("charge", d3.forceManyBody().strength(-10000))
+                            .force("edge", forceLink.distance(40).strength(0.5))
+                            .force("charge", d3.forceManyBody().strength(-800))
                             .force("center", d3.forceCenter().strength(0.05))
-                            .force('collision', d3.forceCollide().radius(nodeSize*10))
+                            // .force('collision', d3.forceCollide().radius(nodeSize*5))
                             .alphaMin(0.001)
                         }
                     }),
