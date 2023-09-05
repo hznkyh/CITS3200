@@ -117,10 +117,10 @@ async def read_items():
 @router.get("/graph")
 async def get_graph():
     global simulation_thread, env
-    if simulation_thread is not None:
-        simulation_thread.join()
-        raise HTTPException(
-            status_code=400, detail="Simulation already running")
+    # if simulation_thread is not None:
+    #     simulation_thread.join()
+    #     raise HTTPException(
+    #         status_code=400, detail="Simulation already running")
     
     print('init',env)
     evaluation , res = create_sim(env, start_time=0, finish_time= 4, new_network=True)
