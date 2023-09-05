@@ -13,12 +13,6 @@
     ForceEdgeDatum,
   } from "v-network-graph/lib/force-layout"
 
-  // dagre: Directed graph layout for JavaScript
-  // https://github.com/dagrejs/dagre
-  //@ts-ignore
-  import dagre from "dagre/dist/dagre.min.js"
-  import { add } from "v-network-graph/lib/modules/vector2d";
-
   const nodeSize = 25
 
   const configs = vNG.defineConfigs({
@@ -35,9 +29,10 @@
           const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
           return d3
             .forceSimulation(nodes)
-            .force("edge", forceLink.distance(40).strength(0.5))
-            .force("charge", d3.forceManyBody().strength(-800))
+            .force("edge", forceLink.distance(80).strength(2.0))
+            .force("charge", d3.forceManyBody().strength(-10000))
             .force("center", d3.forceCenter().strength(0.05))
+            .force('collision', d3.forceCollide().radius(nodeSize))
             .alphaMin(0.001)
         }
       }),
