@@ -70,7 +70,6 @@ export default {
     },
 
     submitForm(){
-      console.log(Graph);
       Graph.methods.getGraph();
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
         && this.validateInput(this.node2) && this.validateInput(this.node3)){
@@ -164,7 +163,6 @@ input[type=text]:focus {
 
 #container{
   flex: 1;
-  margin-bottom:5em;
 }
 
 @media (max-width: 600px) {

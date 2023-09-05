@@ -24,12 +24,10 @@
         methods: {
             getGraph() {
                 axios.get("/network/graph").then((res) => {
-                    console.log (res.data);
                     var nextNodeIndex = 1
                     for (var i = 0; i < res.data.nodes.length; i++) {
                         const nodeId = `node${res.data.nodes[i].id + 1}`
                         const name = `N${nextNodeIndex}`
-                        console.log(nodes)
                         var color = ``
                         // TODO change colour
                         if (res.data.nodes[i].host.compromised != true) {
@@ -48,7 +46,6 @@
                         nextEdgeIndex++
                     };
                 });
-                console.log(graph)
             },
         },
         setup() {
