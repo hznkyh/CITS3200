@@ -13,7 +13,7 @@
   import dagre from "dagre/dist/dagre.min.js"
 import { add } from "v-network-graph/lib/modules/vector2d";
 
-  const nodeSize = 40
+  const nodeSize = 25
 
   const configs = vNG.defineConfigs({
     view: {
@@ -60,8 +60,8 @@ import { add } from "v-network-graph/lib/modules/vector2d";
     // Set an object for the graph label
     g.setGraph({
       rankdir: "LR",
-      nodesep: nodeSize * 2,
-      edgesep: nodeSize,
+      nodesep: nodeSize,
+      edgesep: nodeSize / 2,
       ranksep: nodeSize * 2,
     })
     // Default to assigning a new object as a label for each new edge.
@@ -111,7 +111,7 @@ import { add } from "v-network-graph/lib/modules/vector2d";
       }
       var number_of_edges = res.data.links.length;
       for (var i = 0; i < number_of_edges; i++) {
-        addEdge(`node${res.data.links[i].source}`, `node${res.data.links[i].target}`);
+        addEdge(`node${res.data.links[i].source + 1}`, `node${res.data.links[i].target + 1}`);
       }
       layout()
     });
