@@ -65,16 +65,16 @@
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
-                        // noAutoRestartSimulation: true,
+                        noAutoRestartSimulation: true,
                         createSimulation: (d3, nodes, edges) => {
                         // d3-force parameters
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
                         return d3
                             .forceSimulation(nodes)
-                            .force("edge", forceLink.distance(40).strength(0.5))
-                            .force("charge", d3.forceManyBody().strength(-800))
+                            .force("edge", forceLink.distance(1000).strength(3.0))
+                            .force("charge", d3.forceManyBody().strength(-25000))
                             .force("center", d3.forceCenter().strength(0.05))
-                            // .force('collision', d3.forceCollide().radius(nodeSize*5))
+                            .force("collide", d3.forceCollide().radius(nodeSize * 1.5))
                             .alphaMin(0.001)
                         }
                     }),
