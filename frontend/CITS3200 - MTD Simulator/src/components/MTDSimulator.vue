@@ -36,24 +36,20 @@
             </form>
         </div>
         <div class="network">
-          <h1>Network</h1>
-          <network></network>
+          <Graph></Graph>
         </div>
       </section>
     </div>
   </div>
-    
-
-
 </template>
 
 <script>
-import network from './Network.vue';
+import Graph from './Graph.vue';
 
 export default {
   name: 'MTDSimulator',
   components: {
-    network,
+    Graph,
   },
   data(){
     return{
@@ -72,9 +68,9 @@ export default {
         advancedContent.classList.add("hidden");
       }
     },
-  
 
     submitForm(){
+      Graph.methods.getGraph();
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
         && this.validateInput(this.node2) && this.validateInput(this.node3)){
         console.log('All values are valid')
@@ -146,6 +142,10 @@ export default {
   width: 70%;
   height: auto;
   text-align: center;
+  border: 2px solid #ccc;
+  padding:0;
+  margin:1em;
+  margin-bottom: 4em;
 }
 
 input[type=text] {

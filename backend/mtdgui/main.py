@@ -3,12 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Union
 
-from routers import sim
+from routers import develop, network#, sim
 from controllers import * 
 
 app = FastAPI()
 
-app.include_router(sim.router)
+# app.include_router(sim.router)
+app.include_router(network.router)
+app.include_router(develop.router)
+
+
 
 app.add_middleware(
     CORSMiddleware,    
