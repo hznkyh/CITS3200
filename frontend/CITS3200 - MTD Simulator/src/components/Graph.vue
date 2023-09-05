@@ -43,6 +43,7 @@
                         nextEdgeIndex++
                     };
                 });
+                graph.fitToContent();
             },
         },
         setup() {
@@ -98,10 +99,7 @@
 <template>
     <div class="demo-control-panel">
       <div>
-        <label>Node:</label>
-        <!-- <button @click="addNode">add</button> -->
         <button @click="graph?.fitToContents()">Fit</button>
-        <!-- <button @click="getGraph">Get Graph</button> -->
       </div>
     </div>
     <v-network-graph
