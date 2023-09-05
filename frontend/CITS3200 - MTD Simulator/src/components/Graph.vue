@@ -60,19 +60,21 @@
                     // onBeforeInitialDisplay: () => layout(),
                     panEnabled: false,
                     zoomEnabled: false,
+                    minZoomLevel: 0.1,
+                    maxZoomLevel: 0.1,
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
-                        noAutoRestartSimulation: true,
+                        // noAutoRestartSimulation: true,
                         createSimulation: (d3, nodes, edges) => {
                         // d3-force parameters
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
                         return d3
                             .forceSimulation(nodes)
-                            .force("edge", forceLink.distance(80).strength(2.0))
+                            .force("edge", forceLink.distance(1000).strength(2.0))
                             .force("charge", d3.forceManyBody().strength(-10000))
                             .force("center", d3.forceCenter().strength(0.05))
-                            .force('collision', d3.forceCollide().radius(nodeSize*8))
+                            .force('collision', d3.forceCollide().radius(nodeSize*10))
                             .alphaMin(0.001)
                         }
                     }),
@@ -108,11 +110,6 @@
 </script>
 
 <template>
-    <div class="demo-control-panel">
-      <div>
-        <button @click="graph?.fitToContents()">Fit</button>
-      </div>
-    </div>
     <v-network-graph
       ref="graph"
       class="graph"

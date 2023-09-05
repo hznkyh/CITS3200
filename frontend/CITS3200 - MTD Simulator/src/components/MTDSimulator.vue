@@ -37,7 +37,6 @@
             <button @click="graph?.fitToContents()">Fit</button>
         </div>
         <div class="network">
-          <h1>Network</h1>
           <Graph></Graph>
         </div>
       </section>
