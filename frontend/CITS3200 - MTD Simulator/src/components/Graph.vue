@@ -52,16 +52,18 @@
             },
         },
         setup() {
-            const nodeSize = 25
+            const nodeSize = 40
 
             const configs = vNG.defineConfigs({
                 view: {
                     autoPanAndZoomOnLoad: "fit-content",
                     // onBeforeInitialDisplay: () => layout(),
-                    panEnabled: false,
-                    zoomEnabled: false,
+                    autoPanOnResize: true,
+                    scalingObjects: true,
                     minZoomLevel: 0.1,
                     maxZoomLevel: 0.1,
+                    panEnabled: false,
+                    zoomEnabled: true,
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
@@ -110,6 +112,11 @@
 </script>
 
 <template>
+    <div class="demo-control-panel">
+        <button @click="graph?.fitToContents()">Fit</button>
+        <button @click="graph?.zoomIn()">Zoom In</button>
+        <button @click="graph?.zoomOut()">Zoom Out</button>
+    </div>
     <v-network-graph
       ref="graph"
       class="graph"
