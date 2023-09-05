@@ -30,7 +30,11 @@
                         const nodeId = `node${res.data.nodes[i].id + 1}`
                         const name = `N${nextNodeIndex}`
                         console.log(nodes)
-                        const color = `grey`
+                        var color = ``
+                        // TODO change colour
+                        if (res.data.nodes[i].host.compromised != true) {
+                            color = `red`
+                        }
                         nodes[nodeId] = { name, color}
                         nextNodeIndex++
                     }
@@ -59,6 +63,7 @@
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
+                        noAutoRestartSimulation: true,
                         createSimulation: (d3, nodes, edges) => {
                         // d3-force parameters
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
@@ -67,7 +72,7 @@
                             .force("edge", forceLink.distance(80).strength(2.0))
                             .force("charge", d3.forceManyBody().strength(-10000))
                             .force("center", d3.forceCenter().strength(0.05))
-                            .force('collision', d3.forceCollide().radius(nodeSize))
+                            .force('collision', d3.forceCollide().radius(nodeSize*8))
                             .alphaMin(0.001)
                         }
                     }),
@@ -79,7 +84,7 @@
                     },
                     label: { direction: "center", color: "#fff" },
 
-                    draggable: false,
+                    draggable: true,
 
                 },
                 edge: {
