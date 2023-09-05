@@ -26,11 +26,12 @@
                 axios.get("/network/graph").then((res) => {
                     console.log (res.data);
                     var nextNodeIndex = 1
-                    var number_of_nodes = res.data.nodes.length;
-                    for (var i = 0; i < number_of_nodes; i++) {
-                        const nodeId = `node${nextNodeIndex}`
+                    for (var i = 0; i < res.data.nodes.length; i++) {
+                        const nodeId = `node${res.data.nodes[i].id + 1}`
                         const name = `N${nextNodeIndex}`
-                        nodes[nodeId] = { name }
+                        console.log(nodes)
+                        const color = `grey`
+                        nodes[nodeId] = { name, color}
                         nextNodeIndex++
                     }
                     var number_of_edges = res.data.links.length;
@@ -43,7 +44,7 @@
                         nextEdgeIndex++
                     };
                 });
-                graph.fitToContent();
+                console.log(graph)
             },
         },
         setup() {
@@ -51,37 +52,42 @@
 
             const configs = vNG.defineConfigs({
                 view: {
-                autoPanAndZoomOnLoad: "fit-content",
-                // onBeforeInitialDisplay: () => layout(),
-                panEnabled: false,
-                zoomEnabled: false,
-                layoutHandler: new ForceLayout({
-                    positionFixedByDrag: false,
-                    positionFixedByClickWithAltKey: true,
-                    createSimulation: (d3, nodes, edges) => {
-                    // d3-force parameters
-                    const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
-                    return d3
-                        .forceSimulation(nodes)
-                        .force("edge", forceLink.distance(80).strength(2.0))
-                        .force("charge", d3.forceManyBody().strength(-10000))
-                        .force("center", d3.forceCenter().strength(0.05))
-                        .force('collision', d3.forceCollide().radius(nodeSize))
-                        .alphaMin(0.001)
-                    }
-                }),
+                    autoPanAndZoomOnLoad: "fit-content",
+                    // onBeforeInitialDisplay: () => layout(),
+                    panEnabled: false,
+                    zoomEnabled: false,
+                    layoutHandler: new ForceLayout({
+                        positionFixedByDrag: false,
+                        positionFixedByClickWithAltKey: true,
+                        createSimulation: (d3, nodes, edges) => {
+                        // d3-force parameters
+                        const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
+                        return d3
+                            .forceSimulation(nodes)
+                            .force("edge", forceLink.distance(80).strength(2.0))
+                            .force("charge", d3.forceManyBody().strength(-10000))
+                            .force("center", d3.forceCenter().strength(0.05))
+                            .force('collision', d3.forceCollide().radius(nodeSize))
+                            .alphaMin(0.001)
+                        }
+                    }),
                 },
                 node: {
-                normal: { radius: nodeSize / 2 },
-                label: { direction: "center", color: "#fff" },
-                draggable: false,
+                    normal: { 
+                        radius: nodeSize / 2,
+                        color: node => node.color,
+                    },
+                    label: { direction: "center", color: "#fff" },
+
+                    draggable: false,
+
                 },
                 edge: {
-                normal: {
-                    color: "#aaa",
-                    width: 3,
-                },
-                type: "straight",
+                    normal: {
+                        color: "#aaa",
+                        width: 3,
+                    },
+                    type: "straight",
                 },
             })
             return {

@@ -72,7 +72,7 @@ export default {
     },
 
     submitForm(){
-      console.log(Graph.methods);
+      console.log(Graph);
       Graph.methods.getGraph();
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
         && this.validateInput(this.node2) && this.validateInput(this.node3)){
