@@ -7,20 +7,40 @@
   import { Nodes, Edges } from "v-network-graph"
   import data from "./data"
 
+  import {
+    ForceLayout,
+    ForceNodeDatum,
+    ForceEdgeDatum,
+  } from "v-network-graph/lib/force-layout"
+
   // dagre: Directed graph layout for JavaScript
   // https://github.com/dagrejs/dagre
   //@ts-ignore
   import dagre from "dagre/dist/dagre.min.js"
-import { add } from "v-network-graph/lib/modules/vector2d";
+  import { add } from "v-network-graph/lib/modules/vector2d";
 
   const nodeSize = 25
 
   const configs = vNG.defineConfigs({
     view: {
       autoPanAndZoomOnLoad: "fit-content",
-      onBeforeInitialDisplay: () => layout(),
+      // onBeforeInitialDisplay: () => layout(),
       panEnabled: false,
       zoomEnabled: false,
+      layoutHandler: new ForceLayout({
+        positionFixedByDrag: false,
+        positionFixedByClickWithAltKey: true,
+        createSimulation: (d3, nodes, edges) => {
+          // d3-force parameters
+          const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
+          return d3
+            .forceSimulation(nodes)
+            .force("edge", forceLink.distance(40).strength(0.5))
+            .force("charge", d3.forceManyBody().strength(-800))
+            .force("center", d3.forceCenter().strength(0.05))
+            .alphaMin(0.001)
+        }
+      }),
     },
     node: {
       normal: { radius: nodeSize / 2 },
@@ -32,14 +52,7 @@ import { add } from "v-network-graph/lib/modules/vector2d";
         color: "#aaa",
         width: 3,
       },
-      margin: 4,
-      marker: {
-        target: {
-          type: "arrow",
-          width: 4,
-          height: 4,
-        },
-      },
+      type: "straight",
     },
   })
 
@@ -48,46 +61,6 @@ import { add } from "v-network-graph/lib/modules/vector2d";
   const edges: Edges = reactive({ ...data.edges })
   const nextNodeIndex = ref(Object.keys(nodes).length + 1)
   const nextEdgeIndex = ref(Object.keys(edges).length + 1)
-
-  function layout() {
-    if (Object.keys(nodes).length <= 1 || Object.keys(edges).length == 0) {
-      return
-    }
-
-    // convert graph
-    // ref: https://github.com/dagrejs/dagre/wiki
-    const g = new dagre.graphlib.Graph()
-    // Set an object for the graph label
-    g.setGraph({
-      rankdir: "LR",
-      nodesep: nodeSize,
-      edgesep: nodeSize / 2,
-      ranksep: nodeSize * 2,
-    })
-    // Default to assigning a new object as a label for each new edge.
-    g.setDefaultEdgeLabel(() => ({}))
-
-    // Add nodes to the graph. The first argument is the node id. The second is
-    // metadata about the node. In this case we're going to add labels to each of
-    // our nodes.
-    Object.entries(nodes).forEach(([nodeId, node]) => {
-      g.setNode(nodeId, { label: node.name, width: nodeSize, height: nodeSize })
-    })
-
-    // Add edges to the graph.
-    Object.values(edges).forEach(edge => {
-      g.setEdge(edge.source, edge.target)
-    })
-
-    dagre.layout(g)
-
-    g.nodes().forEach((nodeId: string) => {
-      // update node position
-      const x = g.node(nodeId).x
-      const y = g.node(nodeId).y
-      data.layouts.nodes[nodeId] = { x, y }
-    })
-  }
 
   function addNode() {
     const nodeId = `node${nextNodeIndex.value}`
@@ -113,7 +86,6 @@ import { add } from "v-network-graph/lib/modules/vector2d";
       for (var i = 0; i < number_of_edges; i++) {
         addEdge(`node${res.data.links[i].source + 1}`, `node${res.data.links[i].target + 1}`);
       }
-      layout()
     });
   }
 </script>
