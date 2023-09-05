@@ -37,7 +37,7 @@
         </div>
         <div class="network">
           <h1>Network</h1>
-          <network></network>
+          <Graph></Graph>
         </div>
       </section>
     </div>
@@ -48,12 +48,12 @@
 </template>
 
 <script>
-import network from './Network.vue';
+import Graph from './Graph.vue';
 
 export default {
   name: 'MTDSimulator',
   components: {
-    network,
+    Graph,
   },
   data(){
     return{
