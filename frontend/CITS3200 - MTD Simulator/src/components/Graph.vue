@@ -11,10 +11,39 @@
         ForceEdgeDatum,
     } from "v-network-graph/lib/force-layout"
 
+    const graph = ref<vNG.VNetworkGraphInstance>()
+    const nodes: Nodes = reactive({ ...data.nodes })
+    const edges: Edges = reactive({ ...data.edges })
+    const layouts: Layouts = reactive({nodes: {},})
+
     export default {
         name: 'Network',
         components: {
             vNG,
+        },
+        methods: {
+            getGraph() {
+                axios.get("/network/graph").then((res) => {
+                    console.log (res.data);
+                    var nextNodeIndex = 1
+                    var number_of_nodes = res.data.nodes.length;
+                    for (var i = 0; i < number_of_nodes; i++) {
+                        const nodeId = `node${nextNodeIndex}`
+                        const name = `N${nextNodeIndex}`
+                        nodes[nodeId] = { name }
+                        nextNodeIndex++
+                    }
+                    var number_of_edges = res.data.links.length;
+                    var nextEdgeIndex = 1
+                    for (var i = 0; i < number_of_edges; i++) {
+                        const edgeId = `edge${nextEdgeIndex}`
+                        const source = `node${res.data.links[i].source + 1}`
+                        const target = `node${res.data.links[i].target + 1}`
+                        edges[edgeId] = { source, target }
+                        nextEdgeIndex++
+                    };
+                });
+            },
         },
         setup() {
             const nodeSize = 25
@@ -54,12 +83,6 @@
                 type: "straight",
                 },
             })
-            const graph = ref<vNG.VNetworkGraphInstance>()
-            const nodes: Nodes = reactive({ ...data.nodes })
-            const edges: Edges = reactive({ ...data.edges })
-            const layouts: Layouts = reactive({nodes: {},})
-            const nextNodeIndex = ref(Object.keys(nodes).length + 1)
-            const nextEdgeIndex = ref(Object.keys(edges).length + 1)
             return {
                 nodeSize,
                 configs,
@@ -67,8 +90,6 @@
                 nodes,
                 edges,
                 layouts,
-                nextNodeIndex,
-                nextEdgeIndex,
             }
         }
     }

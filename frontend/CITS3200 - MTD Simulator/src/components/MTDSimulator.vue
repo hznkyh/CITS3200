@@ -34,6 +34,7 @@
             <input type="submit" value="Submit">
 
             </form>
+            <button @click="graph?.fitToContents()">Fit</button>
         </div>
         <div class="network">
           <h1>Network</h1>
@@ -42,9 +43,6 @@
       </section>
     </div>
   </div>
-    
-
-
 </template>
 
 <script>
@@ -72,9 +70,10 @@ export default {
         advancedContent.classList.add("hidden");
       }
     },
-  
 
     submitForm(){
+      console.log(Graph.methods);
+      Graph.methods.getGraph();
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
         && this.validateInput(this.node2) && this.validateInput(this.node3)){
         console.log('All values are valid')
