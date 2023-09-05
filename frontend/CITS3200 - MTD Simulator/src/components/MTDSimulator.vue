@@ -143,6 +143,10 @@ export default {
   width: 70%;
   height: auto;
   text-align: center;
+  border: 2px solid #ccc;
+  padding:0;
+  margin:1em;
+  margin-bottom: 4em;
 }
 
 input[type=text] {
@@ -160,11 +164,7 @@ input[type=text]:focus {
 
 #container{
   flex: 1;
-}
-
-Graph {
-  width: 100%;
-  height: 100%;
+  margin-bottom:5em;
 }
 
 @media (max-width: 600px) {

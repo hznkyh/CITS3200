@@ -112,11 +112,6 @@
 </script>
 
 <template>
-    <div class="demo-control-panel">
-        <button @click="graph?.fitToContents()">Fit</button>
-        <button @click="graph?.zoomIn()">Zoom In</button>
-        <button @click="graph?.zoomOut()">Zoom Out</button>
-    </div>
     <v-network-graph
       ref="graph"
       class="graph"
@@ -125,4 +120,23 @@
       :layouts="layouts"
       :configs="configs"
     />
+    <div class="control-panel">
+        <button @click="graph?.fitToContents()">Fit</button>
+        <button @click="graph?.zoomIn()">Zoom In</button>
+        <button @click="graph?.zoomOut()">Zoom Out</button>
+    </div>
   </template>
+
+<style>
+    .graph {
+      width: 100%;
+      height: 100%;
+    }
+    .control-panel {
+      gap: 10px;
+      padding: 10px;
+    }
+</style>
+```
+
+
