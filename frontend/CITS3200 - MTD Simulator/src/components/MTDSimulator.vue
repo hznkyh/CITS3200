@@ -34,7 +34,6 @@
             <input type="submit" value="Submit">
 
             </form>
-            <button @click="graph?.fitToContents()">Fit</button>
         </div>
         <div class="network">
           <Graph></Graph>
@@ -161,6 +160,11 @@ input[type=text]:focus {
 
 #container{
   flex: 1;
+}
+
+Graph {
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 600px) {
