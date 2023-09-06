@@ -21,7 +21,11 @@ import os
 import sys
 # current_directory = os.path.dirname(os.path.abspath(__file__))
 # target_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)) , 'experiments')
-target_directory = os.getcwd()
+# target_directory = os.getcwd()
+current_script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the path to the "s" directory
+target_directory = os.path.join(current_script_dir, "..", "backend")
 if not os.path.exists(target_directory + '/experimental_data'):
     os.makedirs(target_directory + '/experimental_data')
     os.makedirs(target_directory + '/experimental_data/plots')
@@ -106,6 +110,10 @@ def execute_sim(start_time=0, finish_time=None, scheme='random', mtd_interval=No
     :param new_network: True: create new snapshots based on network size, False: load snapshots based on network size
     """
     # initialise the simulation
+    # TODO Remove test vars
+    total_nodes = 16
+    new_network = True
+
     env = simpy.Environment()
     end_event = env.event()
     print("env is ")
@@ -380,5 +388,7 @@ def serialize_graph(G:nx.Graph, attrs=None):
 
 def serialize_class(G,n,name):
     node = dict(chain(G.nodes[n].items(), [(name, n)]))
-    node['host'] = node['host'].toJson()
+    print(node)
+    if ('host' in node):
+        node['host'] = node['host'].toJson()
     return node

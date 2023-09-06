@@ -151,3 +151,4 @@ async def get_graph():
 async def get_sim():
     return get_sim_json()
 get_sim_json()
+# get_graph()

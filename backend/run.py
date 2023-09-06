@@ -10,6 +10,7 @@ current_script_dir = os.path.dirname(os.path.abspath(__file__))
 # Construct the path to the "s" directory
 s_directory = os.path.join(current_script_dir, "..", "simulator")
 sys.path.append(s_directory)
+print(s_directory)
 from adapter import *
 # a= sim_params()
 # # print(a[0])
@@ -20,9 +21,14 @@ def get_sim_json():
     a= sim_params()
     # print(a[0])
     b = json.dumps(a)
+    # print(b)
     return b
     # checks()
-print(get_sim_json())
+def interface(): 
+    a = get_sim_json()
+    return a
+interface()
+# print(get_sim_json())
 # import simpy
 # env = simpy.Environment()
 # simulation_thread = None
