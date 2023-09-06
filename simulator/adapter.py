@@ -388,7 +388,6 @@ def serialize_graph(G:nx.Graph, attrs=None):
 
 def serialize_class(G,n,name):
     node = dict(chain(G.nodes[n].items(), [(name, n)]))
-    print(node)
     if ('host' in node):
         node['host'] = node['host'].toJson()
     return node
