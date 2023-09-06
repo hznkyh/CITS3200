@@ -15,8 +15,14 @@ from pathlib import Path
 s_directory = os.path.join(Path(__file__).parents[3], "simulator")
 # Add the "s" directory to the Python path
 sys.path.append(s_directory)
+n_directory = os.path.join(Path(__file__).parents[2])
+# Add the "s" directory to the Python path
+sys.path.append(n_directory)
+print("N")
+print(n_directory)
+print("N")
+from run import get_sim_json
 from adapter import *
-
 #
 # from adapter import sim_params, run_sim
 
@@ -141,3 +147,7 @@ async def get_graph():
     env = simpy.Environment()  # create a new environment
     return JSONResponse(content="Simulation stopped", status_code=400)
     
+@router.get("/testGraph")
+async def get_sim():
+    return get_sim_json()
+get_sim_json()

@@ -18,7 +18,7 @@ class SnapshotCheckpoint:
             self._checkpoint_stack = deque(self._checkpoint_stack)
         self.env.process(self.save_snapshots_by_time(time_network, adversary))
 
-    def save_snapshots_by_time(self, time_network, adversary):
+    def save_snapshots_by_time(self, time_network, adversary,graph_array):
         """
         :param time_network: network object to save
         :param adversary: adversary object to save
@@ -30,8 +30,9 @@ class SnapshotCheckpoint:
                 continue
             yield self.env.timeout(checkpoint - last_checkpoint)
             last_checkpoint = checkpoint
-            NetworkSnapshot().save_network(time_network, str(self.env.now + self._proceed_time))
-            AdversarySnapshot().save_adversary(adversary, str(self.env.now + self._proceed_time))
+            NetworkSnapshot().save_network_array(time_network, str(self.env.now), graph_array)
+            # NetworkSnapshot().save_network(time_network, str(self.env.now + self._proceed_time))
+            # AdversarySnapshot().save_adversary(adversary, str(self.env.now + self._proceed_time))
 
     def load_snapshots_by_time(self, time):
         self.set_proceed_time(time)
