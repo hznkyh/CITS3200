@@ -59,7 +59,7 @@
                     scalingObjects: true,
                     minZoomLevel: 0.05,
                     maxZoomLevel: 0.2,
-                    panEnabled: false,
+                    panEnabled: true,
                     zoomEnabled: true,
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,

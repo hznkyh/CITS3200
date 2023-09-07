@@ -1,5 +1,6 @@
 <template>
   <div class="content">
+  <!-- <div class="content"> -->
     <div class="panel">
       <form class="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
@@ -113,6 +114,38 @@
     <div class="network">
       <Graph></Graph>
     </div>
+  </div>
+  <div class="instructions">
+    <h1>Instructions</h1>
+    <ol class="list">
+      <li>Enter inputs to the panel at the right</li>
+      <li>Optional: Click on "Advanced", and enter input for advanced options. Otherwise, leave it as the default values.</li>
+      <li>Click on "Start" to start the simulation</li>
+      <li>Click on "Step" to step through the simulation</li>
+      <li>Click on "Stop" to stop the simulation</li>
+    </ol>
+    <h1>To view</h1>
+    <p>To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
+    <p>Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
+    <p>Click a node and hold it to drag it to anyplace desriable.</p>
+    <h3>Graph</h3>
+    <p>The graph will show the network and the nodes. The nodes will be coloured based on their state. The legend is as follows:</p>
+    <ul class="list">
+      <li>Green: Not compromised and exposed<span class="dot" style="background-color: green;"></span></li>
+      <li>Yellow: Exposed<span class="dot" style="background-color: yellow;"></span></li>
+      <li>Red: Compromised<span class="dot" style="background-color: red;"></span></li>
+    </ul>
+    <h3>Node</h3>
+    <p>Clicking on a node will show the node's information. The information is as follows:</p>
+    <ul class="list">
+      <li>Node ID</li>
+      <li>Node Type</li>
+      <li>Node State</li>
+      <li>Node IP</li>
+      <li>Node OS</li>
+      <li>Node Services</li>
+      <li>Node Users</li>
+    </ul>
   </div>
 </template>
 
@@ -281,10 +314,6 @@ input[type=text]:focus {
    outline: none;
 }
 
-/* #container{
-  flex: 1;
-} */
-
 @media (max-width: 600px) {
   form, article {
     width: 100%;
@@ -323,4 +352,24 @@ input[type=text]:focus {
   font-size: 20px;
   color: black;
  }
+
+ .instructions {
+    margin: 2em;
+    margin-top: 0;
+    padding: 2em;
+    border: 2px solid #ccc;
+    border-radius: 35px;
+ }
+
+.list {
+  margin-bottom: 1em;
+ }
+
+.dot {
+  height: 0.7em;
+  width: 0.7em;
+  margin-left: 0.5em;
+  border-radius: 50%;
+  display: inline-block;
+}
 </style>
