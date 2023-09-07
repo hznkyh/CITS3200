@@ -166,10 +166,11 @@ export default {
         && this.validateWord(this.scheme) && this.validateInput(this.interval) && this.validatePrioityInput(this.compTopoShuffle) 
         && this.validatePrioityInput(this.hostTopoShuffle) && this.validatePrioityInput(this.ipShuffle) && this.validatePrioityInput(this.osDiveristy) 
         && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
-          console.log('Inputs have been detected')
+          console.log('Correct inputs have been detected')
+          return true;
       }
       else{
-        console.log('Invalid inputs have been detected')
+        alert('One or more values are incorrect')
       }
     },
 
