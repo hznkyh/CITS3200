@@ -84,9 +84,10 @@ async def get_sim():
     print('init',env)
     res= []
     # Todo switch to kwargs
-    simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env, },args=((env,res, 0,  4, [1,2,3], True )))
+    simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env,'res':res,'start_time':0,'finish_time':4,'checkpoints':[1,2,3],'new_network':True })
     simulation_thread.start()
     simulation_thread.join()
+    simulation_thread = None
     print("res lenght", len(res))
     graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
     return JSONResponse(content=graph_data)
