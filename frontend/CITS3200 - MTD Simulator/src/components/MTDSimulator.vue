@@ -1,121 +1,117 @@
 <template>
-  <div id="web">
-    <div id="container">
-      <section class="content">
-        <div class="panel">
-          <form class="paramForm" v-on:submit.prevent="submitForm" >
-            <h2> Parameters Panel</h2>
-            <div>
-              <label>Number of Nodes *:</label>
-              <span id="tooltip">
-                <span class='info'>
-                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                </span>
-                <span class="tip">The number of nodes in the network (network size).</span>
-              </span>
-              <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" required>
-            </div>
-            
-            <div>
-              <label>Number of Exposed Nodes *: </label>
-              <span id="tooltip">
-                <span class='info'>
-                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                </span>
-                <span class="tip">The number of exposed nodes in the network.</span>
-              </span>
-              <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" required>
-            </div>
-
-            <div>
-             <label>Number of Layers *: </label>
-             <span id="tooltip">
-                <span class='info'>
-                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                </span>
-                <span class="tip">The number of layers in the network</span>
-              </span>
-              <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" required>
-            </div>
-
-            <div>
-              <label>Compromise Ratio *: </label>
-              <span id="tooltip">
-                <span class='info'>
-                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                </span>
-                <span class="tip">The ratio number that will terminate the simulation if reached.</span>
-              </span>
-              <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" required>
-            </div>
-
-            <div>
-              <label>Scheme *: </label>
-              <span id="tooltip">
-                <span class='info'>
-                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                </span>
-                <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
-              </span>
-              <input id="param" type="text" placeholder="Scheme..." v-model="scheme" required>
-            </div>
-
-            <div>
-              <label>MTD Interval *: </label>
-              <span id="tooltip">
-                <span class='info'>
-                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                </span>
-                <span class="tip">The time interval to trigger an MTD(s)</span>
-              </span>
-              <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" required>
-            </div>
-
-            <button class="advanced" @click="toggleAdvanced()">Advanced</button>
-            <div id="advancedPanel" class="hidden">
-              <div>
-                <span id="tooltip">
-                  <label id="heading">MTD Priority</label>
-                  <span class='info'>
-                    <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-                  </span>
-                  <span class="tip">Below you have the choice to change the priority of options the defender has to avoid an attack. By default (leave empty) it is ordered 1-7 from top to bottom. If you wish
-                    to change the order please fill in the form.
-                  </span>
-                </span>
-              </div>
-
-              <label>Complete Topology Shuffle: </label>
-              <input id="param" type="text" placeholder="Complete Topology Shuffle..." v-model="compTopoShuffle">
-
-              <label>Host Topology Shuffle: </label>
-              <input id="param" type="text" placeholder="Host Topology Shuffle..." v-model="hostTopoShuffle">
-
-              <label>IP Shuffle: </label>
-              <input id="param" type="text" placeholder="IP Shuffle..." v-model="ipShuffle">
-
-              <label>OS Diversity: </label>
-              <input id="param" type="text" placeholder="OS Diversity..." v-model="osDiveristy">
-
-              <label>Port Shuffle: </label>
-              <input id="param" type="text" placeholder="Port Shuffle..." v-model="portShuffle">
-
-              <label>Service Diversity: </label>
-              <input id="param" type="text" placeholder="Service Diversity..." v-model="ServDiversity">
-
-              <label>User Shuffle: </label>
-              <input id="param" type="text" placeholder="User Shuffle..." v-model="userShuffle">
-
-            </div>
-
-            <input type="submit" value="Submit">
-
-            </form>
+  <div class="content">
+    <div class="panel">
+      <form class="paramForm" v-on:submit.prevent="submitForm" >
+        <h2> Parameters Panel</h2>
+        <div>
+          <label>Number of Nodes *:</label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The number of nodes in the network (network size).</span>
+          </span>
+          <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" required>
         </div>
-        <div class="network">
-          <Graph></Graph>
+        
+        <div>
+          <label>Number of Exposed Nodes *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The number of exposed nodes in the network.</span>
+          </span>
+          <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" required>
         </div>
-      </section>
+
+        <div>
+          <label>Number of Layers *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The number of layers in the network</span>
+          </span>
+          <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" required>
+        </div>
+
+        <div>
+          <label>Compromise Ratio *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The ratio number that will terminate the simulation if reached.</span>
+          </span>
+          <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" required>
+        </div>
+
+        <div>
+          <label>Scheme *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
+          </span>
+          <input id="param" type="text" placeholder="Scheme..." v-model="scheme" required>
+        </div>
+
+        <div>
+          <label>MTD Interval *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The time interval to trigger an MTD(s)</span>
+          </span>
+          <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" required>
+        </div>
+
+        <button class="advanced" @click="toggleAdvanced()">Advanced</button>
+        <div id="advancedPanel" class="hidden">
+          <div>
+            <span id="tooltip">
+              <label id="heading">MTD Priority</label>
+              <span class='info'>
+                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+              </span>
+              <span class="tip">Below you have the choice to change the priority of options the defender has to avoid an attack. By default (leave empty) it is ordered 1-7 from top to bottom. If you wish
+                to change the order please fill in the form.
+              </span>
+            </span>
+          </div>
+
+          <label>Complete Topology Shuffle: </label>
+          <input id="param" type="text" placeholder="Complete Topology Shuffle..." v-model="compTopoShuffle">
+
+          <label>Host Topology Shuffle: </label>
+          <input id="param" type="text" placeholder="Host Topology Shuffle..." v-model="hostTopoShuffle">
+
+          <label>IP Shuffle: </label>
+          <input id="param" type="text" placeholder="IP Shuffle..." v-model="ipShuffle">
+
+          <label>OS Diversity: </label>
+          <input id="param" type="text" placeholder="OS Diversity..." v-model="osDiveristy">
+
+          <label>Port Shuffle: </label>
+          <input id="param" type="text" placeholder="Port Shuffle..." v-model="portShuffle">
+
+          <label>Service Diversity: </label>
+          <input id="param" type="text" placeholder="Service Diversity..." v-model="ServDiversity">
+
+          <label>User Shuffle: </label>
+          <input id="param" type="text" placeholder="User Shuffle..." v-model="userShuffle">
+
+        </div>
+
+        <input type="submit" value="Submit">
+
+        </form>
+    </div>
+    <div class="network">
+      <Graph></Graph>
     </div>
   </div>
 </template>
@@ -285,9 +281,9 @@ input[type=text]:focus {
    outline: none;
 }
 
-#container{
+/* #container{
   flex: 1;
-}
+} */
 
 @media (max-width: 600px) {
   form, article {
