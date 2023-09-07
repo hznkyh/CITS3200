@@ -121,6 +121,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Graph from './Graph.vue';
 
 export default {
@@ -158,13 +159,36 @@ export default {
   
 
     submitForm(){
-      Graph.methods.getGraph();
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.nodeExposed) 
         && this.validateInput(this.layers) && this.validateInput(this.compromisedRatio) 
         && this.validateWord(this.scheme) && this.validateInput(this.interval) && this.validatePrioityInput(this.compTopoShuffle) 
         && this.validatePrioityInput(this.hostTopoShuffle) && this.validatePrioityInput(this.ipShuffle) && this.validatePrioityInput(this.osDiveristy) 
         && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
-          console.log('Correct inputs have been detected')
+          console.log('Correct inputs have been detected');
+          var data = JSON.stringify ({
+            "nodeNumber": this.nodeNumber,
+            "nodeExposed": this.nodeExposed,
+            "layers": this.layers,
+            "compromisedRatio": this.compromisedRatio,
+            "scheme": this.scheme,
+            "interval": this.interval,
+            "priority": {
+              "compTopoShuffle": this.compTopoShuffle,
+              "hostTopoShuffle": this.hostTopoShuffle,
+              "ipShuffle": this.ipShuffle,
+              "osDiveristy": this.osDiveristy,
+              "portShuffle": this.portShuffle,
+              "ServDiversity": this.ServDiversity,
+              "userShuffle": this.userShuffle,
+            }
+          });
+          console.log(data);
+          axios.post('backend route', data, {headers: {'Content-Type': 'application/json'}})
+          .then((response) => {
+            Graph.methods.getGraph();
+          }, (error) => {
+            console.log(error);
+          });
           return true;
       }
       else{
