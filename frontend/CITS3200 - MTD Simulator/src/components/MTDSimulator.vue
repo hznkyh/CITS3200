@@ -7,74 +7,74 @@
             <h2> Parameters Panel</h2>
             <div>
               <label>Number of Nodes *:</label>
-              <button id="tooltip">
+              <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
                 <span class="tip">The number of nodes in the network (network size).</span>
-              </button>
+              </span>
               <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" required>
             </div>
             
             <div>
               <label>Number of Exposed Nodes *: </label>
-              <button id="tooltip">
+              <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
                 <span class="tip">The number of exposed nodes in the network.</span>
-              </button>
+              </span>
               <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" required>
             </div>
 
             <div>
              <label>Number of Layers *: </label>
-             <button id="tooltip">
+             <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
                 <span class="tip">The number of layers in the network</span>
-              </button>
+              </span>
               <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" required>
             </div>
 
             <div>
               <label>Compromise Ratio *: </label>
-              <button id="tooltip">
+              <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
                 <span class="tip">The ratio number that will terminate the simulation if reached.</span>
-              </button>
+              </span>
               <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" required>
             </div>
 
             <div>
               <label>Scheme *: </label>
-              <button id="tooltip">
+              <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
                 <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
-              </button>
+              </span>
               <input id="param" type="text" placeholder="Scheme..." v-model="scheme" required>
             </div>
 
             <div>
               <label>MTD Interval *: </label>
-              <button id="tooltip">
+              <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
                 <span class="tip">The time interval to trigger an MTD(s)</span>
-              </button>
+              </span>
               <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" required>
             </div>
 
             <button class="advanced" @click="toggleAdvanced()">Advanced</button>
             <div id="advancedPanel" class="hidden">
               <div>
-                <button id="tooltip">
+                <span id="tooltip">
                   <label id="heading">MTD Priority</label>
                   <span class='info'>
                     <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
@@ -82,7 +82,7 @@
                   <span class="tip">Below you have the choice to change the priority of options the defender has to avoid an attack. By default (leave empty) it is ordered 1-7 from top to bottom. If you wish
                     to change the order please fill in the form.
                   </span>
-                </button>
+                </span>
               </div>
 
               <label>Complete Topology Shuffle: </label>
@@ -281,31 +281,22 @@ input[type=text]:focus {
     font-size: 14px;
 }
 
-button .info {
-      text-decoration: underline;
-     font-style: Italic;
+#tooltip .info {
+  text-decoration: underline;
+  font-style: Italic;
 }
 
-button .tip { 
+#tooltip .tip { 
      display: none; 
 }
 
-button:hover .info {
-      display: none;
- }
-
-button:hover .tip { 
-     display: inline;
-     color: #222525;
- }
-
- button:hover .tip { 
-     display: block;
-     color: #514f4e;
-     background: white;
-     padding: 3px;
-     border: 1px solid #514f4e;
-     width: auto
+ #tooltip:hover .tip { 
+    display: block;
+    color: #514f4e;
+    background: white;
+    padding: 3px;
+    border: 1px solid #514f4e;
+    width: auto
  }
 
  #heading{
