@@ -18,10 +18,7 @@ sys.path.append(s_directory)
 n_directory = os.path.join(Path(__file__).parents[2])
 # Add the "s" directory to the Python path
 sys.path.append(n_directory)
-print("N")
-print(n_directory)
-print("N")
-from run import get_sim_json
+# from run import get_sim_json
 from adapter import *
 #
 # from adapter import sim_params, run_sim
@@ -129,23 +126,14 @@ async def get_graph():
             status_code=400, detail="Simulation already running")
     
     print('init',env)
-    evaluation , res = create_sim(env, start_time=0, finish_time= 4, new_network=True)
-    try: 
-        simulation_thread = threading.Thread(target=env.run, args=(([2])))
-        simulation_thread.start()
-        simulation_thread.join()
-        print("BEFORE", str(simulation_thread))
-        simulation_thread = None
-        print("AFTER", str(simulation_thread))
-        result = {index: serialize_graph(data) for index, data in enumerate(res)}
-        print(result.keys())
-    except:  
-        simulation_thread.join()
-        raise HTTPException (
-            status_code=400, detail="Forcibly terminated thread."
-        )
-    # graph_data = serialize_graph(res.get_network().graph)
-    return JSONResponse(content=result)
+    res= []
+    evaluation = create_sim(env, res=res, start_time=0, finish_time= 4,checkpoints=[1,2],  new_network=True)
+    simulation_thread = threading.Thread(target=env.run, args=(([2])))
+    simulation_thread.start()
+    simulation_thread.join()
+    print("res lenght", len(res))
+    graph_data = serialize_graph(evaluation.get_network().graph)
+    return JSONResponse(content=graph_data)
     
 @router.get("/graphDevEnd")
 async def stop_graph():
@@ -160,29 +148,26 @@ async def stop_graph():
     
 @router.get("/testGraph")
 async def get_sim():
-    return JSONResponse(content=get_sim_json())
-
-# global simulation_thread, env
-if simulation_thread is not None:
-    simulation_thread.join()
-    raise HTTPException(
-        status_code=400, detail="Simulation already running")
-
-print('init',env)
-evaluation , res = create_sim(env, start_time=0, finish_time= 4, new_network=True)
-result = {}
-try: 
-    simulation_thread = threading.Thread(target=env.run, args=(([2])))
+    '''The function `get_sim()` starts a simulation thread and returns the results in a serialized graph
+    format.
+    
+    Returns
+    -------
+        The code is returning a JSON response containing graph data.
+    
+    '''
+    global simulation_thread, env
+    res = []
+    if simulation_thread is not None:
+        simulation_thread.join()
+        raise HTTPException(
+            status_code=400, detail="Simulation already running")
+    
+    print('init',env)
+    res= []
+    simulation_thread = threading.Thread(target=create_sim_test, args=((env,res, 0,  4, [1,2,3], True )))
     simulation_thread.start()
     simulation_thread.join()
-    print("BEFORE", str(simulation_thread))
-    simulation_thread = None
-    print("AFTER", str(simulation_thread))
-    result = {index: serialize_graph(data) for index, data in enumerate(res)}
-    print(result.keys())
-except:  
-    simulation_thread.join()
-    raise HTTPException (
-        status_code=400, detail="Forcibly terminated thread."
-    )
-print(result)
+    print("res lenght", len(res))
+    graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
+    return JSONResponse(content=graph_data)
