@@ -135,11 +135,21 @@ export default {
   data(){
     return{
       nodeNumber:'',
-      node1:'',
-      node2:'',
-      node3:'',
+      nodeExposed:'',
+      layers:'',
+      compromisedRatio:'',
+      scheme:'',
+      interval:'',
+      compTopoShuffle:'',
+      hostTopoShuffle:'',
+      ipShuffle:'',
+      osDiveristy:'',
+      portShuffle:'',
+      ServDiversity:'',
+      userShuffle:"",
     };
   },
+
   methods: {
     toggleAdvanced(){
       var advancedContent = document.getElementById("advancedPanel");
@@ -151,10 +161,12 @@ export default {
     },
   
     submitForm(){
-      if(this.validateInput(this.nodeNumber) && this.validateInput(this.node1) 
-        && this.validateInput(this.node2) && this.validateInput(this.node3)){
-        console.log('All values are valid')
-        console.log(this.nodeNumber, this.node1, this.node2, this.node3)
+      if(this.validateInput(this.nodeNumber) && this.validateInput(this.nodeExposed) 
+        && this.validateInput(this.layers) && this.validateInput(this.compromisedRatio) 
+        && this.validateWord(this.scheme) && this.validateInput(this.interval) && this.validatePrioityInput(this.compTopoShuffle) 
+        && this.validatePrioityInput(this.hostTopoShuffle) && this.validatePrioityInput(this.ipShuffle) && this.validatePrioityInput(this.osDiveristy) 
+        && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
+          console.log('Inputs have been detected')
       }
       else{
         console.log('Invalid inputs have been detected')
@@ -167,7 +179,11 @@ export default {
     },
     validatePrioityInput(num){
       const parsedValue = parseFloat(num);
-      return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 7;
+      return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 7 || num == '';
+    },
+    validateWord(word){
+      const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'none'];
+        return possibleWords.includes(word);
     }
   },
 };
