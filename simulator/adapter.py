@@ -262,7 +262,7 @@ def create_sim(
     
     '''
     end_event = env.event()
-    snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
+    snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=[0.5,1,1.5])
     time_network = None
     adversary = None
     res = list()

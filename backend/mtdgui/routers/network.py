@@ -130,14 +130,25 @@ async def get_graph():
     
     print('init',env)
     evaluation , res = create_sim(env, start_time=0, finish_time= 4, new_network=True)
-    simulation_thread = threading.Thread(target=env.run, args=(([2])))
-    simulation_thread.start()
-    simulation_thread.join()
-    graph_data = serialize_graph(evaluation.get_network().graph)
-    return JSONResponse(content=graph_data)
+    try: 
+        simulation_thread = threading.Thread(target=env.run, args=(([2])))
+        simulation_thread.start()
+        simulation_thread.join()
+        print("BEFORE", str(simulation_thread))
+        simulation_thread = None
+        print("AFTER", str(simulation_thread))
+        result = {index: serialize_graph(data) for index, data in enumerate(res)}
+        print(result.keys())
+    except:  
+        simulation_thread.join()
+        raise HTTPException (
+            status_code=400, detail="Forcibly terminated thread."
+        )
+    # graph_data = serialize_graph(res.get_network().graph)
+    return JSONResponse(content=result)
     
 @router.get("/graphDevEnd")
-async def get_graph():
+async def stop_graph():
     global simulation_thread, env
     if simulation_thread is None:
         raise HTTPException(status_code=400, detail=f"No simulation running and is alive : {simulation_thread.is_alive()}")
@@ -149,4 +160,29 @@ async def get_graph():
     
 @router.get("/testGraph")
 async def get_sim():
-    return get_sim_json()
+    return JSONResponse(content=get_sim_json())
+
+# global simulation_thread, env
+if simulation_thread is not None:
+    simulation_thread.join()
+    raise HTTPException(
+        status_code=400, detail="Simulation already running")
+
+print('init',env)
+evaluation , res = create_sim(env, start_time=0, finish_time= 4, new_network=True)
+result = {}
+try: 
+    simulation_thread = threading.Thread(target=env.run, args=(([2])))
+    simulation_thread.start()
+    simulation_thread.join()
+    print("BEFORE", str(simulation_thread))
+    simulation_thread = None
+    print("AFTER", str(simulation_thread))
+    result = {index: serialize_graph(data) for index, data in enumerate(res)}
+    print(result.keys())
+except:  
+    simulation_thread.join()
+    raise HTTPException (
+        status_code=400, detail="Forcibly terminated thread."
+    )
+print(result)
