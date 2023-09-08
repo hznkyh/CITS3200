@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from itertools import chain, count
 from networkx.utils import to_tuple
 import simpy
-from ..controllers.serialiser import serialize_graph
+from controllers.serialiser import serialize_graph
 
 import sys
 import os
@@ -38,6 +38,8 @@ async def read_items():
 @router.get("/graph")
 async def get_graph():
     global simulation_thread, env
+    res = []
+    print("thread", simulation_thread)
     if simulation_thread is not None:
         simulation_thread.join()
         raise HTTPException(
@@ -45,13 +47,21 @@ async def get_graph():
     
     print('init',env)
     res= []
-    evaluation = create_sim(env, res=res, start_time=0, finish_time= 4,checkpoints=[1,2],  new_network=True)
-    simulation_thread = threading.Thread(target=env.run, args=(([2])))
-    simulation_thread.start()
-    simulation_thread.join()
-    print("res lenght", len(res))
-    graph_data = serialize_graph(evaluation.get_network().graph)
+    # Todo switch to kwargs
+    try: 
+        simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env,'res':res,'start_time':0,'finish_time':4,'checkpoints':[1,2,3],'new_network':True })
+        simulation_thread.start()
+        simulation_thread.join()
+        simulation_thread = None
+        env = simpy.Environment()
+        print("res length", len(res))
+        graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
+    except: 
+        raise HTTPException(
+            status_code=400, detail="Error in simulation execution."
+        ) 
     return JSONResponse(content=graph_data)
+
     
 @router.get("/graphDevEnd")
 async def stop_graph():
@@ -84,10 +94,15 @@ async def get_sim():
     print('init',env)
     res= []
     # Todo switch to kwargs
-    simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env,'res':res,'start_time':0,'finish_time':4,'checkpoints':[1,2,3],'new_network':True })
-    simulation_thread.start()
-    simulation_thread.join()
-    simulation_thread = None
-    print("res lenght", len(res))
-    graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
+    try: 
+        simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env,'res':res,'start_time':0,'finish_time':4,'checkpoints':[1,2,3],'new_network':True })
+        simulation_thread.start()
+        simulation_thread.join()
+        simulation_thread = None
+        print("res lenght", len(res))
+        graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
+    except: 
+        raise HTTPException(
+            status_code=400, detail="Error in simulation execution."
+        ) 
     return JSONResponse(content=graph_data)
