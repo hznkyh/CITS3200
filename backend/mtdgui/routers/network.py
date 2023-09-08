@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from itertools import chain, count
 from networkx.utils import to_tuple
 import simpy
-from controllers.serialiser import serialize_graph
+from ..controllers.serialiser import serialize_graph
 
 import sys
 import os
@@ -37,6 +37,14 @@ async def read_items():
 
 @router.get("/graph")
 async def get_graph():
+    '''The function `get_graph()` starts a simulation thread and returns the results in a serialized graph
+    format. Global threads and envs are used to ensure that in error, the threads are easily terminated. 
+    
+    Returns
+    -------
+        The code returns a JSON response containing graph data.
+    
+    '''
     global simulation_thread, env
     res = []
     print("thread", simulation_thread)
