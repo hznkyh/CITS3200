@@ -2,7 +2,7 @@
   <div class="content">
   <!-- <div class="content"> -->
     <div class="panel">
-      <form class="paramForm" v-on:submit.prevent="submitForm" >
+      <form id="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
         <div>
           <label>Number of Nodes *:</label>
@@ -12,7 +12,7 @@
             </span>
             <span class="tip">The number of nodes in the network (network size).</span>
           </span>
-          <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" required>
+          <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" name="total_nodes" required>
         </div>
         
         <div>
@@ -23,7 +23,7 @@
             </span>
             <span class="tip">The number of exposed nodes in the network.</span>
           </span>
-          <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" required>
+          <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" name="total_endpoints" required>
         </div>
 
         <div>
@@ -34,7 +34,7 @@
             </span>
             <span class="tip">The number of layers in the network</span>
           </span>
-          <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" required>
+          <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" name="total_layers" required>
         </div>
 
         <div>
@@ -45,7 +45,7 @@
             </span>
             <span class="tip">The ratio number that will terminate the simulation if reached.</span>
           </span>
-          <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" required>
+          <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" name="terminate_compromise_ratio" required>
         </div>
 
         <div>
@@ -56,7 +56,7 @@
             </span>
             <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
           </span>
-          <input id="param" type="text" placeholder="Scheme..." v-model="scheme" required>
+          <input id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
         </div>
 
         <div>
@@ -67,7 +67,7 @@
             </span>
             <span class="tip">The time interval to trigger an MTD(s)</span>
           </span>
-          <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" required>
+          <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" name="mtd_interval" required>
         </div>
 
         <button class="advanced" @click="toggleAdvanced()">Advanced</button>
@@ -85,25 +85,25 @@
           </div>
 
           <label>Complete Topology Shuffle: </label>
-          <input id="param" type="text" placeholder="Complete Topology Shuffle..." v-model="compTopoShuffle">
+          <input id="param" type="text" placeholder="Complete Topology Shuffle..." name="CompleteTopologyShuffle" v-model="compTopoShuffle">
 
           <label>Host Topology Shuffle: </label>
-          <input id="param" type="text" placeholder="Host Topology Shuffle..." v-model="hostTopoShuffle">
+          <input id="param" type="text" placeholder="Host Topology Shuffle..." name="HostTopologyShuffle" v-model="hostTopoShuffle">
 
           <label>IP Shuffle: </label>
-          <input id="param" type="text" placeholder="IP Shuffle..." v-model="ipShuffle">
+          <input id="param" type="text" placeholder="IP Shuffle..." name="IPShuffle" v-model="ipShuffle">
 
           <label>OS Diversity: </label>
-          <input id="param" type="text" placeholder="OS Diversity..." v-model="osDiveristy">
+          <input id="param" type="text" placeholder="OS Diversity..." name="OSDiversity" v-model="osDiveristy">
 
           <label>Port Shuffle: </label>
-          <input id="param" type="text" placeholder="Port Shuffle..." v-model="portShuffle">
+          <input id="param" type="text" placeholder="Port Shuffle..." name="PortShuffle" v-model="portShuffle">
 
           <label>Service Diversity: </label>
-          <input id="param" type="text" placeholder="Service Diversity..." v-model="ServDiversity">
+          <input id="param" type="text" placeholder="Service Diversity..." name="ServiceDivesity" v-model="ServDiversity">
 
           <label>User Shuffle: </label>
-          <input id="param" type="text" placeholder="User Shuffle..." v-model="userShuffle">
+          <input id="param" type="text" placeholder="User Shuffle..." name="UserShuffle" v-model="userShuffle">
 
         </div>
 
@@ -194,21 +194,22 @@ export default {
         && this.validatePrioityInput(this.hostTopoShuffle) && this.validatePrioityInput(this.ipShuffle) && this.validatePrioityInput(this.osDiveristy) 
         && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
           console.log('Correct inputs have been detected');
+        
           var data = JSON.stringify ({
-            "nodeNumber": this.nodeNumber,
-            "nodeExposed": this.nodeExposed,
-            "layers": this.layers,
-            "compromisedRatio": this.compromisedRatio,
+            "total_nodes": this.nodeNumber,
+            "total_endpoints": this.nodeExposed,
+            "total_layers": this.layers,
+            "terminate_compromise_ratio": this.compromisedRatio,
             "scheme": this.scheme,
-            "interval": this.interval,
-            "priority": {
-              "compTopoShuffle": this.compTopoShuffle,
-              "hostTopoShuffle": this.hostTopoShuffle,
-              "ipShuffle": this.ipShuffle,
-              "osDiveristy": this.osDiveristy,
-              "portShuffle": this.portShuffle,
-              "ServDiversity": this.ServDiversity,
-              "userShuffle": this.userShuffle,
+            "mtd_interval": this.interval,
+            "MTD_PRIORITY": {
+              "CompleteTopologyShuffle": this.compTopoShuffle,
+              "HostTopologyShuffle": this.hostTopoShuffle,
+              "IPShuffle": this.ipShuffle,
+              "OSDiveristy": this.osDiveristy,
+              "PortShuffle": this.portShuffle,
+              "ServiceDiversity": this.ServDiversity,
+              "UserShuffle": this.userShuffle,
             }
           });
           console.log(data);
@@ -236,7 +237,9 @@ export default {
     validateWord(word){
       const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'none'];
         return possibleWords.includes(word);
-    }
+    },
+    
+    
   },
 };
 </script>
