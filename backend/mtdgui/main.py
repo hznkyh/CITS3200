@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Union, Optional
+
 
 from routers import develop, network#, set_configs#, sim
 from controllers import * 
@@ -31,40 +30,5 @@ async def root():
 if __name__ == "__main__":
     config ={}
     app.run(host="0.0.0.0.0", port=8000, debug=True)
-    
-class Item(BaseModel):
-    name: str
-    age: float
-    is_TrueMan: Union[bool, None]=None
 
-@app.post("/update_item/")
-def update_item(item: Item):
-    item.age += 10
-    print(item)
-    return {'item':item}
-
-class MTD_PRIORITYItem(BaseModel):
-    CompleteTopologyShuffle: Optional[float]
-    HostTopologyShuffle: Optional[float]
-    IPShuffle: Optional[float]
-    OSDiveristy: Optional[float]
-    PortShuffle: Optional[float]
-    ServiceDiversity: Optional[float]
-    UserShuffle: Optional[float]
-
-class formData(BaseModel):
-    total_nodes: float
-    total_endpoints: float
-    total_layers: float
-    terminate_compromise_ratio: float
-    scheme: str
-    mtd_interval: float
-    MTD_PRIORITY: Union[MTD_PRIORITYItem, None]
-
-@app.post("/update_submit/")
-def update_item(item: formData):
-    if item.MTD_PRIORITY is None:
-        pass
-    print(item)
-    return {'item': item.dict()}
 

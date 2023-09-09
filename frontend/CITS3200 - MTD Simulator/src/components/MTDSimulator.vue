@@ -218,7 +218,7 @@ export default {
           var data = JSON.stringify(JSONData)
           
           //console.log(data);
-          axios.post('/update_submit/', data, {headers: {'Content-Type': 'application/json'}})
+          axios.post('/network/update_submit/', data, {headers: {'Content-Type': 'application/json'}})
           .then((response) => {
             console.log(response);
             Graph.methods.getGraph();
