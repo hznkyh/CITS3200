@@ -38,13 +38,19 @@ def update_item(item: Item):
     return {'item':item}
 
 class MTD_PRIORITYItem(BaseModel):
-    CompleteTopologyShuffle: Optional[float]
-    HostTopologyShuffle: Optional[float]
-    IPShuffle: Optional[float]
-    OSDiveristy: Optional[float]
-    PortShuffle: Optional[float]
-    ServiceDiversity: Optional[float]
-    UserShuffle: Optional[float]
+    CompleteTopologyShuffle: Union[float, None]
+    HostTopologyShuffle: Union[float, None]
+    IPShuffle: Union[float, None]
+    OSDiveristy: Union[float, None]
+    PortShuffle: Union[float, None]
+    ServiceDiversity: Union[float, None]
+    UserShuffle: Union[float, None]
+
+@app.post("/update_MTDPsubmit/")
+def update_item(item: MTD_PRIORITYItem):
+    print(item.model_dump_json())
+    return {'item': item.model_dump_json()}
+    #return {'item': item.dict()}
 
 class formData(BaseModel):
     total_nodes: float
@@ -53,12 +59,12 @@ class formData(BaseModel):
     terminate_compromise_ratio: float
     scheme: str
     mtd_interval: float
-    MTD_PRIORITY: Union[MTD_PRIORITYItem, None]
 
 @app.post("/update_submit/")
 def update_item(item: formData):
-    if item.MTD_PRIORITY is None:
-        pass
-    print(item)
-    return {'item': item.dict()}
+    print(item.model_dump_json())
+    return {'item': item.model_dump_json()}
+    #return {'item': item.dict()}
+
+
 
