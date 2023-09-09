@@ -5,13 +5,13 @@ class Item(BaseModel):
     configVal: float
 
 class MTD_PRIORITYItem(BaseModel):
-    CompleteTopologyShuffle: Optional[float]
-    HostTopologyShuffle: Optional[float]
-    IPShuffle: Optional[float]
-    OSDiveristy: Optional[float]
-    PortShuffle: Optional[float]
-    ServiceDiversity: Optional[float]
-    UserShuffle: Optional[float]
+    CompleteTopologyShuffle: Union[float, None]
+    HostTopologyShuffle: Union[float, None]
+    IPShuffle: Union[float, None]
+    OSDiveristy: Union[float, None]
+    PortShuffle: Union[float, None]
+    ServiceDiversity: Union[float, None]
+    UserShuffle: Union[float, None]
 
 class formData(BaseModel):
     total_nodes: float
@@ -20,4 +20,3 @@ class formData(BaseModel):
     terminate_compromise_ratio: float
     scheme: str
     mtd_interval: float
-    MTD_PRIORITY: Union[MTD_PRIORITYItem, None]

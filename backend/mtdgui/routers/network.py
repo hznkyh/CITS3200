@@ -95,10 +95,16 @@ def update_item(item: Item):
 
 @router.post("/update_submit/")
 def update_item(item: formData):
-    if item.MTD_PRIORITY is None:
-        pass
     print(item.model_dump_json())
     return {'item': item.model_dump_json()}
+
+@router.post("/update_MTDPsubmit/")
+def update_item(item: MTD_PRIORITYItem):
+    print(item.model_dump_json())
+    return {'item': item.model_dump_json()}
+
+
+
 
 # { 
 #     run.py { 
