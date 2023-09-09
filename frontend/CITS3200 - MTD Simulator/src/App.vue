@@ -15,6 +15,9 @@
     </div>
   </nav>
   <component :is="currentView"/>
+  <footer>
+    <p>&copy; 2023 Semester 1 CITS3200 Project</p>
+  </footer>
 </template>
 
 <script>
@@ -43,4 +46,16 @@ export default {
 </script>
 
 <style>
+header {
+  padding: 30px;
+  text-align: center;
+  font-size: 35px;
+  color: white;
+}
+footer {
+  text-align: center;
+  padding: 1em 0 0.5em 0;
+  color: white;
+  background-color: rgb(33,33,33);
+}
 </style>

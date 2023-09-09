@@ -1,0 +1,2 @@
+npm install v-network-graph
+npm install dagre
