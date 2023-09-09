@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from .routers import develop, network#, set_configs#, sim
-from .controllers import * 
+from routers import develop, network#, set_configs#, sim
+from controllers import * 
 
 app = FastAPI()
 

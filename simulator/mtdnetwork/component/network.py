@@ -7,14 +7,15 @@ import mtdnetwork.data.constants as constants
 import mtdnetwork.component.services as services
 from mtdnetwork.component.host import Host
 from mtdnetwork.statistic.scorer import Scorer
+from mtdnetwork.data import config
 import os
 
 
 class Network:
 
     def __init__(self, total_nodes, total_endpoints, total_subnets, total_layers, total_database, target_layer=None,
-                 users_to_nodes_ratio=constants.USER_TO_NODES_RATIO,
-                 prob_user_reuse_pass=constants.USER_PROB_TO_REUSE_PASS, seed=None):
+                 users_to_nodes_ratio=config.get("USER_TO_NODES_RATIO"),
+                 prob_user_reuse_pass=config.get("USER_PROB_TO_REUSE_PASS"), seed=None):
         """
         Initialises the state of the network for the simulation.
 
@@ -80,7 +81,7 @@ class Network:
     def init_network(self):
         self.assign_tags()
         self.assign_tag_priority()
-        self.setup_users(self.users_to_nodes_ratio, self.prob_user_reuse_pass, constants.USER_TOTAL_FOR_EACH_HOST)
+        self.setup_users(self.users_to_nodes_ratio, self.prob_user_reuse_pass, config.get("USER_TOTAL_FOR_EACH_HOST"))
         self.gen_graph()
         self.setup_network()
         self.scorer.set_initial_statistics(self)
@@ -208,7 +209,7 @@ class Network:
 
                 # Assigns Colour of nodes based on constant key
                 for k in range(s_nodes):
-                    self.colour_map.append(constants.NODE_COLOURS[i])
+                    self.colour_map.append(config.get("NODE_COLOURS").get(i))
 
                 # Adds Subgraph to final graph
                 self.graph = nx.compose(self.graph, subgraph)
@@ -400,7 +401,7 @@ class Network:
     #
     #             # Assigns Colour of nodes based on constant key
     #             for k in range(s_nodes):
-    #                 self.colour_map.append(constants.NODE_COLOURS[i])
+    #                 self.colour_map.append(config.get("NODE_COLOURS").get(i))
     #
     #             # Adds Subgraph to final graph
     #             self.graph = nx.compose(self.graph, subgraph)
@@ -757,11 +758,11 @@ class Network:
 
     def assign_tags(self):
         """
-        Assigns the tags to layers from constants.py
+        Assigns the tags to layers from config.get("py")
         """
         i = 0
         while i < self.layers:
-            self.tags.append(constants.HOST_TAGS[i])
+            self.tags.append(config.get("HOST_TAGS").get(i))
             i += 1
 
     def assign_tag_priority(self):
@@ -803,7 +804,7 @@ class Network:
         if graph is None:
             graph = self.graph
 
-        shortest_distance = constants.LARGE_INT
+        shortest_distance = config.get("LARGE_INT")
         shortest_path = []
 
         for ex_node in self.exposed_endpoints:
@@ -819,7 +820,7 @@ class Network:
 
         # This function is used when the attacker can't find a path to host
 
-        # if shortest_distance == constants.LARGE_INT:
+        # if shortest_distance == config.get("LARGE_INT"):
         #     raise exceptions.ActionBlockedError
 
         return shortest_path, shortest_distance

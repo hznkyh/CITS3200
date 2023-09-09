@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from itertools import chain, count
 from networkx.utils import to_tuple
 import simpy
-from ..controllers.serialiser import serialize_graph
+from controllers.serialiser import serialize_graph
 
 import sys
 import os
@@ -114,3 +114,4 @@ async def get_sim():
             status_code=400, detail="Error in simulation execution."
         ) 
     return JSONResponse(content=graph_data)
+

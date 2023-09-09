@@ -146,7 +146,7 @@ class AttackOperation:
 
         adversary.set_pivot_host_id(-1)
         visible_network = network.get_hacker_visible_graph()
-        # scan_time = constants.NETWORK_HOST_DISCOVER_TIME * visible_network.number_of_nodes()
+        # scan_time = config.get("NETWORK_HOST_DISCOVER_TIME") * visible_network.number_of_nodes()
         uncompromised_hosts = []
         # Add every uncompromised host that is reachable and is not an exposed or compromised host
         for c_host in compromised_hosts:

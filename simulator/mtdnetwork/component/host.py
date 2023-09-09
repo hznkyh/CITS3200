@@ -1,6 +1,8 @@
 import random, uuid
 import networkx as nx
 import mtdnetwork.data.constants as constants
+from mtdnetwork.data import config
+
 import json
 
 class Host:
@@ -49,7 +51,7 @@ class Host:
         self.total_users = 0
         self.uuid = str(uuid.uuid4())
 
-        self.total_services = random.randint(constants.HOST_SERVICES_MIN, constants.HOST_SERVICES_MAX)
+        self.total_services = random.randint(config.get("HOST_SERVICES_MIN"), config.get("HOST_SERVICES_MAX"))
         # +1 for the target service node the adversary needs to be adjacent inorder to compromise the host
         self.total_nodes = self.total_services + 1
         self.compromised = False
@@ -173,7 +175,7 @@ class Host:
         """
         attempt_users = [username for username in self.users.keys() if username in compromised_users]
 
-        if random.random() < constants.HOST_MAX_PROB_FOR_USER_COMPROMISE * len(attempt_users) / self.total_users:
+        if random.random() < config.get("HOST_MAX_PROB_FOR_USER_COMPROMISE") * len(attempt_users) / self.total_users:
             self.set_compromised()
             return True
         return False
@@ -595,7 +597,7 @@ class Host:
         Returns:
             a random version where the latest versions of the OS are more likely to be chose over older ones
         """
-        versions = constants.OS_VERSION_DICT[operating_system]
+        versions = config.get("OS_VERSION_DICT").get(operating_system)
         total_versions = len(versions)
         return random.choices(versions, weights=[total_versions - index for index in range(total_versions)], k=1)[0]
 
@@ -605,7 +607,7 @@ class Host:
         Returns:
             A random OS
         """
-        return random.choice(constants.OS_TYPES)
+        return random.choice(config.get("OS_TYPES"))
 
     @staticmethod
     def get_random_address(existing_addresses=None):
@@ -640,7 +642,7 @@ class Host:
         """
         if existing_ports is None:
             existing_ports = []
-        new_port = random.choice(constants.HOST_PORT_RANGE)
+        new_port = random.choice(config.get("HOST_PORT_RANGE"))
         if new_port in existing_ports:
             return Host.get_random_port(existing_ports=existing_ports)
         return new_port
@@ -656,7 +658,7 @@ class Host:
         """
         graph = self.graph
 
-        shortest_distance = constants.LARGE_INT
+        shortest_distance = config.get("LARGE_INT")
         shortest_path = []
 
         for ex_service in self.exposed_endpoints:

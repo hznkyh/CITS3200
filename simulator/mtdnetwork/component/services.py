@@ -1,5 +1,7 @@
 import random, logging
 import mtdnetwork.data.constants as constants
+from mtdnetwork.data import config
+
 import pkg_resources
 import uuid
 
@@ -20,7 +22,7 @@ class Vulnerability:
         """
         # 1 for easy, 0 for impossible
         # Change to fit distributions
-        self.complexity = constants.VULN_MIN_COMPLEXITY + (1 - constants.VULN_MIN_COMPLEXITY) * random.random()
+        self.complexity = config.get("VULN_MIN_COMPLEXITY") + (1 - config.get("VULN_MIN_COMPLEXITY")) * random.random()
         # 1 for complete compromise
         # 0 for nothing
         self.impact = random.random() * 10
@@ -30,15 +32,15 @@ class Vulnerability:
         self.exploited = False
         self.has_os_dependency = False
         self.vuln_os_list = []
-        self.has_dependent_vulns = random.random() < constants.VULN_PROB_DEPENDS_ON_OTHER_VULNS
+        self.has_dependent_vulns = random.random() < config.get("VULN_PROB_DEPENDS_ON_OTHER_VULNS")
         self.dependent_vuln_id = random.choice(
-            [x for x in range(0, 101, int(100 * constants.VULN_PROB_DEPENDS_ON_OTHER_VULNS))])
+            [x for x in range(0, 101, int(100 * config.get("VULN_PROB_DEPENDS_ON_OTHER_VULNS")))])
         self.dependent_vulns = []
 
         self.id = str(uuid.uuid4())
         self.logger = logging.getLogger("vuln-{}".format(self.id))
         if can_have_os_dependency and len(os_list) > 1:
-            if random.random() < constants.VULN_PROB_DEPENDS_ON_OS:
+            if random.random() < config.get("VULN_PROB_DEPENDS_ON_OS"):
                 self.has_os_dependency = True
                 self.vuln_os_list = random.sample(os_list, k=random.randint(1, len(os_list) - 1))
                 # self.vuln_os_list = random.sample(os_list, k=random.randint(1, 2))
@@ -74,14 +76,14 @@ class Vulnerability:
             the more attempts a hacker tries at exploiting a particular vulnerability the faster the exploit time becomes
 
         """
-        exp_time = constants.ATTACK_DURATION['EXPLOIT_VULN'] * (1 - self.complexity)
+        exp_time = config.get("ATTACK_DURATION").get('EXPLOIT_VULN') * (1 - self.complexity)
         if self.has_os_dependency and host is not None and host.os_type not in self.vuln_os_list:
             exp_time *= 2.5
         if self.exploited:
             return exp_time / 2
         return exp_time
-        # return constants.VULN_MIN_EXPLOIT_TIME + (constants.VULN_MAX_EXPLOIT_TIME -
-        # constants.VULN_MIN_EXPLOIT_TIME) * ( 1 - self.complexity) / ( self.exploit_attempt + 1)
+        # return config.get("VULN_MIN_EXPLOIT_TIME") + (config.get("VULN_MAX_EXPLOIT_TIME") -
+        # config.get("VULN_MIN_EXPLOIT_TIME")) * ( 1 - self.complexity) / ( self.exploit_attempt + 1)
 
     def network(self, host=None):
         """
@@ -141,9 +143,9 @@ class Vulnerability:
         return (self.complexity * self.impact) / self.exploit_time()
 
     def initial_roa(self):
-        return (self.complexity * self.impact) / (constants.VULN_MIN_EXPLOIT_TIME +
+        return (self.complexity * self.impact) / (config.get("VULN_MIN_EXPLOIT_TIME") +
                                                   (
-                                                          constants.VULN_MAX_EXPLOIT_TIME - constants.VULN_MIN_EXPLOIT_TIME) * (
+                                                          config.get("VULN_MAX_EXPLOIT_TIME") - config.get("VULN_MIN_EXPLOIT_TIME")) * (
                                                           1 - self.complexity))
 
     def __eq__(self, other):
@@ -191,7 +193,7 @@ class Service:
                    v
                    for v in self.vulnerabilities
                    if v.roa() > roa_threshold and not v.is_exploited()
-               ][:constants.SERVICE_TOP_X_VULNS_TO_RETURN]
+               ][:config.get("SERVICE_TOP_X_VULNS_TO_RETURN")]
 
     def get_all_vulns(self):
         return self.vulnerabilities
@@ -204,10 +206,10 @@ class Service:
         for vuln in self.vulnerabilities:
             if vuln.exploited:
                 self.exploit_value += vuln.impact
-        return self.exploit_value > constants.SERVICE_COMPROMISED_THRESHOLD
+        return self.exploit_value > config.get("SERVICE_COMPROMISED_THRESHOLD")
 
     def discover_vuln_time(self, roa_threshold=0):
-        return len(self.get_vulns(roa_threshold=roa_threshold)) * constants.SERVICE_DISCOVER_EACH_VULN_TIME
+        return len(self.get_vulns(roa_threshold=roa_threshold)) * config.get("SERVICE_DISCOVER_EACH_VULN_TIME")
 
     def get_highest_roa_vuln(self):
         vuln_len = len(self.get_vulns())
@@ -224,14 +226,14 @@ class Service:
 class ServicesGenerator:
 
     def __init__(self,
-                 services_per_os=constants.SERVICE_NO_OF_SERVICES_PER_OS,
-                 percent_cross_platform=constants.VULN_PERCENT_CROSS_PLATFORM,
-                 max_vuln_probability=constants.VULN_MAX_PROB_FOR_OCCURING_FOR_SERVICE_VERSION,
-                 vuln_patch_mean=constants.VULN_PATCH_MEAN,
-                 vuln_patch_range=constants.VULN_PATCH_RANGE,
-                 vuln_initial_chances=constants.VULN_INITIAL_CHANCES,
-                 os_dependent_vuln_chance=constants.VULN_PROB_DEPENDS_ON_OS,
-                 dependent_vuln_chance=constants.VULN_PROB_DEPENDS_ON_OTHER_VULNS):
+                 services_per_os=config.get("SERVICE_NO_OF_SERVICES_PER_OS"),
+                 percent_cross_platform=config.get("VULN_PERCENT_CROSS_PLATFORM"),
+                 max_vuln_probability=config.get("VULN_MAX_PROB_FOR_OCCURING_FOR_SERVICE_VERSION"),
+                 vuln_patch_mean=config.get("VULN_PATCH_MEAN"),
+                 vuln_patch_range=config.get("VULN_PATCH_RANGE"),
+                 vuln_initial_chances=config.get("VULN_INITIAL_CHANCES"),
+                 os_dependent_vuln_chance=config.get("VULN_PROB_DEPENDS_ON_OS"),
+                 dependent_vuln_chance=config.get("VULN_PROB_DEPENDS_ON_OTHER_VULNS")):
         """
         Used to generator services for the simulation
 
@@ -319,27 +321,27 @@ class ServicesGenerator:
         """
         Generates all of the services for each OS type and version for the simulation
         """
-        self.os_services = {os_name: {} for os_name in constants.OS_TYPES}
+        self.os_services = {os_name: {} for os_name in config.get("OS_TYPES")}
 
-        for os_type in constants.OS_TYPES:
-            for os_version in constants.OS_VERSION_DICT[os_type]:
+        for os_type in config.get("OS_TYPES"):
+            for os_version in config.get("OS_VERSION_DICT").get(os_type):
                 self.os_services[os_type][os_version] = {}
 
         wordlist = ServicesGenerator.get_service_name_list()
-        types_of_os = len(constants.OS_TYPES)
+        types_of_os = len(config.get("OS_TYPES"))
         total_services = self.services_per_os * types_of_os
         self.service_names = random.choices(wordlist, k=total_services)
 
-        s_versions = constants.SERVICE_VERSIONS
+        s_versions = config.get("SERVICE_VERSIONS")
         s_versions_len = len(s_versions)
 
         self.services = {}
-        # os_list = constants.OS_TYPES
+        # os_list = config.get("OS_TYPES")
         for s_index, service in enumerate(self.service_names):
-            os_list = [constants.OS_TYPES[s_index // self.services_per_os]]
+            os_list = [config.get("OS_TYPES").get(s_index // self.services_per_os])
 
             if random.random() < self.percent_cross_platform:
-                os_list = constants.OS_TYPES
+                os_list = config.get("OS_TYPES")
 
             # can_have_os_depend_vuln = len(os_list) > 1
             can_have_os_depend_vuln = True
@@ -376,7 +378,7 @@ class ServicesGenerator:
                 self.services[service] = self.services[service] + [Service(service, service_version, active_vulns)]
 
             for os_name in os_list:
-                os_versions = constants.OS_VERSION_DICT[os_name]
+                os_versions = config.get("OS_VERSION_DICT").get(os_name)
                 total_os_versions = len(os_versions)
                 version_split = s_versions_len // total_os_versions
                 for os_version_index, os_version in enumerate(os_versions):
