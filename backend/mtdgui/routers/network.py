@@ -85,38 +85,6 @@ async def stop_graph():
     env = simpy.Environment()  # create a new environment
     return JSONResponse(content="Simulation stopped", status_code=400)
     
-@router.get("/testGraph")
-async def get_sim():
-    '''The function `get_sim()` starts a simulation thread and returns the results in a serialized graph
-    format.
-    
-    Returns
-    -------
-        The code is returning a JSON response containing graph data.
-    
-    '''
-    global simulation_thread, env
-    res = []
-    if simulation_thread is not None:
-        simulation_thread.join()
-        raise HTTPException(
-            status_code=400, detail="Simulation already running")
-    
-    print('init',env)
-    res= []
-    # Todo switch to kwargs
-    try: 
-        simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env,'res':res,'start_time':0,'finish_time':4,'checkpoints':[1,2,3],'new_network':True })
-        simulation_thread.start()
-        simulation_thread.join()
-        simulation_thread = None
-        print("res lenght", len(res))
-        graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
-    except: 
-        raise HTTPException(
-            status_code=400, detail="Error in simulation execution."
-        ) 
-    return JSONResponse(content=graph_data)
 
 class Item(BaseModel):
     name: str
@@ -153,3 +121,11 @@ def update_item(item: formData):
         pass
     print(item.model_dump_json())
     return {'item': item.model_dump_json()}
+# { 
+#     run.py { 
+#         total_nodes
+#     }
+#     constants.py { 
+#         optional
+#     }
+# }
