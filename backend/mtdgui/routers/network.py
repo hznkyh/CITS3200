@@ -1,14 +1,13 @@
 import json
 import threading
 import networkx as nx
+from model.forms import Item,MTD_PRIORITYItem,formData
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, HTTPException
 from itertools import chain, count
 # from networkx.utils import to_tuple
 import simpy
 from controllers.serialiser import serialize_graph
-from pydantic import BaseModel
-from typing import Union, Optional
 import sys
 import os
 from pathlib import Path
@@ -47,7 +46,7 @@ async def get_graph():
     
     '''
     global simulation_thread, env
-    config.config = 0
+    # config.config = 0
     # set_config()
     res = []
     print("thread", simulation_thread)
@@ -86,34 +85,13 @@ async def stop_graph():
     return JSONResponse(content="Simulation stopped", status_code=400)
     
 
-class Item(BaseModel):
-    name: str
-    age: float
-    is_TrueMan: Union[bool, None]=None
 
 @router.post("/update_item/")
 def update_item(item: Item):
+    config.config=item.age
     item.age += 10
     print(item)
     return {'item':item}
-
-class MTD_PRIORITYItem(BaseModel):
-    CompleteTopologyShuffle: Optional[float]
-    HostTopologyShuffle: Optional[float]
-    IPShuffle: Optional[float]
-    OSDiveristy: Optional[float]
-    PortShuffle: Optional[float]
-    ServiceDiversity: Optional[float]
-    UserShuffle: Optional[float]
-
-class formData(BaseModel):
-    total_nodes: float
-    total_endpoints: float
-    total_layers: float
-    terminate_compromise_ratio: float
-    scheme: str
-    mtd_interval: float
-    MTD_PRIORITY: Union[MTD_PRIORITYItem, None]
 
 @router.post("/update_submit/")
 def update_item(item: formData):
@@ -121,6 +99,7 @@ def update_item(item: formData):
         pass
     print(item.model_dump_json())
     return {'item': item.model_dump_json()}
+
 # { 
 #     run.py { 
 #         total_nodes

@@ -2,12 +2,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from routers import develop, network#, set_configs#, sim
+from routers import develop, network,config#, set_configs#, sim
 from controllers import * 
 
 app = FastAPI()
 
-# app.include_router(sim.router)
+app.include_router(config.router)
 app.include_router(network.router)
 app.include_router(develop.router)
 # app.include_router(set_configs.router)
