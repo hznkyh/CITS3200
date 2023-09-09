@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Union
+from typing import Union, Optional
 
 from routers import develop, network#, sim
 from controllers import * 
@@ -36,3 +36,29 @@ def update_item(item: Item):
     item.age += 10
     print(item)
     return {'item':item}
+
+class MTD_PRIORITYItem(BaseModel):
+    CompleteTopologyShuffle: Optional[float]
+    HostTopologyShuffle: Optional[float]
+    IPShuffle: Optional[float]
+    OSDiveristy: Optional[float]
+    PortShuffle: Optional[float]
+    ServiceDiversity: Optional[float]
+    UserShuffle: Optional[float]
+
+class formData(BaseModel):
+    total_nodes: float
+    total_endpoints: float
+    total_layers: float
+    terminate_compromise_ratio: float
+    scheme: str
+    mtd_interval: float
+    MTD_PRIORITY: Union[MTD_PRIORITYItem, None]
+
+@app.post("/update_submit/")
+def update_item(item: formData):
+    if item.MTD_PRIORITY is None:
+        pass
+    print(item)
+    return {'item': item.dict()}
+
