@@ -195,17 +195,16 @@ export default {
         && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
           console.log('Correct inputs have been detected');
         
-          var JSONData = ({
+          var mainData = ({
             "total_nodes": this.nodeNumber,
             "total_endpoints": this.nodeExposed,
             "total_layers": this.layers,
             "terminate_compromise_ratio": this.compromisedRatio,
             "scheme": this.scheme,
             "mtd_interval": this.interval,
-            "MTD_PRIORITY": null
           });
           if (this.compTopoShuffle || this.hostTopoShuffle || this.ipShuffle || this.osDiveristy || this.portShuffle || this.ServDiversity || this.userShuffle) {
-            JSONData.MTD_PRIORITY = {
+            var MTD_PRIORITY = {
               "CompleteTopologyShuffle": this.compTopoShuffle,
               "HostTopologyShuffle": this.hostTopoShuffle,
               "IPShuffle": this.ipShuffle,
@@ -215,10 +214,20 @@ export default {
               "UserShuffle": this.userShuffle,
             };
           }
-          var data = JSON.stringify(JSONData)
+          var data = JSON.stringify(mainData);
+          var MTDData = JSON.stringify(MTD_PRIORITY);
           
-          //console.log(data);
+          console.log(data);
           axios.post('/update_submit/', data, {headers: {'Content-Type': 'application/json'}})
+          .then((response) => {
+            console.log(response);
+            Graph.methods.getGraph();
+          }) .catch((error) => {
+            console.log(error);
+          });
+
+          console.log(MTDData);
+          axios.post('/update_MTDPsubmit/', MTDData, {headers: {'Content-Type': 'application/json'}})
           .then((response) => {
             console.log(response);
             Graph.methods.getGraph();
