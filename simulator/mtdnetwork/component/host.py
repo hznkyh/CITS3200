@@ -1,7 +1,7 @@
 import random, uuid
 import networkx as nx
 import mtdnetwork.data.constants as constants
-from mtdnetwork.data import config
+from mtdnetwork.config import config
 
 import json
 
@@ -642,7 +642,7 @@ class Host:
         """
         if existing_ports is None:
             existing_ports = []
-        new_port = random.choice(config.get("HOST_PORT_RANGE"))
+        new_port = random.choice(range(1,config.get("HOST_PORT_RANGE")))
         if new_port in existing_ports:
             return Host.get_random_port(existing_ports=existing_ports)
         return new_port

@@ -7,7 +7,7 @@ import mtdnetwork.data.constants as constants
 import mtdnetwork.component.services as services
 from mtdnetwork.component.host import Host
 from mtdnetwork.statistic.scorer import Scorer
-from mtdnetwork.data import config
+from mtdnetwork.config import config
 import os
 
 
@@ -209,7 +209,7 @@ class Network:
 
                 # Assigns Colour of nodes based on constant key
                 for k in range(s_nodes):
-                    self.colour_map.append(config.get("NODE_COLOURS").get(i))
+                    self.colour_map.append(config.get("NODE_COLOURS")[i])
 
                 # Adds Subgraph to final graph
                 self.graph = nx.compose(self.graph, subgraph)
@@ -762,7 +762,7 @@ class Network:
         """
         i = 0
         while i < self.layers:
-            self.tags.append(config.get("HOST_TAGS").get(i))
+            self.tags.append(config.get("HOST_TAGS")[i])
             i += 1
 
     def assign_tag_priority(self):

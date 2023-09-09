@@ -1,6 +1,6 @@
 import random, logging
 import mtdnetwork.data.constants as constants
-from mtdnetwork.data import config
+from mtdnetwork.config import config
 
 import pkg_resources
 import uuid
@@ -338,7 +338,7 @@ class ServicesGenerator:
         self.services = {}
         # os_list = config.get("OS_TYPES")
         for s_index, service in enumerate(self.service_names):
-            os_list = [config.get("OS_TYPES").get(s_index // self.services_per_os])
+            os_list = [config.get("OS_TYPES")[s_index // self.services_per_os]]
 
             if random.random() < self.percent_cross_platform:
                 os_list = config.get("OS_TYPES")

@@ -46,6 +46,8 @@ async def get_graph():
     
     '''
     global simulation_thread, env
+    config.config = 0
+    # set_config()
     res = []
     print("thread", simulation_thread)
     if simulation_thread is not None:

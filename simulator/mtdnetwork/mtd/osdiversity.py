@@ -1,7 +1,6 @@
 from mtdnetwork.mtd import MTD
 import random
-from mtdnetwork.data import constants
-
+from mtdnetwork.config import config
 
 class OSDiversity(MTD):
     def __init__(self, network=None):
@@ -23,7 +22,7 @@ class OSDiversity(MTD):
             prev_os_version = host_instance.os_version
             prev_os_version_index = config.get("OS_VERSION_DICT").get(prev_os).index(prev_os_version)
             new_os = random.choice(config.get("OS_TYPES"))
-            new_os_version = config.get("OS_VERSION_DICT").get(new_os][prev_os_version_index)
+            new_os_version = config.get("OS_VERSION_DICT").get(new_os).get(prev_os_version_index)
 
             host_instance.os_type = new_os
             host_instance.os_version = new_os_version
