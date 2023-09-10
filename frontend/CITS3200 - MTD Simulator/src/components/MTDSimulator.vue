@@ -202,9 +202,7 @@ export default {
             "terminate_compromise_ratio": this.compromisedRatio,
             "scheme": this.scheme,
             "mtd_interval": this.interval,
-          });
-          if (this.compTopoShuffle || this.hostTopoShuffle || this.ipShuffle || this.osDiveristy || this.portShuffle || this.ServDiversity || this.userShuffle) {
-            var MTD_PRIORITY = {
+            MTD_PRIORITY: {
               "CompleteTopologyShuffle": this.compTopoShuffle,
               "HostTopologyShuffle": this.hostTopoShuffle,
               "IPShuffle": this.ipShuffle,
@@ -212,22 +210,12 @@ export default {
               "PortShuffle": this.portShuffle,
               "ServiceDiversity": this.ServDiversity,
               "UserShuffle": this.userShuffle,
-            };
-          }
+            }
+          });
           var data = JSON.stringify(mainData);
-          var MTDData = JSON.stringify(MTD_PRIORITY);
           
           //console.log(data);
           axios.post('/network/update_submit/', data, {headers: {'Content-Type': 'application/json'}})
-          .then((response) => {
-            console.log(response);
-            Graph.methods.getGraph();
-          }) .catch((error) => {
-            console.log(error);
-          });
-
-          console.log(MTDData);
-          axios.post('/update_MTDPsubmit/', MTDData, {headers: {'Content-Type': 'application/json'}})
           .then((response) => {
             console.log(response);
             Graph.methods.getGraph();
