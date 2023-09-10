@@ -2,7 +2,7 @@ import random
 
 import networkx as nx
 from mtdnetwork.data.constants import OS_TYPES, OS_VERSION_DICT
-from mtdnetwork.config import config
+from mtdnetwork.configs import config
 import matplotlib.pyplot as plt
 from mtdnetwork.statistic.utils import powerset, remove_element
 from pulp import *

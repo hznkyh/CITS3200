@@ -1,6 +1,6 @@
 from mtdnetwork.mtd import MTD
 import random
-from mtdnetwork.config import config
+from mtdnetwork.configs import config
 
 class OSDiversity(MTD):
     def __init__(self, network=None):

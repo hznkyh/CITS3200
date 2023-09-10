@@ -63,9 +63,9 @@ async def get_graph():
     
     '''
     global simulation_thread, env, stored_params
-    # config.config = 0
+    # configs.config = 0
     # set_config()
-    print(config.config)
+    # print(configs.config)
     res = []
     print("thread", simulation_thread)
     if simulation_thread is not None:
@@ -109,7 +109,7 @@ async def stop_graph():
 
 @router.post("/update_item/")
 def update_item(item: Item):
-    config.config=item.age
+    configs.config=item.age
     item.age += 10
     print(item)
     return {'item':item}
@@ -127,7 +127,7 @@ def update_item(item: formData):
 @router.post("/update_MTDPsubmit/")
 def update_item(item: MTD_PRIORITYItem):
     print(item.model_dump_json())
-    config.config=config.set_config(item.model_dump_json())
+    configs.config=config.set_config(item.model_dump_json())
     return {'item': item.model_dump_json()}
 
 

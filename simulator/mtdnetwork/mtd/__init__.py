@@ -1,5 +1,5 @@
-from mtdnetwork.data.constants import MTD_DURATION, MTD_PRIORITY
-from mtdnetwork.config import config
+# from mtdnetwork.data.constants import MTD_DURATION, MTD_PRIORITY
+from mtdnetwork.configs import config
 
 
 class MTD:

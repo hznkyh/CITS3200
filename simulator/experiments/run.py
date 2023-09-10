@@ -5,7 +5,7 @@ import pandas as pd
 from mtdnetwork.component.time_network import TimeNetwork
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
-from mtdnetwork.config import config
+from mtdnetwork.configs import config
 from mtdnetwork.component.adversary import Adversary
 from mtdnetwork.operation.attack_operation import AttackOperation
 from mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint

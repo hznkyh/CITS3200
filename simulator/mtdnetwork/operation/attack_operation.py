@@ -3,7 +3,7 @@ import logging
 import random
 from mtdnetwork.component.time_generator import exponential_variates
 # from mtdnetwork.data.constants import ATTACK_DURATION
-from mtdnetwork.config import config
+from mtdnetwork.configs import config
 
 
 class AttackOperation:

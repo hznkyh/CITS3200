@@ -3,11 +3,11 @@ import pkg_resources
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-import mtdnetwork.data.constants as constants
+# import mtdnetwork.data.constants as constants
 import mtdnetwork.component.services as services
 from mtdnetwork.component.host import Host
 from mtdnetwork.statistic.scorer import Scorer
-from mtdnetwork.config import config
+from mtdnetwork.configs import config
 import os
 
 

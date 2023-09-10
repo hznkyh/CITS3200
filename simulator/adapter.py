@@ -8,11 +8,11 @@ from mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
 from mtdnetwork.operation.attack_operation import AttackOperation
 from mtdnetwork.component.host import Host
 from mtdnetwork.component.adversary import Adversary
-from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
-from mtdnetwork.config import config
+# from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
+from mtdnetwork.configs import config
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.component.time_network import TimeNetwork
-from mtdnetwork import config
+from mtdnetwork.configs import config
 from experiments.run import single_mtd_simulation, create_experiment_snapshots, execute_simulation
 import matplotlib.pyplot as plt
 from itertools import chain, count
@@ -395,7 +395,7 @@ def create_sim_test(
         The function `create_sim` returns two values: `evaluation` and `res`.
     
     '''
-    print("running with config ",config.config)
+    print("running with config ",config)
     end_event = env.event()
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
@@ -418,6 +418,7 @@ def create_sim_test(
                                    total_subnets=total_subnets, total_layers=total_layers,
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
+        print(config)
         adversary = Adversary(network=time_network,
                               attack_threshold=config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_to_array(time_network, adversary, res)

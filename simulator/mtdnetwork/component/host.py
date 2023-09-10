@@ -1,7 +1,7 @@
 import random, uuid
 import networkx as nx
-import mtdnetwork.data.constants as constants
-from mtdnetwork.config import config
+# import mtdnetwork.data.constants as constants
+from mtdnetwork.configs import config
 
 import json
 
