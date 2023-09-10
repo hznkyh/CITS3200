@@ -50,7 +50,6 @@ class Host:
         self.p_u_compromise = False
         self.total_users = 0
         self.uuid = str(uuid.uuid4())
-
         self.total_services = random.randint(config.get("HOST_SERVICES_MIN"), config.get("HOST_SERVICES_MAX"))
         # +1 for the target service node the adversary needs to be adjacent inorder to compromise the host
         self.total_nodes = self.total_services + 1

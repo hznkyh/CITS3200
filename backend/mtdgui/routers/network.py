@@ -30,6 +30,23 @@ router = APIRouter(prefix="/network",
 env = simpy.Environment()
 simulation_thread = None
 simulation_speed = 1.0
+stored_params = None
+parameters = {
+    "start_time": 0,
+    "finish_time": 4,
+    "checkpoints": [1],
+    "new_network": True,
+    "scheme": 'random',
+    "mtd_interval": None,
+    "custom_strategies": None,
+    "total_nodes": 50,
+    "total_endpoints": 5,
+    "total_subnets": 8,
+    "total_layers": 4,
+    "target_layer": 4,
+    "total_database": 2,
+    "terminate_compromise_ratio": 0.8
+}
 
 @router.get("/")
 async def read_items():
@@ -45,9 +62,10 @@ async def get_graph():
         The code returns a JSON response containing graph data.
     
     '''
-    global simulation_thread, env
+    global simulation_thread, env, stored_params
     # config.config = 0
     # set_config()
+    print(config.config)
     res = []
     print("thread", simulation_thread)
     if simulation_thread is not None:
@@ -57,9 +75,12 @@ async def get_graph():
     
     print('init',env)
     res= []
-    # Todo switch to kwargs
+    final_params = {'env':env,'res':res} | parameters 
+    # final_params = {'res':res} | parameters 
+    if stored_params is not None:
+        final_params = final_params | stored_params 
     try: 
-        simulation_thread = threading.Thread(target=create_sim_test, kwargs={'env':env,'res':res,'start_time':0,'finish_time':4,'checkpoints':[1,2,3],'new_network':True })
+        simulation_thread = threading.Thread(target=create_sim_test, kwargs=final_params)
         simulation_thread.start()
         simulation_thread.join()
         simulation_thread = None
@@ -95,8 +116,13 @@ def update_item(item: Item):
 
 @router.post("/update_submit/")
 def update_item(item: formData):
-    print(item.model_dump_json())
+    global stored_params 
+    #Todo replace index into params hash of user ip 
+    stored_params = {key: value for key, value in item.model_dump().items() if value is not None}
+    print(stored_params)
+    print(item.model_dump())
     return {'item': item.model_dump_json()}
+
 
 @router.post("/update_MTDPsubmit/")
 def update_item(item: MTD_PRIORITYItem):

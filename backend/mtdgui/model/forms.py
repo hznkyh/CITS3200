@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import Union, Optional
 
 class Item(BaseModel):
@@ -14,9 +14,11 @@ class MTD_PRIORITYItem(BaseModel):
     UserShuffle: Union[float, None]
 
 class formData(BaseModel):
-    total_nodes: float
-    total_endpoints: float
-    total_layers: float
-    terminate_compromise_ratio: float
-    scheme: str
-    mtd_interval: float
+    total_nodes: Union[int, None] = None
+    total_endpoints: Union[int, None] = None
+    total_layers: Union[int, None] = None
+    terminate_compromise_ratio: Union[float, None] = None
+    scheme: Union[str, None] = None
+    mtd_interval: Union[float, None] = None
+    class Config:
+        validate_assignment = True
