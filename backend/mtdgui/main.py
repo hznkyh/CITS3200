@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Union, Dict
+from typing import Union, Optional, Dict, Any
 
 from routers import develop, network#, sim
 from controllers import * 
@@ -53,7 +53,7 @@ class formData(BaseModel):
     terminate_compromise_ratio: float
     scheme: str
     mtd_interval: float
-    MTD_PRIORITY: Dict[str,int]
+    MTD_PRIORITY: Any = None
 
 @app.post("/update_submit/")
 def update_item(item: formData):
@@ -67,13 +67,15 @@ def update_item(item: formData):
     }
     
     mtd_priority_values = item.MTD_PRIORITY
+    if mtd_priority_values is None:
+        mtd_priority_values = {}
 
     mtd_priority = {'MTD_PRIORITY': mtd_priority_values}
     print(form_data_values)
+    
     print(mtd_priority)
     return {
-        'form_data': form_data_values,
-        **mtd_priority
+        'form_data': form_data_values, **mtd_priority
     }
 
 
