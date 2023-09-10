@@ -43,13 +43,13 @@ def merge(default_config,new_config):
         if key in merged_config and isinstance(merged_config[key], dict) and isinstance(value, dict):
             merged_config[key] = merge(merged_config[key], value)
         else:
-            print(key, " is ", merged_config[key])
+            # print(key, " is ", merged_config[key])
             merged_config[key] = value
-            print("Changed",key, " to ", value)
-    print("MERGED IS ",merged_config)
+            # print("Changed",key, " to ", value)
+    # print("MERGED IS ",merged_config)
     return merged_config
 
 test_file()
 config = set_config()
-print(load_default().get("MTD_PRIORITY"))
-print(config.get("MTD_PRIORITY"))
+# print(load_default().get("MTD_PRIORITY"))
+# print(config.get("MTD_PRIORITY"))

@@ -33,13 +33,13 @@ simulation_speed = 1.0
 stored_params = None
 parameters = {
     "start_time": 0,
-    "finish_time": 4,
-    "checkpoints": [1],
+    "finish_time": 200,
+    "checkpoints": list(range(0,200,50)),
     "new_network": True,
     "scheme": 'random',
     "mtd_interval": None,
     "custom_strategies": None,
-    "total_nodes": 50,
+    "total_nodes": 10,
     "total_endpoints": 5,
     "total_subnets": 8,
     "total_layers": 4,

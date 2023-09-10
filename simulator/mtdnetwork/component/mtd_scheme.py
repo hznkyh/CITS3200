@@ -41,7 +41,6 @@ class MTDScheme:
         if self._mtd_custom_strategies is None:
             self._mtd_custom_strategies = self._mtd_strategies
         if self._mtd_trigger_interval is None:
-            print(config.get("MTD_TRIGGER_INTERVAL"))
             self._mtd_trigger_interval, self._mtd_trigger_std = config.get("MTD_TRIGGER_INTERVAL").get(scheme)
         if scheme == 'simultaneous':
             self._mtd_register_scheme = self._register_mtd_simultaneously
