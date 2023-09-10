@@ -9,6 +9,7 @@ from mtdnetwork.mtd.servicediversity import ServiceDiversity
 from mtdnetwork.mtd.usershuffle import UserShuffle
 from mtdnetwork.mtd.osdiversityassignment import OSDiversityAssignment
 from mtdnetwork.data.constants import MTD_TRIGGER_INTERVAL
+from mtdnetwork.config import config
 from heapq import heappush, heappop
 
 
@@ -40,7 +41,7 @@ class MTDScheme:
         if self._mtd_custom_strategies is None:
             self._mtd_custom_strategies = self._mtd_strategies
         if self._mtd_trigger_interval is None:
-            self._mtd_trigger_interval, self._mtd_trigger_std = MTD_TRIGGER_INTERVAL[scheme]
+            self._mtd_trigger_interval, self._mtd_trigger_std = config.get("MTD_TRIGGER_INTERVAL").get("scheme")
         if scheme == 'simultaneous':
             self._mtd_register_scheme = self._register_mtd_simultaneously
         elif scheme == 'random':

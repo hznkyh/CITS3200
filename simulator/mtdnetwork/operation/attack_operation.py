@@ -2,7 +2,8 @@ import simpy
 import logging
 import random
 from mtdnetwork.component.time_generator import exponential_variates
-from mtdnetwork.data.constants import ATTACK_DURATION
+# from mtdnetwork.data.constants import ATTACK_DURATION
+from mtdnetwork.config import config
 
 
 class AttackOperation:
@@ -59,7 +60,7 @@ class AttackOperation:
         raise an SCAN_HOST action
         """
         self.adversary.set_curr_process('SCAN_HOST')
-        self._attack_process = self.env.process(self._execute_attack_action(ATTACK_DURATION['SCAN_HOST'],
+        self._attack_process = self.env.process(self._execute_attack_action(config.get("ATTACK_DURATION")['SCAN_HOST'],
                                                                             self._execute_scan_host))
 
     def _enum_host(self):
@@ -68,7 +69,7 @@ class AttackOperation:
         """
         if len(self.adversary.get_host_stack()) > 0:
             self.adversary.set_curr_process('ENUM_HOST')
-            self._attack_process = self.env.process(self._execute_attack_action(ATTACK_DURATION['ENUM_HOST'],
+            self._attack_process = self.env.process(self._execute_attack_action(config.get("ATTACK_DURATION")['ENUM_HOST'],
                                                                                 self._execute_enum_host))
         else:
             self._scan_host()
@@ -78,14 +79,14 @@ class AttackOperation:
         raise an SCAN_PORT action
         """
         self.adversary.set_curr_process('SCAN_PORT')
-        self._attack_process = self.env.process(self._execute_attack_action(ATTACK_DURATION['SCAN_PORT'],
+        self._attack_process = self.env.process(self._execute_attack_action(config.get("ATTACK_DURATION")['SCAN_PORT'],
                                                                             self._execute_scan_port))
 
     def _exploit_vuln(self):
         """
         raise an EXPLOIT_VULN action
         """
-        # exploit_time = exponential_variates(ATTACK_DURATION['EXPLOIT_VULN'][0], ATTACK_DURATION['EXPLOIT_VULN'][1])
+        # exploit_time = exponential_variates(config.get("ATTACK_DURATION")['EXPLOIT_VULN'][0], ATTACK_DURATION['EXPLOIT_VULN'][1])
         adversary = self.adversary
         adversary.set_curr_vulns(adversary.get_curr_host().get_vulns(adversary.get_curr_ports()))
         self.adversary.set_curr_process('EXPLOIT_VULN')
@@ -96,7 +97,7 @@ class AttackOperation:
         raise an BRUTE_FORCE action
         """
         self.adversary.set_curr_process('BRUTE_FORCE')
-        self._attack_process = self.env.process(self._execute_attack_action(ATTACK_DURATION['BRUTE_FORCE'],
+        self._attack_process = self.env.process(self._execute_attack_action(config.get("ATTACK_DURATION")['BRUTE_FORCE'],
                                                                             self._execute_brute_force))
 
     def _scan_neighbors(self):
@@ -104,7 +105,7 @@ class AttackOperation:
         raise an SCAN_NEIGHBOR action
         """
         self.adversary.set_curr_process('SCAN_NEIGHBOR')
-        self._attack_process = self.env.process(self._execute_attack_action(ATTACK_DURATION['SCAN_NEIGHBOR'],
+        self._attack_process = self.env.process(self._execute_attack_action(config.get("ATTACK_DURATION")['SCAN_NEIGHBOR'],
                                                                             self._execute_scan_neighbors))
 
     def _handle_interrupt(self, start_time, name):
@@ -118,7 +119,7 @@ class AttackOperation:
                                                                     self.env.now + self._proceed_time,
                                                                     adversary, self._interrupted_mtd)
         # confusion penalty caused by MTD operation
-        yield self.env.timeout(exponential_variates(ATTACK_DURATION['PENALTY'], 0.5))
+        yield self.env.timeout(exponential_variates(config.get("ATTACK_DURATION")['PENALTY'], 0.5))
 
         if self._interrupted_mtd.get_resource_type() == 'network':
             self._interrupted_mtd = None

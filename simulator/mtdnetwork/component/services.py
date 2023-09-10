@@ -339,7 +339,6 @@ class ServicesGenerator:
         # os_list = config.get("OS_TYPES")
         for s_index, service in enumerate(self.service_names):
             os_list = [config.get("OS_TYPES")[s_index // self.services_per_os]]
-
             if random.random() < self.percent_cross_platform:
                 os_list = config.get("OS_TYPES")
 

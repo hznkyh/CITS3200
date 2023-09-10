@@ -9,6 +9,7 @@ from mtdnetwork.operation.attack_operation import AttackOperation
 from mtdnetwork.component.host import Host
 from mtdnetwork.component.adversary import Adversary
 from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
+from mtdnetwork.config import config
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.component.time_network import TimeNetwork
 from mtdnetwork import config
@@ -61,7 +62,7 @@ def checks():
     for size in [25, 50, 75, 100]:
         time_network = TimeNetwork(total_nodes=size)
         adversary = Adversary(network=time_network,
-                              attack_threshold=ATTACKER_THRESHOLD)
+                              attack_threshold=config.get("ATTACKER_THRESHOLD"))
         snapshot_checkpoint.save_snapshots_by_network_size(
             time_network, adversary)
         tn, adv = snapshot_checkpoint.load_snapshots_by_network_size(size)
@@ -142,7 +143,7 @@ def execute_sim(start_time=0, finish_time=None, scheme='random', mtd_interval=No
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
         adversary = Adversary(network=time_network,
-                              attack_threshold=ATTACKER_THRESHOLD)
+                              attack_threshold=config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_initialised(time_network, adversary)
         snapshot_checkpoint.save_snapshots_by_network_size(
             time_network, adversary)
@@ -288,7 +289,7 @@ def create_sim(
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
         adversary = Adversary(network=time_network,
-                              attack_threshold=ATTACKER_THRESHOLD)
+                              attack_threshold=config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_to_array(time_network, adversary, res)
 
 
@@ -418,7 +419,7 @@ def create_sim_test(
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
         adversary = Adversary(network=time_network,
-                              attack_threshold=ATTACKER_THRESHOLD)
+                              attack_threshold=config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_to_array(time_network, adversary, res)
 
 
@@ -445,10 +446,8 @@ def create_sim_test(
     # start simulation
     if finish_time is not None:
         env.run(until=(finish_time - start_time))
-        print("ENDED1")
     else:
         env.run(until=end_event)
-        print("ENDED2")
     evaluation = Evaluation(network=time_network, adversary=adversary)
 
     return evaluation

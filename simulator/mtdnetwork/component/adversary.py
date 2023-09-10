@@ -1,6 +1,7 @@
 import logging
 from mtdnetwork.statistic.attack_statistics import AttackStatistics
 from mtdnetwork.data.constants import HACKER_ATTACK_ATTEMPT_MULTIPLER
+from mtdnetwork.config import config
 
 
 class Adversary:
@@ -17,7 +18,7 @@ class Adversary:
         self.curr_host = None
         self._curr_ports = []
         self._curr_vulns = []
-        self._max_attack_attempts = HACKER_ATTACK_ATTEMPT_MULTIPLER * network.get_total_nodes()
+        self._max_attack_attempts = config.get("HACKER_ATTACK_ATTEMPT_MULTIPLER") * network.get_total_nodes()
         self._curr_attempts = 0
         self.target_compromised = False
         self.observed_changes = {}

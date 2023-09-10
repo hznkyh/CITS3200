@@ -2,6 +2,7 @@ import random
 
 import networkx as nx
 from mtdnetwork.data.constants import OS_TYPES, OS_VERSION_DICT
+from mtdnetwork.config import config
 import matplotlib.pyplot as plt
 from mtdnetwork.statistic.utils import powerset, remove_element
 from pulp import *
@@ -11,7 +12,7 @@ import re
 
 class OSDiversityAssignment(MTD):
 
-    def __init__(self, network=None, os_types=OS_TYPES):
+    def __init__(self, network=None, os_types=config.get("OS_TYPES")):
         super().__init__(name="OSDiversity",
                          mtd_type='diversity',
                          resource_type='application',
@@ -45,13 +46,13 @@ class OSDiversityAssignment(MTD):
 
             prev_os = host_instance.os_type
             prev_os_version = host_instance.os_version
-            prev_os_version_index = OS_VERSION_DICT[prev_os].index(prev_os_version)
+            prev_os_version_index = config.get("OS_VERSION_DICT")[prev_os].index(prev_os_version)
             new_os = random.choice(self.os_types)
             for os_type, host in result:
                 if host == host_id:
                     new_os = os_type
                     break
-            new_os_version = OS_VERSION_DICT[new_os][prev_os_version_index]
+            new_os_version = config.get("OS_VERSION_DICT")[new_os][prev_os_version_index]
 
             host_instance.os_type = new_os
             host_instance.os_version = new_os_version

@@ -5,6 +5,7 @@ import pandas as pd
 from mtdnetwork.component.time_network import TimeNetwork
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
+from mtdnetwork.config import config
 from mtdnetwork.component.adversary import Adversary
 from mtdnetwork.operation.attack_operation import AttackOperation
 from mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
@@ -102,7 +103,7 @@ def create_experiment_snapshots(network_size_list):
     snapshot_checkpoint = SnapshotCheckpoint()
     for size in network_size_list:
         time_network = TimeNetwork(total_nodes=size)
-        adversary = Adversary(network=time_network, attack_threshold=ATTACKER_THRESHOLD)
+        adversary = Adversary(network=time_network, attack_threshold=config.get("ATTACKER_THRESHOLD"))
         snapshot_checkpoint.save_snapshots_by_network_size(time_network, adversary)
 
 
@@ -169,7 +170,7 @@ def dap_mtd_simulation(file_name, combination):
     Simulation for DAP MTD with different number of variants.
     """
     snapshot_checkpoint = SnapshotCheckpoint()
-    os_types_list = [random.sample(OS_TYPES, 2), random.sample(OS_TYPES, 3), OS_TYPES]
+    os_types_list = [random.sample(config.get("OS_TYPES"), 2), random.sample(config.get("OS_TYPES"), 3), config.get("OS_TYPES")]
     evaluations = []
     for os_types in os_types_list:
         mtd_evaluation = []
@@ -257,7 +258,7 @@ def execute_simulation(start_time=0, finish_time=None, scheme='random', mtd_inte
                                    total_subnets=total_subnets, total_layers=total_layers,
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
-        adversary = Adversary(network=time_network, attack_threshold=ATTACKER_THRESHOLD)
+        adversary = Adversary(network=time_network, attack_threshold=config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_initialised(time_network, adversary)
         snapshot_checkpoint.save_snapshots_by_network_size(time_network, adversary)
 

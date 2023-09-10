@@ -32,7 +32,7 @@ def getCurrentConfig():
 
 @router.post("/setCurrent")
 def update_item(item: Item):
-    config.config=item.configVal
+    config.config=config.set_config()
     return {'item':item}
 
 # { 

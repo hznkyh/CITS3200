@@ -127,6 +127,7 @@ def update_item(item: formData):
 @router.post("/update_MTDPsubmit/")
 def update_item(item: MTD_PRIORITYItem):
     print(item.model_dump_json())
+    config.config=config.set_config(item.model_dump_json())
     return {'item': item.model_dump_json()}
 
 
