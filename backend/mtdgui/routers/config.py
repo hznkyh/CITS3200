@@ -28,11 +28,11 @@ async def read_items():
 
 @router.get("/getCurrent")
 def getCurrentConfig(): 
-    return configs.config
+    return config
 
 @router.post("/setCurrent")
 def update_item(item: Item):
-    configs.config=config.set_config()
+    config=set_config()
     return {'item':item}
 
 # { 

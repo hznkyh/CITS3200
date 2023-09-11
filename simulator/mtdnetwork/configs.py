@@ -49,7 +49,7 @@ def merge(default_config,new_config):
     # print("MERGED IS ",merged_config)
     return merged_config
 
-test_file()
+# test_file()
 config = set_config()
 # print(load_default().get("MTD_PRIORITY"))
-# print(config.get("MTD_PRIORITY"))
+print("OS_VERSION_DICT IS\n",config.get("OS_VERSION_DICT").get('windows'))

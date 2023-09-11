@@ -871,7 +871,7 @@ class Network:
                 host_id,
                 pivot_host_id=pivot_host_id,
                 graph=visible_network
-            ) + random.random()
+            ) + str(random.random())
         ) + [
                    host_id
                    for host_id in self.exposed_endpoints
