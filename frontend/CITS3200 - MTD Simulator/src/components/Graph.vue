@@ -24,12 +24,10 @@
         methods: {
             getGraph() {
                 axios.get("/network/graph").then(async (res) => {
-                    //return length of the data
-                    console.log("tests")
-                    console.log(res.data)
                     var number_of_graphs = Object.keys(res.data).length
                     for (var i = 0; i < number_of_graphs; i++) {
                         var graph = res.data[i]
+                        console.log(graph.nodes.length)
                         var nextNodeIndex = 1
                         for (var j = 0; j < graph.nodes.length; j++) {
                             const nodeId = `node${graph.nodes[j].id + 1}`
