@@ -1,6 +1,7 @@
 import pickle
 from mtdnetwork.snapshot import Snapshot
 from mtdnetwork.component.time_network import TimeNetwork
+import copy
 
 
 class NetworkSnapshot(Snapshot):
@@ -25,5 +26,5 @@ class NetworkSnapshot(Snapshot):
         #Todo CHANGE BACK TO THIS FOR PRODUCTION
         # graph_array.append(network.get_graph_copy())
         #Testing for dev
-        graph_array.append(network.graph)
+        graph_array.append(copy.deepcopy(network.graph))
         
