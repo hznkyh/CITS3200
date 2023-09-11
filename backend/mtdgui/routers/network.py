@@ -34,7 +34,7 @@ stored_params = None
 parameters = {
     "start_time": 0,
     "finish_time": 10000,
-    "checkpoints": [1,2,3],
+    "checkpoints": range(0, 10000, 1000),
     "new_network": True,
     "scheme": 'random',
     "mtd_interval": None,
