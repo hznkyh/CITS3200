@@ -40,6 +40,9 @@
                             if (graph.nodes[j].host.compromised == true) {
                                 color = `red`
                             }
+                            else {
+                                color = `green`
+                            }
                             nodes[nodeId] = { name, color}
                             nextNodeIndex++
                         }
