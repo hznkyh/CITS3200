@@ -25,9 +25,9 @@
             getGraph() {
                 axios.get("/network/graph").then(async (res) => {
                     var number_of_graphs = Object.keys(res.data).length
+                    console.log(res.data)
                     for (var i = 0; i < number_of_graphs; i++) {
                         var graph = res.data[i]
-                        console.log(graph.nodes.length)
                         var nextNodeIndex = 1
                         for (var j = 0; j < graph.nodes.length; j++) {
                             const nodeId = `node${graph.nodes[j].id + 1}`
@@ -74,7 +74,7 @@
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
-                        noAutoRestartSimulation: true,
+                        noAutoRestartSimulation: false,
                         createSimulation: (d3, nodes, edges) => {
                         // d3-force parameters
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
