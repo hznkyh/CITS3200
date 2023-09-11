@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Union, Optional, Dict, Any
-
+import uvicorn
 
 from routers import develop, network,config, webSocket ,webSocketDev#, set_configs#, sim
 from controllers import * 
