@@ -32,6 +32,7 @@ class SnapshotCheckpoint:
                 continue
             yield self.env.timeout(checkpoint - last_checkpoint)
             last_checkpoint = checkpoint
+            print("ADDING AT ",self.env.now, "\n")
             NetworkSnapshot().save_network_array(time_network, adversary, graph_array)
             # NetworkSnapshot().save_network(time_network, str(self.env.now + self._proceed_time))
             # AdversarySnapshot().save_adversary(adversary, str(self.env.now + self._proceed_time))
