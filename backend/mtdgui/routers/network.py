@@ -33,7 +33,7 @@ simulation_speed = 1.0
 stored_params = None
 parameters = {
     "start_time": 0,
-    "finish_time": 4,
+    "finish_time": 10000,
     "checkpoints": [1,2,3],
     "new_network": True,
     "scheme": 'random',
