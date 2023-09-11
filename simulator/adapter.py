@@ -190,8 +190,9 @@ def create_sim_test(
     else:
         env.run(until=end_event)
     evaluation = Evaluation(network=time_network, adversary=adversary)
-    print("RES:",res)
-    print("EVALUATION\n",serialize_graph(evaluation.get_network().get_graph()))
+    print(adversary.get_compromised_hosts)
+    # print("RES:",res)
+    # print("EVALUATION\n",serialize_graph(evaluation.get_network().get_graph()))
     return evaluation
 
 def serialize_graph(G:nx.Graph, attrs=None):
