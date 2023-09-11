@@ -39,7 +39,7 @@ parameters = {
     "scheme": 'random',
     "mtd_interval": None,
     "custom_strategies": None,
-    "total_nodes": 10,
+    "total_nodes": 19,
     "total_endpoints": 5,
     "total_subnets": 8,
     "total_layers": 4,
