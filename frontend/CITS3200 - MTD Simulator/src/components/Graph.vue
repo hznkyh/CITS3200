@@ -28,32 +28,32 @@
                     console.log("tests")
                     console.log(res.data)
                     var number_of_graphs = Object.keys(res.data).length
-                    for (var i = 0; i < number_of_graphs; i++) {
-                        console.log(i)
-                        var graph = res.data[i]
-                        var nextNodeIndex = 1
-                        for (var j = 0; j < graph.nodes.length; j++) {
-                            const nodeId = `node${graph.nodes[i].id + 1}`
-                            const name = `N${nextNodeIndex}`
-                            var color = ``
-                            console.log("node: ", j)
-                            // TODO change colour
-                            if (graph.nodes[i].host.compromised != true) {
-                                color = `red`
-                            }
-                            nodes[nodeId] = { name, color}
-                            nextNodeIndex++
+                    // for (var i = 0; i < number_of_graphs; i++) {
+                    // console.log(i)
+                    var graph = res.data[0]
+                    var nextNodeIndex = 1
+                    for (var j = 0; j < graph.nodes.length; j++) {
+                        const nodeId = `node${graph.nodes[j].id + 1}`
+                        const name = `N${nextNodeIndex}`
+                        var color = ``
+                        // console.log("node: ", j)
+                        // TODO change colour
+                        if (graph.nodes[j].host.compromised == true) {
+                            color = `red`
                         }
-                        var number_of_edges = graph.links.length;
-                        var nextEdgeIndex = 1
-                        for (var z = 0; z < number_of_edges; z++) {
-                            const edgeId = `edge${nextEdgeIndex}`
-                            const source = `node${graph.links[i].source + 1}`
-                            const target = `node${graph.links[i].target + 1}`
-                            edges[edgeId] = { source, target }
-                            nextEdgeIndex++
-                        };
+                        nodes[nodeId] = { name, color}
+                        nextNodeIndex++
+                    }
+                    var number_of_edges = graph.links.length;
+                    var nextEdgeIndex = 1
+                    for (var z = 0; z < number_of_edges; z++) {
+                        const edgeId = `edge${nextEdgeIndex}`
+                        const source = `node${graph.links[z].source + 1}`
+                        const target = `node${graph.links[z].target + 1}`
+                        edges[edgeId] = { source, target }
+                        nextEdgeIndex++
                     };
+                    // };
                 });
             },
         },
