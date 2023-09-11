@@ -27,29 +27,33 @@
                     //return length of the data
                     console.log("tests")
                     console.log(res.data)
-                    console.log(Object.keys(res.data))
-                    console.log(res.data[0].nodes.length)
-                    // var nextNodeIndex = 1
-                    // for (var i = 0; i < res.data.nodes.length; i++) {
-                    //     const nodeId = `node${res.data.nodes[i].id + 1}`
-                    //     const name = `N${nextNodeIndex}`
-                    //     var color = ``
-                    //     // TODO change colour
-                    //     if (res.data.nodes[i].host.compromised != true) {
-                    //         color = `red`
-                    //     }
-                    //     nodes[nodeId] = { name, color}
-                    //     nextNodeIndex++
-                    // }
-                    // var number_of_edges = res.data.links.length;
-                    // var nextEdgeIndex = 1
-                    // for (var i = 0; i < number_of_edges; i++) {
-                    //     const edgeId = `edge${nextEdgeIndex}`
-                    //     const source = `node${res.data.links[i].source + 1}`
-                    //     const target = `node${res.data.links[i].target + 1}`
-                    //     edges[edgeId] = { source, target }
-                    //     nextEdgeIndex++
-                    // };
+                    var number_of_graphs = Object.keys(res.data).length
+                    for (var i = 0; i < number_of_graphs; i++) {
+                        console.log(i)
+                        var graph = res.data[i]
+                        var nextNodeIndex = 1
+                        for (var j = 0; j < graph.nodes.length; j++) {
+                            const nodeId = `node${graph.nodes[i].id + 1}`
+                            const name = `N${nextNodeIndex}`
+                            var color = ``
+                            console.log("node: ", j)
+                            // TODO change colour
+                            if (graph.nodes[i].host.compromised != true) {
+                                color = `red`
+                            }
+                            nodes[nodeId] = { name, color}
+                            nextNodeIndex++
+                        }
+                        var number_of_edges = graph.links.length;
+                        var nextEdgeIndex = 1
+                        for (var z = 0; z < number_of_edges; z++) {
+                            const edgeId = `edge${nextEdgeIndex}`
+                            const source = `node${graph.links[i].source + 1}`
+                            const target = `node${graph.links[i].target + 1}`
+                            edges[edgeId] = { source, target }
+                            nextEdgeIndex++
+                        };
+                    };
                 });
             },
         },
