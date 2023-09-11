@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Union, Optional, Dict, Any
-
+import uvicorn
 
 from routers import develop, network,config#, set_configs#, sim
 from controllers import * 
@@ -29,9 +29,10 @@ async def root():
     return {"message": "Hello Bigger Applications!"}
 
 
-if __name__ == "__main__":
-    config ={}
-    app.run(host="0.0.0.0.0", port=8000, debug=True)
+# if __name__ == "__main__":
+#     config ={}
+#     app.run(host="0.0.0.0", port=8000, debug=True)
+#     # uvicorn.run(app,host="0.0.0.0", port=8000)
 
 
 
