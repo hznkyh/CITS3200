@@ -20,7 +20,6 @@
     var number_of_graphs = 0;
     var graphIndex = 0;
     var msg = ""
-    var startSim = false
 
     export default {
         name: 'Network',
@@ -35,7 +34,7 @@
                     this.msg = "Got graph"
                     number_of_graphs = Object.keys(storedGraph).length
                     console.log(storedGraph)
-                    this.graphIndex = 0
+                    graphIndex = 0
                 });
             },
 
