@@ -18,7 +18,7 @@
 
     var storedGraph = {}
     var number_of_graphs = 0;
-    var graphIndex = -1
+    var graphIndex = 0;
     var msg = ""
     var startSim = false
 
@@ -35,6 +35,7 @@
                     this.msg = "Got graph"
                     number_of_graphs = Object.keys(storedGraph).length
                     console.log(storedGraph)
+                    this.graphIndex = 0
                 });
             },
 
@@ -46,8 +47,9 @@
                     setInterval(() => {
                         if (this.startSim) {
                             this.step()
-                            // this.startSim = true
-                            console.log("running")
+                            graphIndex++
+                            this.msg = "Running"
+                            console.log(graphIndex)
                         }
                     }, 1000)
                 }
@@ -56,12 +58,18 @@
             stop() {
                 this.startSim = false
                 this.msg = "Stop"
+
+            },
+
+            manualStep() {
+                this.startSim = false
+                this.step()
+                graphIndex++
+                this.msg = "Stopped"
+                console.log(graphIndex)
             },
 
             step() {
-                // this.msg = "Step"
-                // this.startSim = false
-                graphIndex++
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     this.startSim = false
@@ -184,7 +192,7 @@
         <button @click="graph?.zoomOut()">Zoom Out</button>
         <button @click="getGraph()">Get</button>
         <button @click="start()">Start</button>
-        <button @click="step()">Step</button>
+        <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
         <button @click="continues()">Continue</button>
     </div>
