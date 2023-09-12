@@ -300,10 +300,10 @@ export default {
   width: 70%;
   height: auto;
   text-align: center;
-  border: 2px solid #ccc;
+  /* border: 2px solid #ccc; */
   padding:0;
   margin:1em;
-  margin-bottom: 4em;
+  margin-bottom: 7em;
 }
 
 input[type=text] {

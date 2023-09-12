@@ -16,6 +16,9 @@
     const edges: Edges = reactive({ ...data.edges })
     const layouts: Layouts = reactive({nodes: {},})
 
+    var storedGraph = {}
+    var graphIndex = 0
+
     export default {
         name: 'Network',
         components: {
@@ -24,38 +27,41 @@
         methods: {
             getGraph() {
                 axios.get("/network/graph").then(async (res) => {
-                    var number_of_graphs = Object.keys(res.data).length
-                    console.log(res.data)
-                    for (var i = 0; i < number_of_graphs; i++) {
-                        var graph = res.data[i]
-                        var nextNodeIndex = 1
-                        for (var j = 0; j < graph.nodes.length; j++) {
-                            const nodeId = `node${graph.nodes[j].id + 1}`
-                            const name = `N${nextNodeIndex}`
-                            var color = ``
-                            // console.log("node: ", j)
-                            // TODO change colour
-                            if (graph.nodes[j].host.compromised == true) {
-                                color = `red`
-                            }
-                            else {
-                                color = `green`
-                            }
-                            nodes[nodeId] = { name, color}
-                            nextNodeIndex++
-                        }
-                        var number_of_edges = graph.links.length;
-                        var nextEdgeIndex = 1
-                        for (var z = 0; z < number_of_edges; z++) {
-                            const edgeId = `edge${nextEdgeIndex}`
-                            const source = `node${graph.links[z].source + 1}`
-                            const target = `node${graph.links[z].target + 1}`
-                            edges[edgeId] = { source, target }
-                            nextEdgeIndex++
-                        };
-                        await new Promise(r => setTimeout(r, 5000));
-                    };
+                    storedGraph = res.data
                 });
+                graphIndex = 0
+            },
+
+            step() {
+                var number_of_graphs = Object.keys(storedGraph).length
+                console.log(storedGraph)
+                var graph = storedGraph[graphIndex]
+                var nextNodeIndex = 1
+                for (var j = 0; j < graph.nodes.length; j++) {
+                    const nodeId = `node${graph.nodes[j].id + 1}`
+                    const name = `N${nextNodeIndex}`
+                    var color = ``
+                    // console.log("node: ", j)
+                    // TODO change colour
+                    if (graph.nodes[j].host.compromised == true) {
+                        color = `red`
+                    }
+                    else {
+                        color = `green`
+                    }
+                    nodes[nodeId] = { name, color}
+                    nextNodeIndex++
+                }
+                var number_of_edges = graph.links.length;
+                var nextEdgeIndex = 1
+                for (var z = 0; z < number_of_edges; z++) {
+                    const edgeId = `edge${nextEdgeIndex}`
+                    const source = `node${graph.links[z].source + 1}`
+                    const target = `node${graph.links[z].target + 1}`
+                    edges[edgeId] = { source, target }
+                    nextEdgeIndex++
+                };
+                graphIndex++
             },
         },
         setup() {
@@ -119,6 +125,7 @@
 </script>
 
 <template>
+    <p>asdfa</p>
     <v-network-graph
       ref="graph"
       class="graph"
@@ -126,12 +133,14 @@
       :edges="edges"
       :layouts="layouts"
       :configs="configs"
-    />
+    >
+    </v-network-graph>
     <div class="control-panel">
         <button @click="graph?.fitToContents()">Fit</button>
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
-        <button @click="getGraph()">Update</button>
+        <button @click="getGraph()">Get</button>
+        <button @click="step()">Step</button>
     </div>
   </template>
 
@@ -139,6 +148,7 @@
     .graph {
       width: 100%;
       height: 100%;
+      border: 1px solid #ccc;
     }
     .control-panel {
       gap: 10px;
