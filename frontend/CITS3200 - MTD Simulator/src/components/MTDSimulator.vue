@@ -70,8 +70,52 @@
           <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" name="mtd_interval" required>
         </div>
 
+        <div>
+          <label>Finish Time *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How long the simulation should run for</span>
+          </span>
+          <input id="param" type="text" placeholder="Finish Time..." v-model="finishTime" name="finish_time" required>
+        </div>
+
+        <div>
+          <label>Checkpoints *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How often snapshots are taken of the simulation</span>
+          </span>
+          <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
+        </div>
+
         <button class="advanced" @click="toggleAdvanced()">Advanced</button>
         <div id="advancedPanel" class="hidden">
+          <div>
+          <label>Total Subnets *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The number of subnets</span>
+          </span>
+          <input id="param" type="text" placeholder="Total Subnets..." v-model="totalSubnets" name="total_subnets">
+        </div>
+
+        <div>
+          <label>Target Layers *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How often snapshots are taken of the simulation</span>
+          </span>
+          <input id="param" type="text" placeholder="Target Layers..." v-model="targetLayers" name="target_layers">
+        </div>
+
           <div>
             <span id="tooltip">
               <label id="heading">MTD Priority</label>
@@ -104,6 +148,26 @@
 
           <label>User Shuffle: </label>
           <input id="param" type="text" placeholder="User Shuffle..." name="UserShuffle" v-model="userShuffle">
+
+          <div>
+            <span id="tooltip">
+              <label id="heading">MTD Trigger Interval</label>
+              <span class='info'>
+                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+              </span>
+              <span class="tip">When to trigger the chosen scheme
+              </span>
+            </span>
+          </div>
+
+          <label>Simultaneous: </label>
+          <input id="param" type="text" placeholder="(value, value)" name="simultaneous" v-model="similtaneous">
+
+          <label>Random: </label>
+          <input id="param" type="text" placeholder="(value, value)" name="random" v-model="random">
+
+          <label>Alternative: </label>
+          <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="altenative">
 
         </div>
 
@@ -166,13 +230,18 @@ export default {
       compromisedRatio:'',
       scheme:'',
       interval:'',
+      finishTime,
+      checkpoints,
       compTopoShuffle:'',
       hostTopoShuffle:'',
       ipShuffle:'',
       osDiveristy:'',
       portShuffle:'',
       ServDiversity:'',
-      userShuffle:"",
+      userShuffle:'',
+      similtaneous:'',
+      random:'',
+      alternative:'',
     };
   },
 
@@ -186,7 +255,6 @@ export default {
       }
     },
   
-
     submitForm(){
       if(this.validateInput(this.nodeNumber) && this.validateInput(this.nodeExposed) 
         && this.validateInput(this.layers) && this.validateInput(this.compromisedRatio) 
@@ -202,6 +270,10 @@ export default {
             "terminate_compromise_ratio": this.compromisedRatio,
             "scheme": this.scheme,
             "mtd_interval": this.interval,
+            "finish_time": this.finishTime,
+            "checkpoints": this.checkpoints,
+            "total_subnets": this.totalSubnets,
+            "target_layers": this.targetLayers,
             MTD_PRIORITY: {
               "CompleteTopologyShuffle": this.compTopoShuffle,
               "HostTopologyShuffle": this.hostTopoShuffle,
@@ -209,8 +281,13 @@ export default {
               "OSDiveristy": this.osDiveristy,
               "PortShuffle": this.portShuffle,
               "ServiceDiversity": this.ServDiversity,
-              "UserShuffle": this.userShuffle,
-            }
+              "UserShuffle": this.userShuffle
+            },
+            MTD_TRIGGER_INTERVAL:{
+              "similtaneous": this.similtaneous,
+              "random": this.random,
+              "alternative": this.alternative,
+            },
           });
           var data = JSON.stringify(mainData);
           
