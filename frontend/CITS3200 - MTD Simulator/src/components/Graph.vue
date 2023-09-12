@@ -19,7 +19,7 @@
     var storedGraph = {}
     var number_of_graphs = 0;
     var graphIndex = 0;
-    var msg = ""
+    var msg = "Simulation not started"
 
     export default {
         name: 'Network',
