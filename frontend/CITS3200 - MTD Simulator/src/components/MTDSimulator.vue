@@ -303,7 +303,7 @@ export default {
   /* border: 2px solid #ccc; */
   padding:0;
   margin:1em;
-  margin-bottom: 7em;
+  margin-bottom: 6em;
 }
 
 input[type=text] {

@@ -18,6 +18,7 @@
 
     var storedGraph = {}
     var graphIndex = 0
+    var msg = ""
 
     export default {
         name: 'Network',
@@ -26,13 +27,16 @@
         },
         methods: {
             getGraph() {
+                this.msg = "Getting graph..."
                 axios.get("/network/graph").then(async (res) => {
                     storedGraph = res.data
+                    this.msg = "Got graph"
                 });
                 graphIndex = 0
             },
 
             step() {
+                this.msg = "Step"
                 var number_of_graphs = Object.keys(storedGraph).length
                 console.log(storedGraph)
                 var graph = storedGraph[graphIndex]
@@ -64,6 +68,16 @@
                 graphIndex++
             },
         },
+        data() {
+            return {
+                msg,
+                graph,
+                nodes,
+                edges,
+                layouts,
+            }
+        },
+
         setup() {
             const nodeSize = 40
 
@@ -125,7 +139,6 @@
 </script>
 
 <template>
-    <p>asdfa</p>
     <v-network-graph
       ref="graph"
       class="graph"
@@ -142,6 +155,7 @@
         <button @click="getGraph()">Get</button>
         <button @click="step()">Step</button>
     </div>
+    <p class="message"> {{ msg }} </p>
   </template>
 
 <style>
@@ -153,6 +167,9 @@
     .control-panel {
       gap: 10px;
       padding: 10px;
+    }
+    .message {
+        margin:0;
     }
 </style>
 ```
