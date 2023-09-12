@@ -17,8 +17,10 @@
     const layouts: Layouts = reactive({nodes: {},})
 
     var storedGraph = {}
-    var graphIndex = 0
+    var number_of_graphs = 0;
+    var graphIndex = -1
     var msg = ""
+    var startSim = false
 
     export default {
         name: 'Network',
@@ -31,22 +33,47 @@
                 axios.get("/network/graph").then(async (res) => {
                     storedGraph = res.data
                     this.msg = "Got graph"
+                    number_of_graphs = Object.keys(storedGraph).length
+                    console.log(storedGraph)
                 });
-                graphIndex = 0
+            },
+
+            start() {
+                if (!this.startSim) {
+                    this.startSim = true
+                    this.msg = "Start"
+                    this.step()
+                    setInterval(() => {
+                        if (this.startSim) {
+                            this.step()
+                            // this.startSim = true
+                            console.log("running")
+                        }
+                    }, 1000)
+                }
+            },
+
+            stop() {
+                this.startSim = false
+                this.msg = "Stop"
             },
 
             step() {
-                this.msg = "Step"
-                var number_of_graphs = Object.keys(storedGraph).length
-                console.log(storedGraph)
+                // this.msg = "Step"
+                // this.startSim = false
+                graphIndex++
+                if (graphIndex == number_of_graphs) {
+                    this.msg = "Simulation finished"
+                    this.startSim = false
+                    this.graphIndex = -1
+                    return
+                }
                 var graph = storedGraph[graphIndex]
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
                     const nodeId = `node${graph.nodes[j].id + 1}`
                     const name = `N${nextNodeIndex}`
                     var color = ``
-                    // console.log("node: ", j)
-                    // TODO change colour
                     if (graph.nodes[j].host.compromised == true) {
                         color = `red`
                     }
@@ -65,7 +92,11 @@
                     edges[edgeId] = { source, target }
                     nextEdgeIndex++
                 };
-                graphIndex++
+            },
+            continues() {
+                this.msg = "Continue"
+                this.startSim = true
+                this.start()
             },
         },
         data() {
@@ -77,7 +108,6 @@
                 layouts,
             }
         },
-
         setup() {
             const nodeSize = 40
 
@@ -153,7 +183,10 @@
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
         <button @click="getGraph()">Get</button>
+        <button @click="start()">Start</button>
         <button @click="step()">Step</button>
+        <button @click="stop()">Stop</button>
+        <button @click="continues()">Continue</button>
     </div>
     <p class="message"> {{ msg }} </p>
   </template>
