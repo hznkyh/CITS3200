@@ -46,10 +46,10 @@
                     this.step()
                     setInterval(() => {
                         if (this.startSim) {
+                            this.msg = "Running"
                             this.step()
                             graphIndex++
-                            this.msg = "Running"
-                            console.log(graphIndex)
+                            
                         }
                     }, 1000)
                 }
@@ -57,7 +57,7 @@
 
             stop() {
                 this.startSim = false
-                this.msg = "Stop"
+                this.msg = "Stopped"
 
             },
 
@@ -66,7 +66,6 @@
                 this.step()
                 graphIndex++
                 this.msg = "Stopped"
-                console.log(graphIndex)
             },
 
             step() {
@@ -100,11 +99,6 @@
                     edges[edgeId] = { source, target }
                     nextEdgeIndex++
                 };
-            },
-            continues() {
-                this.msg = "Continue"
-                this.startSim = true
-                this.start()
             },
         },
         data() {
@@ -194,7 +188,6 @@
         <button @click="start()">Start</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
-        <button @click="continues()">Continue</button>
     </div>
     <p class="message"> {{ msg }} </p>
   </template>
