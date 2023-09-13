@@ -47,9 +47,9 @@ class MTD_PRIORITYItem(BaseModel):
     UserShuffle: Union[int, None]
 
 class MTD_TRIGGERItem(BaseModel):
-    simultaneous: Union[int, None]
-    random: Union[int, None]
-    alternative: Union[int, None]
+    simultaneous: Union[Any, None]
+    random: Union[Any, None]
+    alternative: Union[Any, None]
 
 class formData(BaseModel):
     total_nodes: int
@@ -76,8 +76,8 @@ def update_item(item: formData):
         "mtd_interval": item.mtd_interval,
         "finish_time": item.finish_time,
         "checkpoints": item.checkpoints,
-        "total_subsets": item.total_subnets,
-        "target_layers": item.target_layers,
+        # "total_subsets": item.total_subnets, ISSUES LIE HERE
+        # "target_layers": item.target_layers,
     }
     
     mtd_priority_values = item.MTD_PRIORITY
