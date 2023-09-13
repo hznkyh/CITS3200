@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-  <!-- <div class="content"> -->
     <div class="panel">
       <form id="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
@@ -95,7 +94,7 @@
         <button class="advanced" @click="toggleAdvanced()">Advanced</button>
         <div id="advancedPanel" class="hidden">
           <div>
-          <label>Total Subnets *: </label>
+          <label>Total Subnets: </label>
           <span id="tooltip">
             <span class='info'>
               <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
@@ -106,7 +105,7 @@
         </div>
 
         <div>
-          <label>Target Layers *: </label>
+          <label>Target Layers: </label>
           <span id="tooltip">
             <span class='info'>
               <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
@@ -167,7 +166,7 @@
           <input id="param" type="text" placeholder="(value, value)" name="random" v-model="random">
 
           <label>Alternative: </label>
-          <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="altenative">
+          <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="alternative">
 
         </div>
 
@@ -230,8 +229,10 @@ export default {
       compromisedRatio:'',
       scheme:'',
       interval:'',
-      finishTime,
-      checkpoints,
+      finishTime: '',
+      checkpoints: '',
+      totalSubnets: '',
+      targetLayers: '',
       compTopoShuffle:'',
       hostTopoShuffle:'',
       ipShuffle:'',
@@ -256,12 +257,39 @@ export default {
     },
   
     submitForm(){
-      if(this.validateInput(this.nodeNumber) && this.validateInput(this.nodeExposed) 
-        && this.validateInput(this.layers) && this.validateInput(this.compromisedRatio) 
-        && this.validateWord(this.scheme) && this.validateInput(this.interval) && this.validatePrioityInput(this.compTopoShuffle) 
-        && this.validatePrioityInput(this.hostTopoShuffle) && this.validatePrioityInput(this.ipShuffle) && this.validatePrioityInput(this.osDiveristy) 
-        && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
-          console.log('Correct inputs have been detected');
+      const validationRules = [
+        {field: this.nodeNumber, validator: this.validateIntInputs, fieldName: 'Node Number'},
+        {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
+        {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
+        {field: this.compromisedRatio, validator: this.validateFloatInputs, fieldName: 'Compromise Ratio'},
+        {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
+        {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
+        {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
+        {field: this.checkpoints, validator: this.validateFloatInputs, fieldName: 'Checkpoints'},
+        //{field: this.totalSubnets, validator: this.validateTotalSubets, fieldName: 'Total Subsets'},
+        {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
+        {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
+        {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
+        {field: this.ipShuffle, validator: this.validatePrioityInput, fieldName: 'IP Shuffle'},
+        {field: this.osDiveristy, validator: this.validatePrioityInput, fieldName: 'OS Diversity'},
+        {field: this.portShuffle, validator: this.validatePrioityInput, fieldName: 'Port Shuffle'},
+        {field: this.ServDiversity, validator: this.validatePrioityInput, fieldName: 'Service Diversity'},
+        {field: this.userShuffle, validator: this.validatePrioityInput, fieldName: 'User Shuffle'},
+        {field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
+        {field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
+        {field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
+      ];
+
+      const errorMessages = [];
+
+      validationRules.forEach(rule => {
+        if (!rule.validator(rule.field)) {
+          errorMessages.push(`Invalid input for ${rule.fieldName}`);
+        }
+      });
+
+      if (errorMessages.length === 0) {
+        console.log('Correct inputs have been detected');
         
           var mainData = ({
             "total_nodes": this.nodeNumber,
@@ -281,7 +309,7 @@ export default {
               "OSDiveristy": this.osDiveristy,
               "PortShuffle": this.portShuffle,
               "ServiceDiversity": this.ServDiversity,
-              "UserShuffle": this.userShuffle
+              "UserShuffle": this.userShuffle,
             },
             MTD_TRIGGER_INTERVAL:{
               "similtaneous": this.similtaneous,
@@ -301,13 +329,20 @@ export default {
           });
       }
       else{
-        alert('One or more values are incorrect')
+        alert(`Validation Errors:\n${errorMessages.join('\n')}`);
       }
     },
 
-    validateInput(value){
-      const parsedValue = parseFloat(value);
+    validateIntInputs(value){
+      if (value === '') {
+        return true;
+      }
+      const parsedValue = parseInt(value);
       return !isNaN(parsedValue) && parsedValue >= 0;
+    },
+    validateFloatInputs(value){
+      const parsedValue = parseFloat(value);
+      return !isNaN(parsedValue) && parsedValue >= 0.0;
     },
     validatePrioityInput(num){
       const parsedValue = parseFloat(num);
@@ -317,8 +352,19 @@ export default {
       const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'none'];
         return possibleWords.includes(word);
     },
-    
-    
+    validateFinishTime(time){
+      const parsedValue = parseFloat(time);
+      return !isNaN(parsedValue) && parsedValue >= 3000;
+    },
+    validateTotalSubets(num){
+      return (this.total_nodes - this.nodeExposed) / (num - 1) > 2
+    },
+    validateTrigger(i, f) {
+      const parsedI = parseInt(i);
+      const parsedF = parseFloat(f);
+      return !isNaN(parsedI) && parsedI >= 0 && !isNaN(parsedF) && parsedF >= 0.0 || i == '' && f == '';
+    },
+
   },
 };
 </script>
