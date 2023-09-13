@@ -275,9 +275,9 @@ export default {
         {field: this.portShuffle, validator: this.validatePrioityInput, fieldName: 'Port Shuffle'},
         {field: this.ServDiversity, validator: this.validatePrioityInput, fieldName: 'Service Diversity'},
         {field: this.userShuffle, validator: this.validatePrioityInput, fieldName: 'User Shuffle'},
-        {field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
-        {field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
-        {field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
+        //{field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
+        //{field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
+        //{field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
       ];
 
       const errorMessages = [];
@@ -300,8 +300,8 @@ export default {
             "mtd_interval": this.interval,
             "finish_time": this.finishTime,
             "checkpoints": this.checkpoints,
-            "total_subnets": this.totalSubnets,
-            "target_layers": this.targetLayers,
+            //"total_subnets": this.totalSubnets, ISSUES LIE HERE IT SEEMS
+            // "target_layers": this.targetLayers,
             MTD_PRIORITY: {
               "CompleteTopologyShuffle": this.compTopoShuffle,
               "HostTopologyShuffle": this.hostTopoShuffle,
