@@ -77,16 +77,18 @@
                 var graph = storedGraph[graphIndex]
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
-                    const nodeId = `node${graph.nodes[j].id + 1}`
+                    var node = graph.nodes[j]
+                    const nodeId = `node${node.id + 1}`
                     const name = `N${nextNodeIndex}`
+                    var subnet = node.subnet
                     var color = ``
-                    if (graph.nodes[j].host.compromised == true) {
+                    if (node.host.compromised == true) {
                         color = `red`
                     }
                     else {
                         color = `green`
                     }
-                    nodes[nodeId] = { name, color}
+                    nodes[nodeId] = { name, color, subnet}
                     nextNodeIndex++
                 }
                 var number_of_edges = graph.links.length;
@@ -98,6 +100,7 @@
                     edges[edgeId] = { source, target }
                     nextEdgeIndex++
                 };
+                console.log(nodes)
             },
         },
         data() {
@@ -131,8 +134,8 @@
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
                         return d3
                             .forceSimulation(nodes)
-                            .force("edge", forceLink.distance(1000).strength(3.0))
-                            .force("charge", d3.forceManyBody().strength(-25000))
+                            .force("edge", forceLink.strength(3.0))
+                            .force("charge", d3.forceManyBody().strength(-50000))
                             .force("center", d3.forceCenter().strength(0.05))
                             .force("collide", d3.forceCollide().radius(nodeSize * 1.5))
                             .alphaMin(0.001)
@@ -141,7 +144,7 @@
                 },
                 node: {
                     normal: { 
-                        radius: nodeSize / 2,
+                        radius: nodeSize,
                         color: node => node.color,
                     },
                     label: { direction: "center", color: "#fff" },
