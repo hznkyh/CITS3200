@@ -79,7 +79,7 @@ async def get_graph():
     final_params = {'env':env,'res':res} | parameters 
     print("INITIAL PARAMS", final_params)
     if stored_params is not None:
-        final_params = final_params | stored_params
+        final_params = final_params | stored_params 
     print("FINAL PARAMS", final_params)
     if type(final_params["checkpoints"]) is int: 
         final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
