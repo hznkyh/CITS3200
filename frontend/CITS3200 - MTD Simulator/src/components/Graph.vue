@@ -50,17 +50,18 @@
         numCoordinates: number,
         minDistance: number
         ): [number, number][] {
-        const coordinates: [number, number][] = [];
-
+        var coordinates: [number, number][] = [];
+        
+        console.log("generateCoordinates")
         while (coordinates.length < numCoordinates) {
-            const x = Math.floor(Math.random() * 100) + 1; // Adjust the range as needed
-            const y = Math.floor(Math.random() * 100) + 1; // Adjust the range as needed
+            const x = Math.random() * (600 - (-600)) + (-600); // Adjust the range as needed
+            const y = Math.random() * (350 - (-350)) + (-350); // Adjust the range as needed
 
+            console.log("one iteration")
             // Check if the new coordinates satisfy the minimum distance requirement
             const valid = coordinates.every(([x1, y1]) => {
-            return Math.abs(x - x1) >= minDistance && Math.abs(y - y1) >= minDistance;
+                return Math.abs(x - x1) >= minDistance && Math.abs(y - y1) >= minDistance;
             });
-
             if (valid) {
             coordinates.push([x, y]);
             }
@@ -85,17 +86,18 @@
         if (JSON.stringify(new_subnets) == JSON.stringify(old_subnets)) {
             return
         }
-        var centerx = 0
-        var centery = 0
+
         console.log(new_subnets)
 
+        var coordinates = generateCoordinates(Object.keys(new_subnets).length, 100)
+
+        console.log(coordinates)
         for (var key in new_subnets) {
             var subnet = new_subnets[key]
-            var center = getRandomCoordinates(centerx, centery)
-            centerx = center.x
-            centery = center.y
+            var centerx = coordinates[key][0]
+            var centery = coordinates[key][1]
             var subnetSize = subnet.length
-            var subnetRadius = 50
+            var subnetRadius = 30
             var angle = 360 / subnetSize
             var angleIndex = 0
             for (var i = 0; i < subnetSize; i++) {
