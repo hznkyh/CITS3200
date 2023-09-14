@@ -33,9 +33,9 @@
         }
     }
 
-    function getRandomCoordinates() {
-        const x = Math.random() * (5000 - (-5000)) + (-5000);
-        const y = Math.random() * (3000 - (-3000)) + (-3000);
+    function getRandomCoordinates(centerx, centery) {
+        const x = centerx + Math.random() * (4000 - (-4000)) + (-4000);
+        const y = centery + Math.random() * (3000 - (-3000)) + (-3000);
         return { x, y };
     }   
 
@@ -55,10 +55,14 @@
         if (JSON.stringify(new_subnets) == JSON.stringify(old_subnets)) {
             return
         }
+        var centerx = 0
+        var centery = 0
 
         for (var key in new_subnets) {
             var subnet = new_subnets[key]
-            var center = getRandomCoordinates()
+            var center = getRandomCoordinates(centerx, centery)
+            centerx = center.x
+            centery = center.y
             var subnetSize = subnet.length
             var subnetRadius = 300
             var angle = 360 / subnetSize
@@ -73,11 +77,9 @@
         old_subnets = new_subnets
     }
 
-    // function layout() {
-    //     //test graph width and height
-    //     layouts.nodes["node1"] = { x: 7000, y: 4000 }
-    //     layouts.nodes["node2"] = { x: -7000, y: -4000 }
-    // }
+    function test() {
+        this.$refs.myBtn.click()
+    }
 
     export default {
         name: 'Network',
@@ -133,6 +135,7 @@
             },
 
             step() {
+                layout()
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     this.startSim = false
@@ -174,6 +177,9 @@
                     nextNodeIndex++
                 }
                 layout()
+                const graphComponent = this.$refs.graph;
+                // Call the fitToContents method of the component
+                graphComponent.fitToContents();
             },
         },
         data() {
@@ -230,7 +236,7 @@
 </script>
 
 <template>
-    <v-network-graph
+    <v-network-graph id="v-graph"
       ref="graph"
       class="graph"
       :nodes="nodes"
@@ -240,7 +246,7 @@
     >
     </v-network-graph>
     <div class="control-panel">
-        <button @click="graph?.fitToContents()">Fit</button>
+        <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
         <button @click="getGraph()">Get</button>
