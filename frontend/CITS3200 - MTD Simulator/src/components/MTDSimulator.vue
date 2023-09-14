@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-  <!-- <div class="content"> -->
     <div class="panel">
       <form id="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
@@ -56,7 +55,13 @@
             </span>
             <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
           </span>
-          <input id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+          <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+            <option value="random">random</option>
+            <option value="simultaneous"> simultaneous</option>
+            <option value="alternative">alternative</option>
+            <option value="single">single</option>
+            <option value="None">None</option>
+          </select>
         </div>
 
         <div>
@@ -70,8 +75,52 @@
           <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" name="mtd_interval" required>
         </div>
 
+        <div>
+          <label>Finish Time *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How long the simulation should run for</span>
+          </span>
+          <input id="param" type="text" placeholder="Finish Time..." v-model="finishTime" name="finish_time" required>
+        </div>
+
+        <div>
+          <label>Checkpoints *: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How often snapshots are taken of the simulation</span>
+          </span>
+          <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
+        </div>
+
         <button class="advanced" @click="toggleAdvanced()">Advanced</button>
         <div id="advancedPanel" class="hidden">
+          <div>
+          <label>Total Subnets: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">The number of subnets</span>
+          </span>
+          <input id="param" type="text" placeholder="Total Subnets..." v-model="totalSubnets" name="total_subnets">
+        </div>
+
+        <div>
+          <label>Target Layers: </label>
+          <span id="tooltip">
+            <span class='info'>
+              <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+            </span>
+            <span class="tip">How often snapshots are taken of the simulation</span>
+          </span>
+          <input id="param" type="text" placeholder="Target Layers..." v-model="targetLayers" name="target_layers">
+        </div>
+
           <div>
             <span id="tooltip">
               <label id="heading">MTD Priority</label>
@@ -104,6 +153,26 @@
 
           <label>User Shuffle: </label>
           <input id="param" type="text" placeholder="User Shuffle..." name="UserShuffle" v-model="userShuffle">
+
+          <div>
+            <span id="tooltip">
+              <label id="heading">MTD Trigger Interval</label>
+              <span class='info'>
+                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+              </span>
+              <span class="tip">When to trigger the chosen scheme
+              </span>
+            </span>
+          </div>
+
+          <label>Simultaneous: </label>
+          <input id="param" type="text" placeholder="(value, value)" name="simultaneous" v-model="similtaneous">
+
+          <label>Random: </label>
+          <input id="param" type="text" placeholder="(value, value)" name="random" v-model="random">
+
+          <label>Alternative: </label>
+          <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="alternative">
 
         </div>
 
@@ -166,13 +235,20 @@ export default {
       compromisedRatio:'',
       scheme:'',
       interval:'',
+      finishTime: '',
+      checkpoints: '',
+      totalSubnets: '',
+      targetLayers: '',
       compTopoShuffle:'',
       hostTopoShuffle:'',
       ipShuffle:'',
       osDiveristy:'',
       portShuffle:'',
       ServDiversity:'',
-      userShuffle:"",
+      userShuffle:'',
+      similtaneous:'',
+      random:'',
+      alternative:'',
     };
   },
 
@@ -186,14 +262,40 @@ export default {
       }
     },
   
-
     submitForm(){
-      if(this.validateInput(this.nodeNumber) && this.validateInput(this.nodeExposed) 
-        && this.validateInput(this.layers) && this.validateInput(this.compromisedRatio) 
-        && this.validateWord(this.scheme) && this.validateInput(this.interval) && this.validatePrioityInput(this.compTopoShuffle) 
-        && this.validatePrioityInput(this.hostTopoShuffle) && this.validatePrioityInput(this.ipShuffle) && this.validatePrioityInput(this.osDiveristy) 
-        && this.validatePrioityInput(this.portShuffle) && this.validatePrioityInput(this.ServDiversity) && this.validatePrioityInput(this.userShuffle)){
-          console.log('Correct inputs have been detected');
+      const validationRules = [
+        {field: this.nodeNumber, validator: this.validateIntInputs, fieldName: 'Node Number'},
+        {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
+        {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
+        {field: this.compromisedRatio, validator: this.validateFloatInputs, fieldName: 'Compromise Ratio'},
+        {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
+        {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
+        {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
+        {field: this.checkpoints, validator: this.validateFloatInputs, fieldName: 'Checkpoints'},
+        {field: this.totalSubnets, validator: this.validateTotalSubets, fieldName: 'Total Subsets'},
+        {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
+        {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
+        {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
+        {field: this.ipShuffle, validator: this.validatePrioityInput, fieldName: 'IP Shuffle'},
+        {field: this.osDiveristy, validator: this.validatePrioityInput, fieldName: 'OS Diversity'},
+        {field: this.portShuffle, validator: this.validatePrioityInput, fieldName: 'Port Shuffle'},
+        {field: this.ServDiversity, validator: this.validatePrioityInput, fieldName: 'Service Diversity'},
+        {field: this.userShuffle, validator: this.validatePrioityInput, fieldName: 'User Shuffle'},
+        {field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
+        {field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
+        {field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
+      ];
+
+      const errorMessages = [];
+
+      validationRules.forEach(rule => {
+        if (!rule.validator(rule.field)) {
+          errorMessages.push(`Invalid input for ${rule.fieldName}`);
+        }
+      });
+
+      if (errorMessages.length === 0) {
+        console.log('Correct inputs have been detected');
         
           var mainData = ({
             "total_nodes": this.nodeNumber,
@@ -202,15 +304,24 @@ export default {
             "terminate_compromise_ratio": this.compromisedRatio,
             "scheme": this.scheme,
             "mtd_interval": this.interval,
+            "finish_time": this.finishTime,
+            "checkpoints": this.checkpoints,
+            "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
+            "target_layers": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
             MTD_PRIORITY: {
-              "CompleteTopologyShuffle": this.compTopoShuffle,
-              "HostTopologyShuffle": this.hostTopoShuffle,
-              "IPShuffle": this.ipShuffle,
-              "OSDiveristy": this.osDiveristy,
-              "PortShuffle": this.portShuffle,
-              "ServiceDiversity": this.ServDiversity,
-              "UserShuffle": this.userShuffle,
-            }
+              "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
+              "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
+              "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
+              "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
+              "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
+              "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
+              "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+            },
+            MTD_TRIGGER_INTERVAL:{
+              "similtaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
+              "random": this.random !== '' ? parseInt(this.random) : null,
+              "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
+            },
           });
           var data = JSON.stringify(mainData);
           
@@ -224,13 +335,20 @@ export default {
           });
       }
       else{
-        alert('One or more values are incorrect')
+        alert(`Validation Errors:\n${errorMessages.join('\n')}`);
       }
     },
 
-    validateInput(value){
-      const parsedValue = parseFloat(value);
+    validateIntInputs(value){
+      if (value === '') {
+        return true;
+      }
+      const parsedValue = parseInt(value);
       return !isNaN(parsedValue) && parsedValue >= 0;
+    },
+    validateFloatInputs(value){
+      const parsedValue = parseFloat(value);
+      return !isNaN(parsedValue) && parsedValue >= 0.0;
     },
     validatePrioityInput(num){
       const parsedValue = parseFloat(num);
@@ -240,8 +358,31 @@ export default {
       const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'none'];
         return possibleWords.includes(word);
     },
-    
-    
+    validateFinishTime(time){
+      const parsedValue = parseFloat(time);
+      return !isNaN(parsedValue) && parsedValue >= 3000;
+    },
+    validateTotalSubets(num){
+      // return (this.total_nodes - this.nodeExposed) / (num - 1) > 2
+      return num == '' || num >= 0;
+    },
+    validateTrigger(values) {
+      if(!values){
+        return true;
+      }
+      const intPattern = /^\d+$/;
+      const floatPattern = /^\d+(\.\d+)?$/;
+
+      const separate = values.split(',').map(part => part.trim());
+
+      if (separate.length != 2){
+        return false;
+      }
+      const valueOne = intPattern.test(separate[0]);
+      const valueTwo = floatPattern.test(separate[1])
+
+      return valueOne && valueTwo
+    },
   },
 };
 </script>
