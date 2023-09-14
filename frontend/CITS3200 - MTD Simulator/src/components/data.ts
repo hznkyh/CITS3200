@@ -18,7 +18,16 @@ const edges: Edges = {
 }
 
 const layouts: Layouts = reactive({
-  nodes: {},
+  nodes: {
+    node1: { x: 0, y: 0 },
+    node2: { x: 0, y: 100 },
+    node3: { x: 100, y: 100 },
+    node4: { x: 100, y: 0 },
+    node5: { x: 200, y: 0 },
+    node6: { x: 200, y: 100 },
+    node7: { x: 200, y: 200 },
+
+  },
 })
 
 export default {

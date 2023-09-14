@@ -34,8 +34,8 @@
     }
 
     function getRandomCoordinates(centerx, centery) {
-        const x = centerx + Math.random() * (4000 - (-4000)) + (-4000);
-        const y = centery + Math.random() * (3000 - (-3000)) + (-3000);
+        const x = Math.random() * (300 - (-300)) + (-300);
+        const y = Math.random() * (100 - (-100)) + (-100);
         return { x, y };
     }   
 
@@ -64,12 +64,12 @@
             centerx = center.x
             centery = center.y
             var subnetSize = subnet.length
-            var subnetRadius = 300
+            var subnetRadius = 50
             var angle = 360 / subnetSize
             var angleIndex = 0
             for (var i = 0; i < subnetSize; i++) {
-                var x = center.x + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) + (Math.floor(Math.random() * 401) - 200)
-                var y = center.y + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) + (Math.floor(Math.random() * 401) - 200)
+                var x = center.x + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
+                var y = center.y + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
                 layouts.nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
@@ -177,9 +177,9 @@
                     nextNodeIndex++
                 }
                 layout()
-                const graphComponent = this.$refs.graph;
-                // Call the fitToContents method of the component
-                graphComponent.fitToContents();
+                // const graphComponent = this.$refs.graph;
+                // // Call the fitToContents method of the component
+                // graphComponent.fitToContents();
             },
         },
         data() {
@@ -192,7 +192,7 @@
             }
         },
         setup() {
-            const nodeSize = 40
+            const nodeSize = 10
 
             const configs = vNG.defineConfigs({
                 view: {
@@ -200,14 +200,26 @@
                     // onBeforeInitialDisplay: () => layout(),
                     autoPanOnResize: true,
                     scalingObjects: true,
-                    minZoomLevel: 0.05,
-                    maxZoomLevel: 0.2,
+                    minZoomLevel: 0.5,
+                    maxZoomLevel: 1.0,
                     panEnabled: true,
                     zoomEnabled: true,
+                    layoutHandler: new ForceLayout({
+                        positionFixedByDrag: false,
+                        positionFixedByClickWithAltKey: true,
+                        createSimulation: (d3, nodes, edges) => {
+                        // d3-force parameters
+                        const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
+                        return d3
+                            .forceSimulation(nodes)
+                            .force("collide", d3.forceCollide(nodeSize/2))
+                            .alphaMin(0.001)
+                        }
+                    }),
                 },
                 node: {
                     normal: { 
-                        radius: nodeSize,
+                        radius: nodeSize/2,
                         color: node => node.color,
                     },
                     label: { direction: "center", color: "#fff" },
