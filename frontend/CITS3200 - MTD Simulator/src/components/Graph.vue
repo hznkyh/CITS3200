@@ -14,7 +14,7 @@
     const graph = ref<vNG.VNetworkGraphInstance>()
     const nodes: Nodes = reactive({ ...data.nodes })
     const edges: Edges = reactive({ ...data.edges })
-    const layouts: Layouts = reactive({nodes: {},})
+    const layouts: Layouts = reactive({ ...data.layouts})
 
     var storedGraph = {}
     var number_of_graphs = 0;
@@ -30,6 +30,40 @@
             }
         }
     }
+
+    function layout() {
+        // layout the nodes based on their subnet
+        var subnets = {}
+        for (var key in nodes) {
+            var node = nodes[key]
+            var subnet = node.subnet
+            if (subnet in subnets) {
+                subnets[subnet].push(key)
+            } else {
+                subnets[subnet] = [key]
+            }
+        }
+
+        console.log(subnets)
+        for (var key in subnets) {
+            var subnet = subnets[key]
+            var subnetSize = subnet.length
+            var subnetRadius = 200
+            var angle = 360 / subnetSize
+            var angleIndex = 0
+            for (var i = 0; i < subnetSize; i++) {
+                var x = subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180)
+                var y = subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180)
+                layouts.nodes[subnet[i]] = { x, y }
+                angleIndex++
+            }
+            
+        }
+    }
+
+    // function layout() {
+    //     layouts.nodes["node1"] = { x: 100, y: 50 }
+    // }
 
     export default {
         name: 'Network',
@@ -110,7 +144,7 @@
                     const nodeId = `node${node.id + 1}`
                     const name = `N${nextNodeIndex}`
                     var subnet = node.subnet
-                    var color = ``
+                    var color = ''
                     if (node.host.compromised == true) {
                         color = `red`
                         findExposed(nodeId)
@@ -120,9 +154,14 @@
                     else {
                         color = `green`
                     }
+
                     nodes[nodeId] = { name, color, subnet}
                     nextNodeIndex++
                 }
+
+                layout()
+                console.log(layouts)
+
                 console.log(nodes)
             },
         },
@@ -141,29 +180,13 @@
             const configs = vNG.defineConfigs({
                 view: {
                     autoPanAndZoomOnLoad: "fit-content",
-                    // onBeforeInitialDisplay: () => layout(),
+                    onBeforeInitialDisplay: () => layout(),
                     autoPanOnResize: true,
                     scalingObjects: true,
                     minZoomLevel: 0.05,
                     maxZoomLevel: 0.2,
                     panEnabled: true,
                     zoomEnabled: true,
-                    layoutHandler: new ForceLayout({
-                        positionFixedByDrag: false,
-                        positionFixedByClickWithAltKey: true,
-                        noAutoRestartSimulation: true,
-                        createSimulation: (d3, nodes, edges) => {
-                        // d3-force parameters
-                        const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
-                        return d3
-                            .forceSimulation(nodes)
-                            .force("edge", forceLink.distance(500).strength(3.0))
-                            .force("charge", d3.forceManyBody().strength(-50000))
-                            .force("center", d3.forceCenter().strength(0.05))
-                            .force("collide", d3.forceCollide().radius(nodeSize * 1.5))
-                            .alphaMin(0.001)
-                        }
-                    }),
                 },
                 node: {
                     normal: { 
