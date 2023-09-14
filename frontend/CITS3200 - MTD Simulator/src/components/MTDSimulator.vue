@@ -267,7 +267,7 @@ export default {
         {field: this.nodeNumber, validator: this.validateIntInputs, fieldName: 'Node Number'},
         {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
         {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
-        {field: this.compromisedRatio, validator: this.validateFloatInputs, fieldName: 'Compromise Ratio'},
+        {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
         {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
         {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
         {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
@@ -349,6 +349,10 @@ export default {
     validateFloatInputs(value){
       const parsedValue = parseFloat(value);
       return !isNaN(parsedValue) && parsedValue >= 0.0;
+    },
+    validateRatio(value){
+      const parsedValue = parseFloat(value)
+      return !isNaN(parsedValue) && parsedValue <= 1.0;
     },
     validatePrioityInput(num){
       const parsedValue = parseFloat(num);
