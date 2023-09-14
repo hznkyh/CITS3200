@@ -39,6 +39,7 @@
     }   
 
     function layout() {
+        console.log("layout")
         // layout the nodes based on their subnet
         var new_subnets = {}
         for (var key in nodes) {
@@ -50,7 +51,6 @@
                new_subnets[subnet] = [key]
             }
         }
-        console.log (new_subnets)
         if (JSON.stringify(new_subnets) == JSON.stringify(old_subnets)) {
             return
         }
@@ -150,7 +150,6 @@
                     nextEdgeIndex++
                 };
 
-                var exposedNodes = []
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
                     var node = graph.nodes[j]
@@ -171,11 +170,7 @@
                     nodes[nodeId] = { name, color, subnet}
                     nextNodeIndex++
                 }
-
                 layout()
-                console.log(layouts)
-
-                console.log(nodes)
             },
         },
         data() {
@@ -193,7 +188,7 @@
             const configs = vNG.defineConfigs({
                 view: {
                     autoPanAndZoomOnLoad: "fit-content",
-                    onBeforeInitialDisplay: () => layout(),
+                    // onBeforeInitialDisplay: () => layout(),
                     autoPanOnResize: true,
                     scalingObjects: true,
                     minZoomLevel: 0.05,
