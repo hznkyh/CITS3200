@@ -61,6 +61,12 @@
             },
 
             manualStep() {
+                if (graphIndex == number_of_graphs) {
+                    this.msg = "Simulation finished"
+                    this.startSim = false
+                    this.graphIndex = -1
+                    return
+                }
                 this.startSim = false
                 this.step()
                 graphIndex++
@@ -135,7 +141,7 @@
                         return d3
                             .forceSimulation(nodes)
                             .force("edge", forceLink.strength(3.0))
-                            .force("charge", d3.forceManyBody().strength(-50000))
+                            .force("charge", d3.forceManyBody().strength(-5000))
                             .force("center", d3.forceCenter().strength(0.05))
                             .force("collide", d3.forceCollide().radius(nodeSize * 1.5))
                             .alphaMin(0.001)
