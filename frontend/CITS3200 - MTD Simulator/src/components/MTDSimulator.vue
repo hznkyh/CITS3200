@@ -55,7 +55,13 @@
             </span>
             <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
           </span>
-          <input id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+          <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+            <option value="random">random</option>
+            <option value="simultaneous"> simultaneous</option>
+            <option value="alternative">alternative</option>
+            <option value="single">single</option>
+            <option value="None">None</option>
+          </select>
         </div>
 
         <div>
@@ -266,7 +272,7 @@ export default {
         {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
         {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
         {field: this.checkpoints, validator: this.validateFloatInputs, fieldName: 'Checkpoints'},
-        //{field: this.totalSubnets, validator: this.validateTotalSubets, fieldName: 'Total Subsets'},
+        {field: this.totalSubnets, validator: this.validateTotalSubets, fieldName: 'Total Subsets'},
         {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
         {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
         {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
@@ -275,9 +281,9 @@ export default {
         {field: this.portShuffle, validator: this.validatePrioityInput, fieldName: 'Port Shuffle'},
         {field: this.ServDiversity, validator: this.validatePrioityInput, fieldName: 'Service Diversity'},
         {field: this.userShuffle, validator: this.validatePrioityInput, fieldName: 'User Shuffle'},
-        //{field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
-        //{field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
-        //{field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
+        {field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
+        {field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
+        {field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
       ];
 
       const errorMessages = [];
@@ -300,8 +306,8 @@ export default {
             "mtd_interval": this.interval,
             "finish_time": this.finishTime,
             "checkpoints": this.checkpoints,
-            //"total_subnets": this.totalSubnets, ISSUES LIE HERE IT SEEMS
-            // "target_layers": this.targetLayers,
+            "total_subnets": this.totalSubnets !== '' ? parseInt(this.targetLayers) : null,
+            "target_layers": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
             MTD_PRIORITY: {
               "CompleteTopologyShuffle": this.compTopoShuffle,
               "HostTopologyShuffle": this.hostTopoShuffle,
@@ -357,14 +363,26 @@ export default {
       return !isNaN(parsedValue) && parsedValue >= 3000;
     },
     validateTotalSubets(num){
-      return (this.total_nodes - this.nodeExposed) / (num - 1) > 2
+      // return (this.total_nodes - this.nodeExposed) / (num - 1) > 2
+      return num == '' || num >= 0;
     },
-    validateTrigger(i, f) {
-      const parsedI = parseInt(i);
-      const parsedF = parseFloat(f);
-      return !isNaN(parsedI) && parsedI >= 0 && !isNaN(parsedF) && parsedF >= 0.0 || i == '' && f == '';
-    },
+    validateTrigger(values) {
+      if(!values){
+        return true;
+      }
+      const intPattern = /^\d+$/;
+      const floatPattern = /^\d+(\.\d+)?$/;
 
+      const separate = values.split(',').map(part => part.trim());
+
+      if (separate.length != 2){
+        return false;
+      }
+      const valueOne = intPattern.test(separate[0]);
+      const valueTwo = floatPattern.test(separate[1])
+
+      return valueOne && valueTwo
+    },
   },
 };
 </script>
