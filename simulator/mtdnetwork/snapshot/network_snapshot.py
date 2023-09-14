@@ -22,9 +22,5 @@ class NetworkSnapshot(Snapshot):
             return network
 
     def save_network_array(self, network: TimeNetwork, suffix: str, graph_array: list):
-        print("save network array",graph_array)
-        #Todo CHANGE BACK TO THIS FOR PRODUCTION
-        # graph_array.append(network.get_graph_copy())
-        #Testing for dev
         graph_array.append(copy.deepcopy(network.graph))
         

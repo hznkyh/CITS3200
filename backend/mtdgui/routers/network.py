@@ -76,9 +76,12 @@ async def get_graph():
     print('init',env)
     res= []
     final_params = {'env':env,'res':res} | parameters 
-    # final_params = {'res':res} | parameters 
+    print("INITIAL PARAMS", final_params)
     if stored_params is not None:
         final_params = final_params | stored_params 
+    print("FINAL PARAMS", final_params)
+    if type(final_params["checkpoints"]) is int: 
+        final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
     try: 
         simulation_thread = threading.Thread(target=create_sim_test, kwargs=final_params)
         simulation_thread.start()
@@ -108,6 +111,7 @@ async def stop_graph():
 
 @router.post("/update_submit/")
 def update_item(item: formData):
+    global stored_params
     form_data_values = {
         "total_nodes": item.total_nodes,
         "total_endpoints": item.total_endpoints,
@@ -117,8 +121,8 @@ def update_item(item: formData):
         "mtd_interval": item.mtd_interval,
         "finish_time": item.finish_time,
         "checkpoints": item.checkpoints,
-        "total_subsets": item.total_subnets,
-        "target_layers": item.target_layers,
+        "total_subnets": item.total_subnets,
+        "target_layer": item.target_layers,
     }
     
     mtd_priority_values = item.MTD_PRIORITY
@@ -134,8 +138,10 @@ def update_item(item: formData):
     print(form_data_values)
     print(mtd_priority)
     print(mtd_trigger)
-    return RedirectResponse("https://localhost:8000/network/graph")
-
+    # return RedirectResponse("https://localhost:8000/network/graph")
+    print("Setting stored params to: ",stored_params)
+    filtered_dict = {key: value for key, value in form_data_values.items() if value is not None}
+    stored_params = filtered_dict
     return {
         'form_data': form_data_values, **mtd_priority, **mtd_trigger
     }

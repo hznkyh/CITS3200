@@ -186,7 +186,6 @@ def dap_mtd_simulation(file_name, combination):
                     evaluations.append(result)
                     mtd_evaluation.append(result)
         save_evaluation_result(file_name, mtd_evaluation)
-        print(os_types)
     return evaluations
 
 

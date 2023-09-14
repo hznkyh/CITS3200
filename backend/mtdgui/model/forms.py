@@ -1,5 +1,5 @@
 from pydantic import BaseModel, validator
-from typing import Union, Optional
+from typing import Union, Optional,Any
 
 class Item(BaseModel):
     configVal: float

@@ -20,9 +20,6 @@ class OSDiversity(MTD):
                 continue
             prev_os = host_instance.os_type
             prev_os_version = host_instance.os_version
-            print(prev_os," version ",prev_os_version)
-            print("Config is ", config)
-            print("OS_VERSION_DICT is ", config.get("OS_VERSION_DICT"))
             prev_os_version_index = config.get("OS_VERSION_DICT").get(prev_os).index(prev_os_version)
             new_os = random.choice(config.get("OS_TYPES"))
             new_os_version = config.get("OS_VERSION_DICT")[new_os][prev_os_version_index]

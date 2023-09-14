@@ -135,7 +135,6 @@ def create_sim_test(
         The function `create_sim` returns two values: `evaluation` and `res`.
     
     '''
-    print("running with config ",config)
     end_event = env.event()
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
@@ -158,7 +157,6 @@ def create_sim_test(
                                    total_subnets=total_subnets, total_layers=total_layers,
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
-        print(config)
         adversary = Adversary(network=time_network,
                               attack_threshold=config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_to_array(time_network, adversary, res)
