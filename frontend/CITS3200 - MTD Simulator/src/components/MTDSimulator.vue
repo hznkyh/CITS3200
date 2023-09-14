@@ -367,8 +367,14 @@ export default {
       return !isNaN(parsedValue) && parsedValue >= 3000;
     },
     validateTotalSubets(num){
-      // return (this.total_nodes - this.nodeExposed) / (num - 1) > 2
-      return num == '' || num >= 0;
+      if (num === ''){
+        return true;
+      }
+      const parsedNum = parseFloat(num);
+      if (!isNaN(parsedNum) && (this.total_nodes - this.nodeExposed) / (parsedNum - 1) > 2) {
+        return true;
+      }
+      return false;
     },
     validateTrigger(values) {
       if(!values){
