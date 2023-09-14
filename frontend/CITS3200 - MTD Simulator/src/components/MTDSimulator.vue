@@ -264,7 +264,7 @@ export default {
   
     submitForm(){
       const validationRules = [
-        {field: this.nodeNumber, validator: this.validateIntInputs, fieldName: 'Node Number'},
+        {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
         {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
         {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
         {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
@@ -345,6 +345,10 @@ export default {
       }
       const parsedValue = parseInt(value);
       return !isNaN(parsedValue) && parsedValue >= 0;
+    },
+    validateNodes(num){
+      const parsedValue = parseInt(num);
+      return !isNaN(parsedValue) && parsedValue >= 20;
     },
     validateFloatInputs(value){
       const parsedValue = parseFloat(value);
