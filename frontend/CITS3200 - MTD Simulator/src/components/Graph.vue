@@ -22,6 +22,7 @@
     var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
+    var intervalID
 
     function findExposed(nodeId: string) {
         for (var key in edges) {
@@ -100,7 +101,7 @@
                     this.startSim = true
                     this.msg = "Start"
                     this.step()
-                    setInterval(() => {
+                    intervalID = setInterval(() => {
                         if (this.startSim) {
                             this.msg = "Running"
                             this.step()
@@ -122,6 +123,7 @@
                     this.msg = "Simulation finished"
                     this.startSim = false
                     this.graphIndex = -1
+                    clearInterval(intervalID)
                     return
                 }
                 this.startSim = false
@@ -135,6 +137,7 @@
                     this.msg = "Simulation finished"
                     this.startSim = false
                     this.graphIndex = -1
+                    clearInterval(intervalID)
                     return
                 }
                 exposed = [];
