@@ -31,6 +31,12 @@
         }
     }
 
+    function getRandomCoordinates() {
+        const x = Math.random() * (5000 - (-5000)) + (-5000);
+        const y = Math.random() * (3000 - (-3000)) + (-3000);
+        return { x, y };
+    }   
+
     function layout() {
         // layout the nodes based on their subnet
         var subnets = {}
@@ -44,16 +50,19 @@
             }
         }
 
-        console.log(subnets)
+        var centerx = 0
+        var centery = 0
+
         for (var key in subnets) {
             var subnet = subnets[key]
+            var center = getRandomCoordinates()
             var subnetSize = subnet.length
-            var subnetRadius = 200
+            var subnetRadius = 500
             var angle = 360 / subnetSize
             var angleIndex = 0
             for (var i = 0; i < subnetSize; i++) {
-                var x = subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180)
-                var y = subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180)
+                var x = center.x + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) + (Math.floor(Math.random() * 401) - 200)
+                var y = center.y + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) + (Math.floor(Math.random() * 401) - 200)
                 layouts.nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
@@ -62,7 +71,9 @@
     }
 
     // function layout() {
-    //     layouts.nodes["node1"] = { x: 100, y: 50 }
+    //     //test graph width and height
+    //     layouts.nodes["node1"] = { x: 7000, y: 4000 }
+    //     layouts.nodes["node2"] = { x: -7000, y: -4000 }
     // }
 
     export default {
