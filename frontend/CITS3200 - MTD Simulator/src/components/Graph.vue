@@ -21,6 +21,7 @@
     var graphIndex = 0;
     var msg = "Simulation not started"
     var exposed: string[] = [];
+    var old_subnets = {}
 
     function findExposed(nodeId: string) {
         for (var key in edges) {
@@ -39,25 +40,26 @@
 
     function layout() {
         // layout the nodes based on their subnet
-        var subnets = {}
+        var new_subnets = {}
         for (var key in nodes) {
             var node = nodes[key]
             var subnet = node.subnet
-            if (subnet in subnets) {
-                subnets[subnet].push(key)
+            if (subnet in new_subnets) {
+                new_subnets[subnet].push(key)
             } else {
-                subnets[subnet] = [key]
+               new_subnets[subnet] = [key]
             }
         }
+        console.log (new_subnets)
+        if (JSON.stringify(new_subnets) == JSON.stringify(old_subnets)) {
+            return
+        }
 
-        var centerx = 0
-        var centery = 0
-
-        for (var key in subnets) {
-            var subnet = subnets[key]
+        for (var key in new_subnets) {
+            var subnet = new_subnets[key]
             var center = getRandomCoordinates()
             var subnetSize = subnet.length
-            var subnetRadius = 500
+            var subnetRadius = 300
             var angle = 360 / subnetSize
             var angleIndex = 0
             for (var i = 0; i < subnetSize; i++) {
@@ -66,8 +68,8 @@
                 layouts.nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
-            
         }
+        old_subnets = new_subnets
     }
 
     // function layout() {
