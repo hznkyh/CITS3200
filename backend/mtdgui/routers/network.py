@@ -2,7 +2,7 @@ import json
 import threading
 import networkx as nx
 from model.forms import Item,MTD_PRIORITYItem,formData
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi import APIRouter, HTTPException
 from itertools import chain, count
 # from networkx.utils import to_tuple
@@ -33,8 +33,8 @@ simulation_speed = 1.0
 stored_params = None
 parameters = {
     "start_time": 0,
-    "finish_time": 2000,
-    "checkpoints": range(0, 2000, 1000),
+    "finish_time": 10000,
+    "checkpoints": range(0, 10000, 1000),
     "new_network": True,
     "scheme": 'random',
     "mtd_interval": None,
@@ -106,30 +106,39 @@ async def stop_graph():
     return JSONResponse(content="Simulation stopped", status_code=400)
     
 
-
-@router.post("/update_item/")
-def update_item(item: Item):
-    configs.config=item.age
-    item.age += 10
-    print(item)
-    return {'item':item}
-
 @router.post("/update_submit/")
 def update_item(item: formData):
-    global stored_params 
-    #Todo replace index into params hash of user ip 
-    stored_params = {key: value for key, value in item.model_dump().items() if value is not None}
-    print(stored_params)
-    print(item.model_dump())
-    return {'item': item.model_dump_json()}
+    form_data_values = {
+        "total_nodes": item.total_nodes,
+        "total_endpoints": item.total_endpoints,
+        "total_layers": item.total_layers,
+        "terminate_compromise_ratio": item.terminate_compromise_ratio,
+        "scheme": item.scheme,
+        "mtd_interval": item.mtd_interval,
+        "finish_time": item.finish_time,
+        "checkpoints": item.checkpoints,
+        "total_subsets": item.total_subnets,
+        "target_layers": item.target_layers,
+    }
+    
+    mtd_priority_values = item.MTD_PRIORITY
+    if mtd_priority_values is None:
+        mtd_priority_values = {}
+    mtd_priority = {'MTD_PRIORITY': mtd_priority_values}
 
+    mtd_trigger_values = item.MTD_TRIGGER_INTERVAL
+    if mtd_trigger_values is None:
+        mtd_trigger_values = {}
+    mtd_trigger = {'MTD_TRIGGER_INTERVAL': mtd_trigger_values}
 
-@router.post("/update_MTDPsubmit/")
-def update_item(item: MTD_PRIORITYItem):
-    print(item.model_dump_json())
-    configs.config=config.set_config(item.model_dump_json())
-    return {'item': item.model_dump_json()}
+    print(form_data_values)
+    print(mtd_priority)
+    print(mtd_trigger)
+    return RedirectResponse("https://localhost:8000/network/graph")
 
+    return {
+        'form_data': form_data_values, **mtd_priority, **mtd_trigger
+    }
 
 
 

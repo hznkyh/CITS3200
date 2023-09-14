@@ -5,20 +5,29 @@ class Item(BaseModel):
     configVal: float
 
 class MTD_PRIORITYItem(BaseModel):
-    CompleteTopologyShuffle: Union[float, None]
-    HostTopologyShuffle: Union[float, None]
-    IPShuffle: Union[float, None]
-    OSDiveristy: Union[float, None]
-    PortShuffle: Union[float, None]
-    ServiceDiversity: Union[float, None]
-    UserShuffle: Union[float, None]
+    CompleteTopologyShuffle: Union[int, None]
+    HostTopologyShuffle: Union[int, None]
+    IPShuffle: Union[int, None]
+    OSDiveristy: Union[int, None]
+    PortShuffle: Union[int, None]
+    ServiceDiversity: Union[int, None]
+    UserShuffle: Union[int, None]
+
+class MTD_TRIGGERItem(BaseModel):
+    simultaneous: Union[float, None]
+    random: Union[float, None]
+    alternative: Union[float, None]
 
 class formData(BaseModel):
-    total_nodes: Union[int, None] = None
-    total_endpoints: Union[int, None] = None
-    total_layers: Union[int, None] = None
-    terminate_compromise_ratio: Union[float, None] = None
-    scheme: Union[str, None] = None
-    mtd_interval: Union[float, None] = None
-    class Config:
-        validate_assignment = True
+    total_nodes: int
+    total_endpoints: int
+    total_layers: int
+    terminate_compromise_ratio: float
+    scheme: str
+    mtd_interval: float
+    finish_time: float
+    checkpoints: int
+    total_subnets: Union[int, None]
+    target_layers: Union[int, None]
+    MTD_PRIORITY: Any = None
+    MTD_TRIGGER_INTERVAL: Any = None
