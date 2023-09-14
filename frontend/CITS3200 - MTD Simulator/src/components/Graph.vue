@@ -34,10 +34,40 @@
     }
 
     function getRandomCoordinates(centerx, centery) {
-        const x = Math.random() * (300 - (-300)) + (-300);
-        const y = Math.random() * (100 - (-100)) + (-100);
+        var offset = Math.random() * (350 - (-350)) + (-350);
+        var x = centerx + offset
+        var y = centery + offset
+
+        var rangex = [-700, 700]
+        var rangey = [-350, 350]
+
+        x = Math.min(Math.max(x, rangex[0]), rangex[1])
+        y = Math.min(Math.max(y, rangey[0]), rangey[1])
         return { x, y };
     }   
+
+    function generateCoordinates(
+        numCoordinates: number,
+        minDistance: number
+        ): [number, number][] {
+        const coordinates: [number, number][] = [];
+
+        while (coordinates.length < numCoordinates) {
+            const x = Math.floor(Math.random() * 100) + 1; // Adjust the range as needed
+            const y = Math.floor(Math.random() * 100) + 1; // Adjust the range as needed
+
+            // Check if the new coordinates satisfy the minimum distance requirement
+            const valid = coordinates.every(([x1, y1]) => {
+            return Math.abs(x - x1) >= minDistance && Math.abs(y - y1) >= minDistance;
+            });
+
+            if (valid) {
+            coordinates.push([x, y]);
+            }
+        }
+
+        return coordinates;
+    }
 
     function layout() {
         console.log("layout")
@@ -57,6 +87,7 @@
         }
         var centerx = 0
         var centery = 0
+        console.log(new_subnets)
 
         for (var key in new_subnets) {
             var subnet = new_subnets[key]
@@ -68,8 +99,8 @@
             var angle = 360 / subnetSize
             var angleIndex = 0
             for (var i = 0; i < subnetSize; i++) {
-                var x = center.x + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
-                var y = center.y + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
+                var x = centerx + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
+                var y = centery + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
                 layouts.nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
@@ -192,16 +223,16 @@
             }
         },
         setup() {
-            const nodeSize = 10
+            const nodeSize = 16
 
             const configs = vNG.defineConfigs({
                 view: {
-                    autoPanAndZoomOnLoad: "fit-content",
+                    autoPanAndZoomOnLoad: "center-zero",
                     // onBeforeInitialDisplay: () => layout(),
                     autoPanOnResize: true,
                     scalingObjects: true,
                     minZoomLevel: 0.5,
-                    maxZoomLevel: 1.0,
+                    maxZoomLevel: 0.5,
                     panEnabled: true,
                     zoomEnabled: true,
                     layoutHandler: new ForceLayout({
@@ -212,7 +243,9 @@
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
                         return d3
                             .forceSimulation(nodes)
-                            .force("collide", d3.forceCollide(nodeSize/2))
+                            .force("center", d3.forceCenter())
+                            // .force("charge", d3.forceManyBody().strength(-100))
+                            .force("collide", d3.forceCollide(nodeSize))
                             .alphaMin(0.001)
                         }
                     }),
@@ -230,7 +263,7 @@
                 edge: {
                     normal: {
                         color: "#aaa",
-                        width: 3,
+                        width: 2,
                     },
                     type: "straight",
                 },
