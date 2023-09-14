@@ -20,6 +20,16 @@
     var number_of_graphs = 0;
     var graphIndex = 0;
     var msg = "Simulation not started"
+    var exposed: string[] = [];
+
+    function findExposed(nodeId: string) {
+        for (var key in edges) {
+            var edge = edges[key]
+            if (edge.source == nodeId) {
+                exposed.push(edge.target)
+            }
+        }
+    }
 
     export default {
         name: 'Network',
@@ -80,23 +90,9 @@
                     this.graphIndex = -1
                     return
                 }
+                exposed = [];
                 var graph = storedGraph[graphIndex]
-                var nextNodeIndex = 1
-                for (var j = 0; j < graph.nodes.length; j++) {
-                    var node = graph.nodes[j]
-                    const nodeId = `node${node.id + 1}`
-                    const name = `N${nextNodeIndex}`
-                    var subnet = node.subnet
-                    var color = ``
-                    if (node.host.compromised == true) {
-                        color = `red`
-                    }
-                    else {
-                        color = `green`
-                    }
-                    nodes[nodeId] = { name, color, subnet}
-                    nextNodeIndex++
-                }
+
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
                 for (var z = 0; z < number_of_edges; z++) {
@@ -106,6 +102,27 @@
                     edges[edgeId] = { source, target }
                     nextEdgeIndex++
                 };
+
+                var exposedNodes = []
+                var nextNodeIndex = 1
+                for (var j = 0; j < graph.nodes.length; j++) {
+                    var node = graph.nodes[j]
+                    const nodeId = `node${node.id + 1}`
+                    const name = `N${nextNodeIndex}`
+                    var subnet = node.subnet
+                    var color = ``
+                    if (node.host.compromised == true) {
+                        color = `red`
+                        findExposed(nodeId)
+                    } else if (exposed.includes(nodeId)) {
+                        color = `yellow`
+                    }
+                    else {
+                        color = `green`
+                    }
+                    nodes[nodeId] = { name, color, subnet}
+                    nextNodeIndex++
+                }
                 console.log(nodes)
             },
         },
@@ -134,7 +151,7 @@
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
-                        noAutoRestartSimulation: false,
+                        noAutoRestartSimulation: true,
                         createSimulation: (d3, nodes, edges) => {
                         // d3-force parameters
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
