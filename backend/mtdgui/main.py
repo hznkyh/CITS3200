@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Union, Optional, Dict, Any
 import uvicorn
-
+from models import formData
 from routers import develop, network,config#, set_configs#, sim
 from controllers import * 
 
@@ -48,34 +48,6 @@ def update_item(item: Item):
     print(item)
     return {'item':item}
 
-class MTD_PRIORITYItem(BaseModel):
-    CompleteTopologyShuffle: Union[int, None]
-    HostTopologyShuffle: Union[int, None]
-    IPShuffle: Union[int, None]
-    OSDiveristy: Union[int, None]
-    PortShuffle: Union[int, None]
-    ServiceDiversity: Union[int, None]
-    UserShuffle: Union[int, None]
-
-class MTD_TRIGGERItem(BaseModel):
-    simultaneous: Union[float, None]
-    random: Union[float, None]
-    alternative: Union[float, None]
-
-class formData(BaseModel):
-    total_nodes: int
-    total_endpoints: int
-    total_layers: int
-    terminate_compromise_ratio: float
-    scheme: str
-    mtd_interval: float
-    finish_time: float
-    checkpoints: int
-    total_subnets: Union[int, None]
-    target_layers: Union[int, None]
-    MTD_PRIORITY: Any = None
-    MTD_TRIGGER_INTERVAL: Any = None
-
 @app.post("/update_submit/")
 def update_item(item: formData):
     form_data_values = {
@@ -87,8 +59,8 @@ def update_item(item: formData):
         "mtd_interval": item.mtd_interval,
         "finish_time": item.finish_time,
         "checkpoints": item.checkpoints,
-        "total_subsets": item.total_subnets,
-        "target_layers": item.target_layers,
+        "total_subnets": item.total_subnets,
+        "target_layer": item.target_layers,
     }
     
     mtd_priority_values = item.MTD_PRIORITY
