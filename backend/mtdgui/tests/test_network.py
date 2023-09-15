@@ -1,39 +1,44 @@
-# import networkx as nx
+from fastapi.testclient import TestClient
+from ..main import app
+import json
+client = TestClient(app) 
 
+def test_make_new_default_graph(): 
+    response = client.get('/network/graph')
+    assert response.status_code == 200 
+    data = response.json()
+    assert len(data) == 3
 
-# class CustomNode:
-#     def __init__(self, name, attribute):
-#         self.name = name
-#         self.attribute = attribute
+def test_update_run_parameters(): 
+    # Define test data
+    form_data = {
+        "total_nodes": 30,
+        "total_endpoints": 5,
+        "total_layers": 3,
+        "terminate_compromise_ratio": 0.7,
+        "scheme": "random",
+        "mtd_interval": 2.0,
+        "finish_time": 9000,
+        "checkpoints": 1000,
+        "total_subnets": 2,
+        "target_layers": 4,
+        "MTD_PRIORITY": None,
+        "MTD_TRIGGER_INTERVAL": None
+    }
 
-#     def to_dict(self):
-#         return {"name": self.name, "attribute": self.attribute}
+    response = client.post("/update_submit/", json=form_data)
 
-# G = nx.Graph()
-# node1 = CustomNode("Node1", "Attribute1")
-# node2 = CustomNode("Node2", "Attribute2")
-# G.add_edge(node1, node2)
+    assert response.status_code == 200
 
-# def serialize_graph(graph):
-#     data = nx.node_link_data(graph)
-#     serialized_nodes = [node.to_dict() for node in graph.nodes()]
-#     data["nodes"] = serialized_nodes
-#     return data
+    response_json = response.json()
+    assert "form_data" in response_json
+    assert "MTD_PRIORITY" in response_json
+    assert "MTD_TRIGGER_INTERVAL" in response_json
 
+    assert response_json['form_data'] == form_data
+    assert response_json['MTD_PRIORITY'] == form_data['MTD_PRIORITY']
+    assert response_json['MTD_TRIGGER_INTERVAL'] == form_data['MTD_TRIGGER_INTERVAL']
 
-# def test_serialize_graph():
-#     G_test = nx.Graph()
-#     node1 = CustomNode("Node1", "Attribute1")
-#     node2 = CustomNode("Node2", "Attribute2")
-#     G_test.add_edge(node1, node2)
+    graph_response = client.get("/network/graph")
 
-#     serialized_graph = serialize_graph(G_test)
-
-#     assert serialized_graph["nodes"] == [
-#         {"name": "Node1", "attribute": "Attribute1"},
-#         {"name": "Node2", "attribute": "Attribute2"}
-#     ]
-
-#     assert serialized_graph["links"] == [
-#         {"source": 0, "target": 1}
-#     ]
+    
