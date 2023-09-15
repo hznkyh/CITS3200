@@ -264,10 +264,10 @@ export default {
   
     submitForm(){
       const validationRules = [
-        {field: this.nodeNumber, validator: this.validateIntInputs, fieldName: 'Node Number'},
+        {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
         {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
         {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
-        {field: this.compromisedRatio, validator: this.validateFloatInputs, fieldName: 'Compromise Ratio'},
+        {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
         {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
         {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
         {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
@@ -346,9 +346,17 @@ export default {
       const parsedValue = parseInt(value);
       return !isNaN(parsedValue) && parsedValue >= 0;
     },
+    validateNodes(num){
+      const parsedValue = parseInt(num);
+      return !isNaN(parsedValue) && parsedValue >= 20;
+    },
     validateFloatInputs(value){
       const parsedValue = parseFloat(value);
       return !isNaN(parsedValue) && parsedValue >= 0.0;
+    },
+    validateRatio(value){
+      const parsedValue = parseFloat(value)
+      return !isNaN(parsedValue) && parsedValue <= 1.0;
     },
     validatePrioityInput(num){
       const parsedValue = parseFloat(num);
@@ -363,8 +371,14 @@ export default {
       return !isNaN(parsedValue) && parsedValue >= 3000;
     },
     validateTotalSubets(num){
-      // return (this.total_nodes - this.nodeExposed) / (num - 1) > 2
-      return num == '' || num >= 0;
+      if (num === ''){
+        return true;
+      }
+      const parsedNum = parseFloat(num);
+      if (!isNaN(parsedNum) && (this.total_nodes - this.nodeExposed) / (parsedNum - 1) > 2) {
+        return true;
+      }
+      return false;
     },
     validateTrigger(values) {
       if(!values){
