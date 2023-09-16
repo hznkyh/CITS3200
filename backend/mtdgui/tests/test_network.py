@@ -10,11 +10,12 @@ def test_make_new_default_graph():
     assert response.status_code == 200 
     data = response.json()
     # Should be 10 checkpoints in the default response 
-    assert len(data) == 10
+    assert len(data) == len(parameters["checkpoints"])
     # Each checkpoint should return directed, multipgraph, graph, nodes and links
     for i in range(0,len(data)): 
-        assert len(data[i]) == len(parameters["checkpoints"])
-        assert len(data[i].nodes) == parameters["total_nodes"]
+        assert len(data[str(i)]) == 5
+        # Check that each checkpoint has the right number of nodes
+        assert len(data[str(i)]["nodes"]) == parameters["total_nodes"]
 
 def test_update_run_parameters(): 
     # Define test data
@@ -28,9 +29,9 @@ def test_update_run_parameters():
         "finish_time": 9000,
         "checkpoints": 1000,
         "total_subnets": 2,
-        "target_layer": 4,
-        "MTD_PRIORITY": None,
-        "MTD_TRIGGER_INTERVAL": None
+        "target_layers": 4,
+        "MTD_PRIORITY": "string",
+        "MTD_TRIGGER_INTERVAL": "string"
     }
 
     response = client.post("network/update_submit/", json=form_data)
@@ -38,10 +39,15 @@ def test_update_run_parameters():
     assert response.status_code == 200
 
     response_json = response.json()
-    assert "form_data" in print(response_json)
+    assert "form_data" in response_json
     assert "MTD_PRIORITY" in response_json
     assert "MTD_TRIGGER_INTERVAL" in response_json
 
-    graph_response = client.get("network/graph")
+    config_response = client.get("/config/getCurrent")
+
+    assert response.status_code == 200 
+    # graph_response = client.get("network/graph")
+
+    # assert graph_response.status_code == 200
 
     
