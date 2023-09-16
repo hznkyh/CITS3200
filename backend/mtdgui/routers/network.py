@@ -1,7 +1,7 @@
 import json
 import threading
 import networkx as nx
-from model.forms import Item,MTD_PRIORITYItem,formData
+from models.forms import Item,MTD_PRIORITYItem,formData
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi import APIRouter, HTTPException
 from itertools import chain, count
@@ -39,7 +39,7 @@ parameters = {
     "scheme": 'random',
     "mtd_interval": None,
     "custom_strategies": None,
-    "total_nodes": 19,
+    "total_nodes": 20,
     "total_endpoints": 5,
     "total_subnets": 8,
     "total_layers": 4,
