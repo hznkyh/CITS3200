@@ -1,5 +1,5 @@
 from pydantic import BaseModel, conint
-from typing import Optional, Union, Any, List
+from typing import Optional, Union, List
 # class MTD_PRIORITY(BaseModel):
 #     CompleteTopologyShuffle: Optional[conint(ge=0)] = None
 #     HostTopologyShuffle: Optional[conint(ge=0)] = None
