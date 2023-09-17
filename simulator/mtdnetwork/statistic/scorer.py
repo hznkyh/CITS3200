@@ -1,5 +1,7 @@
 # import mtdnetwork.irrelevant_stuff.exceptions as exceptions
+import logging
 
+logger = logging.getLogger(__name__)
 
 class Statistics:
 

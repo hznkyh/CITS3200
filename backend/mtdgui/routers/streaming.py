@@ -1,7 +1,7 @@
 from threading import Lock, Thread
 import random
-from fastapi import APIRouter, WebSocket, Depends, HTTPException
-from backend.mtdgui.dev.Sim import MySimulator
+from fastapi import APIRouter
+from dev.Sim import MySimulator
 from starlette.responses import StreamingResponse
 import time
 
@@ -39,6 +39,7 @@ def stream_messages(thread):
                     break
                 else:
                     time.sleep(1)  # Wait a bit before checking again
+    thread.join()  # This waits for thread to complete
 
 
 # This callback will append simulation data to our message queue
@@ -71,7 +72,6 @@ def sse_callback(name:str, typeof:str, wait:float):
         message_queue.append(msg)
         # print(message_queue)
 
-
 @router.get("/stream/")
 async def stream_simulation_data():
     '''The function `stream_simulation_data` runs a simulation using a separate thread and returns a
@@ -88,7 +88,7 @@ async def stream_simulation_data():
     thread = Thread(target=sim.run, args=(50,))
     thread.start()
 
-    thread.join()  # This waits for each thread to complete
+   
 
     # The line `return StreamingResponse(stream_messages(thread), media_type="text/event-stream")` is
     # creating a streaming response object with a media type of "text/event-stream".

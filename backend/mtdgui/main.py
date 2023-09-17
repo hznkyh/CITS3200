@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Union, Optional, Dict, Any
 import uvicorn
 
-from routers import develop, network,config, webSocket ,webSocketDev#, set_configs#, sim
+from routers import develop, network,config, webSocket ,webSocketDev, streaming #, set_configs#, sim
 from controllers import * 
 
 app = FastAPI()
@@ -12,6 +12,7 @@ app = FastAPI()
 app.include_router(config.router)
 app.include_router(network.router)
 app.include_router(develop.router)
+app.include_router(streaming.router)
 app.include_router(webSocket.router)
 app.include_router(webSocketDev.router)
 

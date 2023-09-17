@@ -1,11 +1,11 @@
-import logging
 from mtdnetwork.statistic.attack_statistics import AttackStatistics
 from mtdnetwork.data.constants import HACKER_ATTACK_ATTEMPT_MULTIPLER
 from mtdnetwork.configs import config
+import logging
 
-
+logger = logging.getLogger(__name__)
 class Adversary:
-    def __init__(self, network, attack_threshold):
+    def __init__(self, network, attack_threshold, logger=None):
         self.network = network
         self._compromised_users = []
         self._compromised_hosts = []
@@ -18,11 +18,10 @@ class Adversary:
         self.curr_host = None
         self._curr_ports = []
         self._curr_vulns = []
-        self._max_attack_attempts = config.get("HACKER_ATTACK_ATTEMPT_MULTIPLER") * network.get_total_nodes()
+        self._max_attack_attempts = config["HACKER_ATTACK_ATTEMPT_MULTIPLER"] * network.get_total_nodes()
         self._curr_attempts = 0
         self.target_compromised = False
         self.observed_changes = {}
-
         self._attack_stats = AttackStatistics()
         self._curr_process = 'SCAN_HOST'
 

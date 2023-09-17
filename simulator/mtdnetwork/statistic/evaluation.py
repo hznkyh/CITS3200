@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -6,7 +7,7 @@ import pandas as pd
 import os
 
 directory = os.getcwd()
-
+logger = logging.getLogger(__name__)
 
 class Evaluation:
     def __init__(self, network, adversary):

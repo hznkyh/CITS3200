@@ -1,9 +1,10 @@
+import logging
 import random, uuid
 import networkx as nx
 # import mtdnetwork.data.constants as constants
 from mtdnetwork.configs import config
 
-import json
+logger = logging.getLogger(__name__)
 
 class Host:
     def __init__(self, operating_system, os_version, host_id, host_ip, users_list,

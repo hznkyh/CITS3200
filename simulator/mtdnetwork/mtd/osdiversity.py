@@ -1,7 +1,8 @@
+import logging
 from mtdnetwork.mtd import MTD
 import random
 from mtdnetwork.configs import config
-
+logger = logging.getLogger(__name__)
 class OSDiversity(MTD):
     def __init__(self, network=None):
         super().__init__(name="OSDiversity",

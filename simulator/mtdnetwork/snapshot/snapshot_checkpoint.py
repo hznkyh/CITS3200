@@ -14,7 +14,7 @@ class SnapshotCheckpoint:
 
     def proceed_save(self, time_network, adversary,graph_array):
         """launch an event in simulation to save snapshots by time"""
-        print("proceed save", self._checkpoint_stack )
+        # print("proceed save", self._checkpoint_stack )
         if self._checkpoint_stack is not None:
             self._checkpoint_stack = deque(self._checkpoint_stack)
         self.env.process(self.save_snapshots_by_time(time_network, adversary,graph_array))
@@ -26,13 +26,13 @@ class SnapshotCheckpoint:
         """
         last_checkpoint = self._proceed_time
         while len(self._checkpoint_stack) > 0:
-            print(f"checkpoint stack is {self._checkpoint_stack} ")
+            # print(f"checkpoint stack is {self._checkpoint_stack} ")
             checkpoint = self._checkpoint_stack.popleft()
             if checkpoint < last_checkpoint:
                 continue
             yield self.env.timeout(checkpoint - last_checkpoint)
             last_checkpoint = checkpoint
-            print("ADDING AT ",self.env.now, "\n")
+            # print("ADDING AT ",self.env.now, "\n")
             NetworkSnapshot().save_network_array(time_network, adversary, graph_array)
             # NetworkSnapshot().save_network(time_network, str(self.env.now + self._proceed_time))
             # AdversarySnapshot().save_adversary(adversary, str(self.env.now + self._proceed_time))

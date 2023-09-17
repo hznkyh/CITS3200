@@ -1,3 +1,4 @@
+import logging
 import networkx as nx
 import pkg_resources
 import matplotlib.pyplot as plt
@@ -10,12 +11,21 @@ from mtdnetwork.statistic.scorer import Scorer
 from mtdnetwork.configs import config
 import os
 
-
+logger = logging.getLogger(__name__)
 class Network:
 
-    def __init__(self, total_nodes, total_endpoints, total_subnets, total_layers, total_database, target_layer=None,
-                 users_to_nodes_ratio=config.get("USER_TO_NODES_RATIO"),
-                 prob_user_reuse_pass=config.get("USER_PROB_TO_REUSE_PASS"), seed=None):
+    def __init__(
+        self,
+        total_nodes,
+        total_endpoints,
+        total_subnets,
+        total_layers,
+        total_database,
+        target_layer=None,
+        users_to_nodes_ratio=config["USER_TO_NODES_RATIO"],
+        prob_user_reuse_pass=config["USER_PROB_TO_REUSE_PASS"],
+        seed=None
+    ):
         """
         Initialises the state of the network for the simulation.
 
@@ -52,7 +62,8 @@ class Network:
         self.exposed_endpoints = [n for n in range(total_endpoints)]
 
         self.total_database = total_database
-        self._database = [n for n in range(total_nodes - total_database, total_nodes)]
+        self._database = [n for n in range(
+            total_nodes - total_database, total_nodes)]
 
         self.tags = []
         self.tag_priority = []
@@ -81,7 +92,8 @@ class Network:
     def init_network(self):
         self.assign_tags()
         self.assign_tag_priority()
-        self.setup_users(self.users_to_nodes_ratio, self.prob_user_reuse_pass, config.get("USER_TOTAL_FOR_EACH_HOST"))
+        self.setup_users(self.users_to_nodes_ratio, self.prob_user_reuse_pass, config.get(
+            "USER_TOTAL_FOR_EACH_HOST"))
         self.gen_graph()
         self.setup_network()
         self.scorer.set_initial_statistics(self)
@@ -114,7 +126,8 @@ class Network:
         subnets_per_layer = []
         while len(subnets_per_layer) < self.layers:
             # Adds 1 to start of array if array is empty
-            if len(subnets_per_layer) == 0: subnets_per_layer.append(1)
+            if len(subnets_per_layer) == 0:
+                subnets_per_layer.append(1)
             l_subnets = random.randint(1, max_subnets_per_layer)
             # Only appends value if it doesn't exceed maximum number of subnets possible
             if self.total_subnets - (sum(subnets_per_layer) + l_subnets) > self.layers - len(subnets_per_layer):
@@ -171,7 +184,8 @@ class Network:
                 subgraph = nx.barabasi_albert_graph(s_nodes, m)
                 new_node_mapping = {k: k + node_id for k in range(s_nodes)}
                 subgraph = nx.relabel_nodes(subgraph, new_node_mapping)
-                new_attr = {k + node_id: {"subnet": j, "layer": i} for k in range(s_nodes)}
+                new_attr = {k + node_id: {"subnet": j, "layer": i}
+                            for k in range(s_nodes)}
                 attr = {**attr, **new_attr}
 
                 # Setting offset to next empty node
@@ -186,7 +200,8 @@ class Network:
                     }
 
                     for k, v in subgraph_pos.items():
-                        y = v[1] + j * 3 + 1.5 * (max_subnet_in_layer - len(subnet_node_list))
+                        y = v[1] + j * 3 + 1.5 * \
+                            (max_subnet_in_layer - len(subnet_node_list))
                         subgraph_pos[k] = np.array(
                             [v[0] + i * 2.25, y]
                         )
@@ -261,7 +276,8 @@ class Network:
         layer1_weights = [self.graph.degree(n) for n in layer1_nodes]
         while len(blank_endpoints):
             endpoint = blank_endpoints.pop(0)
-            other_node = random.choices(layer1_nodes, weights=layer1_weights, k=1)[0]
+            other_node = random.choices(
+                layer1_nodes, weights=layer1_weights, k=1)[0]
             self.graph.add_edge(endpoint, other_node)
 
         # Updates Colour of target node to red
@@ -270,7 +286,8 @@ class Network:
 
         # Fix positions for endpoints
         for n in range(self.total_endpoints):
-            position = (n + 1) / self.total_endpoints * (max_y_pos - min_y_pos) + min_y_pos
+            position = (n + 1) / self.total_endpoints * \
+                (max_y_pos - min_y_pos) + min_y_pos
             new_pos = {n: np.array([0, position])}
             self.pos.update(new_pos)
 
@@ -573,7 +590,8 @@ class Network:
             if not layer_id in layer_subnets:
                 layer_subnets[layer_id] = {}
 
-            layer_subnets[layer_id][subnet_id] = layer_subnets[layer_id].get(subnet_id, []) + [host_id]
+            layer_subnets[layer_id][subnet_id] = layer_subnets[layer_id].get(
+                subnet_id, []) + [host_id]
 
         return layer_subnets
 
@@ -613,7 +631,8 @@ class Network:
         Returns:
             ave_score: Score of each host added up, divided by the number of hosts
         """
-        shortest_path = self.get_path_from_exposed(self.target_node, self.graph)[0]
+        shortest_path = self.get_path_from_exposed(
+            self.target_node, self.graph)[0]
         vuln_list = []
         total_score = 0
         for host_id in shortest_path:
@@ -635,7 +654,8 @@ class Network:
             if total_host_vulns - not_unique_host_vulns == 0:
                 new_vuln_percent = 0
             else:
-                new_vuln_percent = (total_host_vulns - not_unique_host_vulns) / total_host_vulns
+                new_vuln_percent = (total_host_vulns -
+                                    not_unique_host_vulns) / total_host_vulns
             total_score = total_score + new_vuln_percent
         if len(shortest_path) > 0:
             return total_score / len(shortest_path)
@@ -659,7 +679,8 @@ class Network:
         if self.total_users < 1:
             self.total_users = 1
 
-        names = [x.decode() for x in pkg_resources.resource_string('mtdnetwork', "data/first-names.txt").splitlines()]
+        names = [x.decode() for x in pkg_resources.resource_string(
+            'mtdnetwork', "data/first-names.txt").splitlines()]
 
         random_users = random.choices(names, k=self.total_users)
         self.users_list = [
@@ -873,10 +894,10 @@ class Network:
                 graph=visible_network
             ) + str(random.random())
         ) + [
-                   host_id
-                   for host_id in self.exposed_endpoints
-                   if host_id in host_stack
-               ]
+            host_id
+            for host_id in self.exposed_endpoints
+            if host_id in host_stack
+        ]
 
     def get_neighbors(self, host_id):
         """
@@ -1008,6 +1029,7 @@ class Network:
 
     def draw(self):
         plt.figure(1, figsize=(15, 12))
-        nx.draw(self.graph, pos=self.pos, node_color=self.colour_map, with_labels=True)
+        nx.draw(self.graph, pos=self.pos,
+                node_color=self.colour_map, with_labels=True)
         directory = os.getcwd()
         plt.savefig(directory + '/experimental_data/plots/network.png')

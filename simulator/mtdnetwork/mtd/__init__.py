@@ -17,9 +17,9 @@ class MTD:
         self._name = name
         self._mtd_type = mtd_type
         self._resource_type = resource_type
-        self._execution_time_mean = config.get("MTD_DURATION")[name][0]
-        self._execution_time_std = config.get("MTD_DURATION")[name][1]
-        self._priority = config.get("MTD_PRIORITY")[name]
+        self._execution_time_mean = config["MTD_DURATION"][name][0]
+        self._execution_time_std = config["MTD_DURATION"][name][1]
+        self._priority = config["MTD_PRIORITY"][name]
         self.network = network
 
     def __lt__(self, other):

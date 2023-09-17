@@ -1,4 +1,5 @@
 
+import logging
 import simpy
 import json
 from networkx.readwrite import json_graph
@@ -20,6 +21,9 @@ import pandas as pd
 import warnings
 import os
 import sys
+
+
+logger = logging.getLogger(__name__)
 # current_directory = os.path.dirname(os.path.abspath(__file__))
 # target_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)) , 'experiments')
 # target_directory = os.getcwd()
@@ -45,14 +49,6 @@ class GraphEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def sim_params(num_nodes=50, num_endpoints=50, num_subnets=8, num_layers=4, target_layer=4):
-    print("Working")
-    test = execute_sim(start_time=0, finish_time=200, mtd_interval=20, scheme='random', total_nodes=num_nodes,
-                       total_endpoints=num_endpoints, total_subnets=num_subnets, total_layers=num_layers)
-    return test
-    # print(test.get_network().get_hosts())
-    # for i,host in test.get_network().get_hosts().items():
-    #     print(host.ip)
 
 def create_sim_test(
     env: simpy.Environment,
@@ -70,7 +66,8 @@ def create_sim_test(
     total_layers=4,
     target_layer=4,
     total_database=2,
-    terminate_compromise_ratio=0.8
+    terminate_compromise_ratio=0.8,
+    callback=None,
 ):
     '''The `create_sim` function creates a simulation environment for a network attack and defense
     scenario, with options for different attack and defense strategies, network parameters, and
@@ -134,10 +131,12 @@ def create_sim_test(
         The function `create_sim` returns two values: `evaluation` and `res`.
     
     '''
+    logger.info('init simulation')
     end_event = env.event()
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
     adversary = None
+
     if start_time > 0:
         try:
             time_network, adversary = snapshot_checkpoint.load_snapshots_by_time(
@@ -163,7 +162,7 @@ def create_sim_test(
 
     # start attack
     attack_operation = AttackOperation(
-        env=env, end_event=end_event, adversary=adversary, proceed_time=0)
+        env=env, end_event=end_event, callback = callback, adversary=adversary, proceed_time=0)
     attack_operation.proceed_attack()
 
     # start mtd
@@ -174,7 +173,7 @@ def create_sim_test(
         mtd_operation.proceed_mtd()
 
     # save snapshot by time
-    print("proceed save checkpoints",checkpoints)
+    # print("proceed save checkpoints",checkpoints)
     if checkpoints is not None:
         snapshot_checkpoint.proceed_save(time_network, adversary,res)
 
@@ -186,91 +185,8 @@ def create_sim_test(
         env.run(until=(finish_time - start_time))
     else:
         env.run(until=end_event)
-    evaluation = Evaluation(network=time_network, adversary=adversary)
-    print("==============================")
-    print(adversary.get_compromised_hosts())
-    # print("RES:",res)
-    # print("EVALUATION\n",serialize_graph(evaluation.get_network().get_graph()))
-    return evaluation
-
-def serialize_graph(G:nx.Graph, attrs=None):
-    """Returns data in node-link format that is suitable for JSON serialization
-    and use in Javascript documents.
-
-    Parameters
-    ----------
-    G : NetworkX graph
-
-    attrs : dict
-        A dictionary that contains five keys 'source', 'target', 'name',
-        'key' and 'link'.  The corresponding values provide the attribute
-        names for storing NetworkX-internal graph data.  The values should
-        be unique.  Default value::
-
-            dict(source='source', target='target', name='id',
-                 key='key', link='links')
-
-        If some user-defined graph data use these attribute names as data keys,
-        they may be silently dropped.
-
-    Returns
-    -------
-    data : dict
-       A dictionary with node-link formatted data.
-
-    Raises
-    ------
-    NetworkXError
-        If values in attrs are not unique.
-
-    Examples
-    --------
-
-    Notes
-    -----
-    Graph, node, and link attributes are stored in this format.  Note that
-    attribute keys will be converted to strings in order to comply with JSON.
-    """
-    _attrs = dict(source="source", target="target", name="id", key="key", link="links")
-    multigraph = G.is_multigraph()
-    # Allow 'attrs' to keep default values.
-    if attrs is None:
-        attrs = _attrs
-    else:
-        attrs.update({k: v for (k, v) in _attrs.items() if k not in attrs})
-    name = attrs["name"]
-    source = attrs["source"]
-    print(source)
-    target = attrs["target"]
-    links = attrs["link"]
-    # Allow 'key' to be omitted from attrs if the graph is not a multigraph.
-    key = None if not multigraph else attrs["key"]
-    if len({source, target, key}) < 3:
-        raise nx.NetworkXError("Attribute names are not unique.")
-    data = {
-        "directed": G.is_directed(),
-        "multigraph": multigraph,
-        "graph": G.graph,
-        "nodes": [serialize_class(G,n,name)  for n in G],
-        # "nodes": [dict(chain(G.nodes[n].items(), [(name, n)])) for n in G],
-    }
         
-    if multigraph:
-        data[links] = [
-            dict(chain(d.items(), [(source, u), (target, v), (key, k)]))
-            for u, v, k, d in G.edges(keys=True, data=True)
-        ]
-    else:            
-        data[links] = [
-            dict(chain(d.items(), [(source, u), (target, v)]))
-            for u, v, d in G.edges(data=True)
-        ]
-    return data
-    # return data
-
-def serialize_class(G,n,name):
-    node = dict(chain(G.nodes[n].items(), [(name, n)]))
-    if ('host' in node):
-        node['host'] = node['host'].toJson()
-    return node
-
+    evaluation = Evaluation(network=time_network, adversary=adversary)
+    # print("RES:",res)
+    print("get_compromised_hosts ",evaluation._adversary.get_compromised_hosts())
+    return evaluation

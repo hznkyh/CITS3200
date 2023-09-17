@@ -51,5 +51,3 @@ def merge(default_config,new_config):
 
 # test_file()
 config = set_config()
-# print(load_default().get("MTD_PRIORITY"))
-print("OS_VERSION_DICT IS\n",config.get("OS_VERSION_DICT").get('windows'))

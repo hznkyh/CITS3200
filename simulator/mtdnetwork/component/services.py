@@ -1,11 +1,13 @@
-import random, logging
+from pickle import NONE
+import random
+import logging
 # import mtdnetwork.data.constants as constants
 from mtdnetwork.configs import config
 
 import pkg_resources
 import uuid
 
-
+logger = logging.getLogger(__name__)
 class Vulnerability:
     def __init__(self, can_have_os_dependency=False, os_list=[]):
         """
@@ -22,7 +24,7 @@ class Vulnerability:
         """
         # 1 for easy, 0 for impossible
         # Change to fit distributions
-        self.complexity = config.get("VULN_MIN_COMPLEXITY") + (1 - config.get("VULN_MIN_COMPLEXITY")) * random.random()
+        self.complexity =config["VULN_MIN_COMPLEXITY"] + (1 -config["VULN_MIN_COMPLEXITY"]) * random.random()
         # 1 for complete compromise
         # 0 for nothing
         self.impact = random.random() * 10
@@ -32,17 +34,18 @@ class Vulnerability:
         self.exploited = False
         self.has_os_dependency = False
         self.vuln_os_list = []
-        self.has_dependent_vulns = random.random() < config.get("VULN_PROB_DEPENDS_ON_OTHER_VULNS")
+        self.has_dependent_vulns = random.random() <config[
+            "VULN_PROB_DEPENDS_ON_OTHER_VULNS"]
         self.dependent_vuln_id = random.choice(
-            [x for x in range(0, 101, int(100 * config.get("VULN_PROB_DEPENDS_ON_OTHER_VULNS")))])
+            [x for x in range(0, 101, int(100 *config["VULN_PROB_DEPENDS_ON_OTHER_VULNS"]))])
         self.dependent_vulns = []
 
         self.id = str(uuid.uuid4())
-        self.logger = logging.getLogger("vuln-{}".format(self.id))
         if can_have_os_dependency and len(os_list) > 1:
-            if random.random() < config.get("VULN_PROB_DEPENDS_ON_OS"):
+            if random.random() <config["VULN_PROB_DEPENDS_ON_OS"]:
                 self.has_os_dependency = True
-                self.vuln_os_list = random.sample(os_list, k=random.randint(1, len(os_list) - 1))
+                self.vuln_os_list = random.sample(
+                    os_list, k=random.randint(1, len(os_list) - 1))
                 # self.vuln_os_list = random.sample(os_list, k=random.randint(1, 2))
 
     def is_exploited(self):
@@ -76,14 +79,14 @@ class Vulnerability:
             the more attempts a hacker tries at exploiting a particular vulnerability the faster the exploit time becomes
 
         """
-        exp_time = config.get("ATTACK_DURATION").get('EXPLOIT_VULN') * (1 - self.complexity)
+        exp_time =config["ATTACK_DURATION"]['EXPLOIT_VULN'] * (1 - self.complexity)
         if self.has_os_dependency and host is not None and host.os_type not in self.vuln_os_list:
             exp_time *= 2.5
         if self.exploited:
             return exp_time / 2
         return exp_time
-        # return config.get("VULN_MIN_EXPLOIT_TIME") + (config.get("VULN_MAX_EXPLOIT_TIME") -
-        # config.get("VULN_MIN_EXPLOIT_TIME")) * ( 1 - self.complexity) / ( self.exploit_attempt + 1)
+        # returnconfig["VULN_MIN_EXPLOIT_TIME"] + (config[]"VULN_MAX_EXPLOIT_TIME"] -
+        #config["VULN_MIN_EXPLOIT_TIME"]) * ( 1 - self.complexity) / ( self.exploit_attempt + 1)
 
     def network(self, host=None):
         """
@@ -106,7 +109,7 @@ class Vulnerability:
         if random.random() < self.complexity:
             self.exploited = True
             if self.has_os_dependency:
-                self.logger.info("OS DEPENDENT VULNERABILITY EXPLOITED!")
+                logger.info("vuln-{} OS DEPENDENT VULNERABILITY EXPLOITED!".format(self.id))
             return self.impact
         return 0.0
 
@@ -133,20 +136,19 @@ class Vulnerability:
     def roa(self):
         """
         Psuedo return on attack metric
-        
+
         This is because I have set the probability of an attack occuring to be the same as the 'attack cost'.
-        
+
         This version uses the exploit_time as the attack cost.
-        
+
         The x100 is because impact is expressed as a value 1-10 on CVE
         """
         return (self.complexity * self.impact) / self.exploit_time()
 
     def initial_roa(self):
-        return (self.complexity * self.impact) / (config.get("VULN_MIN_EXPLOIT_TIME") +
-                                                  (
-                                                          config.get("VULN_MAX_EXPLOIT_TIME") - config.get("VULN_MIN_EXPLOIT_TIME")) * (
-                                                          1 - self.complexity))
+        return (self.complexity * self.impact) / (config["VULN_MIN_EXPLOIT_TIME"]) + (
+           config["VULN_MAX_EXPLOIT_TIME"] -config["VULN_MIN_EXPLOIT_TIME"]) * (
+            1 - self.complexity)
 
     def __eq__(self, other):
         """
@@ -173,7 +175,8 @@ class Service:
         """
         self.name = service_name
         self.version = service_version
-        self.vulnerabilities = sorted(vulnerabilities, key=lambda v: v.roa(), reverse=True)
+        self.vulnerabilities = sorted(
+            vulnerabilities, key=lambda v: v.roa(), reverse=True)
         self.exploit_value = 0.0
         self.id = str(uuid.uuid4())
 
@@ -190,10 +193,10 @@ class Service:
             the top X vulnerabilities in terms of RoA of the service that have not been exploited yet
         """
         return [
-                   v
-                   for v in self.vulnerabilities
-                   if v.roa() > roa_threshold and not v.is_exploited()
-               ][:config.get("SERVICE_TOP_X_VULNS_TO_RETURN")]
+            v
+            for v in self.vulnerabilities
+            if v.roa() > roa_threshold and not v.is_exploited()
+        ][:config["SERVICE_TOP_X_VULNS_TO_RETURN"]]
 
     def get_all_vulns(self):
         return self.vulnerabilities
@@ -206,10 +209,10 @@ class Service:
         for vuln in self.vulnerabilities:
             if vuln.exploited:
                 self.exploit_value += vuln.impact
-        return self.exploit_value > config.get("SERVICE_COMPROMISED_THRESHOLD")
+        return self.exploit_value >config["SERVICE_COMPROMISED_THRESHOLD"]
 
     def discover_vuln_time(self, roa_threshold=0):
-        return len(self.get_vulns(roa_threshold=roa_threshold)) * config.get("SERVICE_DISCOVER_EACH_VULN_TIME")
+        return len(self.get_vulns(roa_threshold=roa_threshold)) *config["SERVICE_DISCOVER_EACH_VULN_TIME"]
 
     def get_highest_roa_vuln(self):
         vuln_len = len(self.get_vulns())
@@ -223,17 +226,6 @@ class Service:
         return other.name == self.name and other.version == self.version
 
 
-class ServicesGenerator:
-
-    def __init__(self,
-                 services_per_os=config.get("SERVICE_NO_OF_SERVICES_PER_OS"),
-                 percent_cross_platform=config.get("VULN_PERCENT_CROSS_PLATFORM"),
-                 max_vuln_probability=config.get("VULN_MAX_PROB_FOR_OCCURING_FOR_SERVICE_VERSION"),
-                 vuln_patch_mean=config.get("VULN_PATCH_MEAN"),
-                 vuln_patch_range=config.get("VULN_PATCH_RANGE"),
-                 vuln_initial_chances=config.get("VULN_INITIAL_CHANCES"),
-                 os_dependent_vuln_chance=config.get("VULN_PROB_DEPENDS_ON_OS"),
-                 dependent_vuln_chance=config.get("VULN_PROB_DEPENDS_ON_OTHER_VULNS")):
         """
         Used to generator services for the simulation
 
@@ -255,17 +247,21 @@ class ServicesGenerator:
             dependent_vuln_chance (Unused):
                 the chance that a vulnerability can only be exploited if there is another particular type vulnerability that can also be exploited
         """
+       
+class ServicesGenerator:
+    def __init__(self, **kwargs):
+        self.services_per_os = kwargs.get("services_per_os",config["SERVICE_NO_OF_SERVICES_PER_OS"])
+        self.percent_cross_platform = kwargs.get("percent_cross_platform",config["VULN_PERCENT_CROSS_PLATFORM"])
+        self.max_vuln_probability = kwargs.get("max_vuln_probability",config["VULN_MAX_PROB_FOR_OCCURING_FOR_SERVICE_VERSION"])
+        self.vuln_patch_mean = kwargs.get("vuln_patch_mean",config["VULN_PATCH_MEAN"])
+        self.vuln_patch_range = kwargs.get("vuln_patch_range",config["VULN_PATCH_RANGE"])
+        self.vuln_initial_chances = kwargs.get("vuln_initial_chances",config["VULN_INITIAL_CHANCES"])
+        self.os_dependent_vuln_chance = kwargs.get("os_dependent_vuln_chance",config["VULN_PROB_DEPENDS_ON_OS"])
+        self.dependent_vuln_chance = kwargs.get("dependent_vuln_chance",config["VULN_PROB_DEPENDS_ON_OTHER_VULNS"])
+        
         self.services = None
         self.service_names = None
         self.os_services = None
-        self.services_per_os = services_per_os
-        self.percent_cross_platform = percent_cross_platform
-        self.os_dependent_vuln_chance = os_dependent_vuln_chance
-        self.dependent_vuln_chance = dependent_vuln_chance
-        self.vuln_patch_mean = vuln_patch_mean
-        self.vuln_patch_range = vuln_patch_range
-        self.vuln_initial_chances = vuln_initial_chances
-        self.max_vuln_probability = max_vuln_probability
         self.gen_services()
 
     def get_random_service(self, os_type, os_version):
@@ -281,7 +277,8 @@ class ServicesGenerator:
         Returns:
             a random service for the provided os_type and os_version
         """
-        service_name = random.choice(list(self.os_services[os_type][os_version].keys()))
+        service_name = random.choice(
+            list(self.os_services[os_type][os_version].keys()))
         return random.choice(self.os_services[os_type][os_version][service_name]).copy()
 
     def get_random_service_latest_version(self, os_type, os_version):
@@ -297,7 +294,8 @@ class ServicesGenerator:
         Returns:
             a random service set to the latest version for the provided os_type and os_version
         """
-        service_name = random.choice(list(self.os_services[os_type][os_version].keys()))
+        service_name = random.choice(
+            list(self.os_services[os_type][os_version].keys()))
         return self.os_services[os_type][os_version][service_name][-1].copy()
 
     def service_is_compatible_with_os(self, os_type, os_version, service):
@@ -321,26 +319,26 @@ class ServicesGenerator:
         """
         Generates all of the services for each OS type and version for the simulation
         """
-        self.os_services = {os_name: {} for os_name in config.get("OS_TYPES")}
+        self.os_services = {os_name: {} for os_name in config["OS_TYPES"]}
 
-        for os_type in config.get("OS_TYPES"):
-            for os_version in config.get("OS_VERSION_DICT").get(os_type):
+        for os_type in config["OS_TYPES"]:
+            for os_version in config["OS_VERSION_DICT"][os_type]:
                 self.os_services[os_type][os_version] = {}
 
         wordlist = ServicesGenerator.get_service_name_list()
-        types_of_os = len(config.get("OS_TYPES"))
+        types_of_os = len(config["OS_TYPES"])
         total_services = self.services_per_os * types_of_os
         self.service_names = random.choices(wordlist, k=total_services)
 
-        s_versions = config.get("SERVICE_VERSIONS")
+        s_versions =config["SERVICE_VERSIONS"]
         s_versions_len = len(s_versions)
 
         self.services = {}
-        # os_list = config.get("OS_TYPES")
+        # os_list =config["OS_TYPES"]
         for s_index, service in enumerate(self.service_names):
-            os_list = [config.get("OS_TYPES")[s_index // self.services_per_os]]
+            os_list = [config["OS_TYPES"][s_index // self.services_per_os]]
             if random.random() < self.percent_cross_platform:
-                os_list = config.get("OS_TYPES")
+                os_list =config["OS_TYPES"]
 
             # can_have_os_depend_vuln = len(os_list) > 1
             can_have_os_depend_vuln = True
@@ -351,7 +349,9 @@ class ServicesGenerator:
             # Code for vulnerability generation, commented out double generation from original code
             for i in range(self.vuln_initial_chances):
                 if random.random() < self.max_vuln_probability:
-                    vuln_patch_dist = i + random.randint(-self.vuln_patch_range, self.vuln_patch_range)
+                    vuln_patch_dist = i + \
+                        random.randint(-self.vuln_patch_range,
+                                       self.vuln_patch_range)
                     vulns[vuln_patch_dist] = Vulnerability(
                         can_have_os_dependency=can_have_os_depend_vuln,
                         os_list=os_list
@@ -369,20 +369,21 @@ class ServicesGenerator:
                 # if random.random() < self.max_vuln_probability*version_scale:
                 #     vuln_patch_dist = self.vuln_patch_mean + random.randint(-self.vuln_patch_range, self.vuln_patch_range)
                 #     vulns[sv_index+vuln_patch_dist] = Vulnerability(
-                #         can_have_os_dependency=can_have_os_depend_vuln, 
+                #         can_have_os_dependency=can_have_os_depend_vuln,
                 #         os_list=os_list
                 #     )
 
                 active_vulns = [vulns[i] for i in vulns if i >= sv_index]
-                self.services[service] = self.services[service] + [Service(service, service_version, active_vulns)]
+                self.services[service] = self.services[service] + \
+                    [Service(service, service_version, active_vulns)]
 
             for os_name in os_list:
-                os_versions = config.get("OS_VERSION_DICT").get(os_name)
+                os_versions =config["OS_VERSION_DICT"].get(os_name)
                 total_os_versions = len(os_versions)
                 version_split = s_versions_len // total_os_versions
                 for os_version_index, os_version in enumerate(os_versions):
                     service_versions = self.services[service][s_versions_len - (
-                            os_version_index + 1) * version_split:s_versions_len - os_version_index * version_split]
+                        os_version_index + 1) * version_split:s_versions_len - os_version_index * version_split]
                     self.os_services[os_name][os_version][service] = service_versions
 
     @staticmethod

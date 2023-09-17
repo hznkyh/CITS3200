@@ -1,9 +1,10 @@
+import logging
 from mtdnetwork.component.network import Network
 from mtdnetwork.statistic.mtd_statistics import MTDStatistics
 from mtdnetwork.component.host import Host
 import random
 
-
+logger = logging.getLogger(__name__)
 class TimeNetwork(Network):
 
     def __init__(self, total_nodes=50, total_endpoints=5, total_subnets=8, total_layers=4,
