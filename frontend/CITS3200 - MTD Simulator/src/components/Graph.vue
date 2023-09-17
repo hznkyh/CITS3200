@@ -14,12 +14,105 @@
     const graph = ref<vNG.VNetworkGraphInstance>()
     const nodes: Nodes = reactive({ ...data.nodes })
     const edges: Edges = reactive({ ...data.edges })
-    const layouts: Layouts = reactive({nodes: {},})
+    const layouts: Layouts = reactive({ ...data.layouts})
 
     var storedGraph = {}
     var number_of_graphs = 0;
     var graphIndex = 0;
     var msg = "Simulation not started"
+    var exposed: string[] = [];
+    var old_subnets = {}
+    var intervalID
+
+    function findExposed(nodeId: string) {
+        for (var key in edges) {
+            var edge = edges[key]
+            if (edge.source == nodeId) {
+                exposed.push(edge.target)
+            }
+        }
+    }
+
+    function getRandomCoordinates(centerx, centery) {
+        var offset = Math.random() * (350 - (-350)) + (-350);
+        var x = centerx + offset
+        var y = centery + offset
+
+        var rangex = [-700, 700]
+        var rangey = [-350, 350]
+
+        x = Math.min(Math.max(x, rangex[0]), rangex[1])
+        y = Math.min(Math.max(y, rangey[0]), rangey[1])
+        return { x, y };
+    }   
+
+    function generateCoordinates(
+        numCoordinates: number,
+        minDistance: number
+        ): [number, number][] {
+        var coordinates: [number, number][] = [];
+        
+        console.log("generateCoordinates")
+        while (coordinates.length < numCoordinates) {
+            const x = Math.random() * (600 - (-600)) + (-600); // Adjust the range as needed
+            const y = Math.random() * (350 - (-350)) + (-350); // Adjust the range as needed
+
+            console.log("one iteration")
+            // Check if the new coordinates satisfy the minimum distance requirement
+            const valid = coordinates.every(([x1, y1]) => {
+                return Math.abs(x - x1) >= minDistance && Math.abs(y - y1) >= minDistance;
+            });
+            if (valid) {
+            coordinates.push([x, y]);
+            }
+        }
+
+        return coordinates;
+    }
+
+    function layout() {
+        console.log("layout")
+        // layout the nodes based on their subnet
+        var new_subnets = {}
+        for (var key in nodes) {
+            var node = nodes[key]
+            var subnet = node.subnet
+            if (subnet in new_subnets) {
+                new_subnets[subnet].push(key)
+            } else {
+               new_subnets[subnet] = [key]
+            }
+        }
+        if (JSON.stringify(new_subnets) == JSON.stringify(old_subnets)) {
+            return
+        }
+
+        console.log(new_subnets)
+
+        var coordinates = generateCoordinates(Object.keys(new_subnets).length, 100)
+
+        console.log(coordinates)
+        for (var key in new_subnets) {
+            var subnet = new_subnets[key]
+            var centerx = coordinates[key][0]
+            var centery = coordinates[key][1]
+            var subnetSize = subnet.length
+            var subnetRadius = 30
+            var angle = 360 / subnetSize
+            var angleIndex = 0
+            for (var i = 0; i < subnetSize; i++) {
+                var x = centerx + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
+                var y = centery + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
+                layouts.nodes[subnet[i]] = { x, y }
+                angleIndex++
+            }
+        }
+        old_subnets = new_subnets
+    }
+
+    function test() {
+        this.$refs.myBtn.click()
+    }
 
     export default {
         name: 'Network',
@@ -43,14 +136,14 @@
                     this.startSim = true
                     this.msg = "Start"
                     this.step()
-                    setInterval(() => {
+                    intervalID = setInterval(() => {
                         if (this.startSim) {
                             this.msg = "Running"
                             this.step()
                             graphIndex++
                             
                         }
-                    }, 1000)
+                    }, 1500)
                 }
             },
 
@@ -61,6 +154,13 @@
             },
 
             manualStep() {
+                if (graphIndex == number_of_graphs) {
+                    this.msg = "Simulation finished"
+                    this.startSim = false
+                    this.graphIndex = -1
+                    clearInterval(intervalID)
+                    return
+                }
                 this.startSim = false
                 this.step()
                 graphIndex++
@@ -68,27 +168,17 @@
             },
 
             step() {
+                layout()
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     this.startSim = false
                     this.graphIndex = -1
+                    clearInterval(intervalID)
                     return
                 }
+                exposed = [];
                 var graph = storedGraph[graphIndex]
-                var nextNodeIndex = 1
-                for (var j = 0; j < graph.nodes.length; j++) {
-                    const nodeId = `node${graph.nodes[j].id + 1}`
-                    const name = `N${nextNodeIndex}`
-                    var color = ``
-                    if (graph.nodes[j].host.compromised == true) {
-                        color = `red`
-                    }
-                    else {
-                        color = `green`
-                    }
-                    nodes[nodeId] = { name, color}
-                    nextNodeIndex++
-                }
+
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
                 for (var z = 0; z < number_of_edges; z++) {
@@ -98,6 +188,31 @@
                     edges[edgeId] = { source, target }
                     nextEdgeIndex++
                 };
+
+                var nextNodeIndex = 1
+                for (var j = 0; j < graph.nodes.length; j++) {
+                    var node = graph.nodes[j]
+                    const nodeId = `node${node.id + 1}`
+                    const name = `N${nextNodeIndex}`
+                    var subnet = node.subnet
+                    var color = ''
+                    if (node.host.compromised == true) {
+                        color = `red`
+                        findExposed(nodeId)
+                    } else if (exposed.includes(nodeId)) {
+                        color = `yellow`
+                    }
+                    else {
+                        color = `green`
+                    }
+
+                    nodes[nodeId] = { name, color, subnet}
+                    nextNodeIndex++
+                }
+                layout()
+                // const graphComponent = this.$refs.graph;
+                // // Call the fitToContents method of the component
+                // graphComponent.fitToContents();
             },
         },
         data() {
@@ -110,38 +225,36 @@
             }
         },
         setup() {
-            const nodeSize = 40
+            const nodeSize = 16
 
             const configs = vNG.defineConfigs({
                 view: {
-                    autoPanAndZoomOnLoad: "fit-content",
+                    autoPanAndZoomOnLoad: "center-zero",
                     // onBeforeInitialDisplay: () => layout(),
                     autoPanOnResize: true,
                     scalingObjects: true,
-                    minZoomLevel: 0.05,
-                    maxZoomLevel: 0.2,
+                    minZoomLevel: 0.5,
+                    maxZoomLevel: 0.5,
                     panEnabled: true,
                     zoomEnabled: true,
                     layoutHandler: new ForceLayout({
                         positionFixedByDrag: false,
                         positionFixedByClickWithAltKey: true,
-                        noAutoRestartSimulation: false,
                         createSimulation: (d3, nodes, edges) => {
                         // d3-force parameters
                         const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges).id(d => d.id)
                         return d3
                             .forceSimulation(nodes)
-                            .force("edge", forceLink.distance(1000).strength(3.0))
-                            .force("charge", d3.forceManyBody().strength(-25000))
-                            .force("center", d3.forceCenter().strength(0.05))
-                            .force("collide", d3.forceCollide().radius(nodeSize * 1.5))
+                            .force("center", d3.forceCenter())
+                            // .force("charge", d3.forceManyBody().strength(-100))
+                            .force("collide", d3.forceCollide(nodeSize))
                             .alphaMin(0.001)
                         }
                     }),
                 },
                 node: {
                     normal: { 
-                        radius: nodeSize / 2,
+                        radius: nodeSize/2,
                         color: node => node.color,
                     },
                     label: { direction: "center", color: "#fff" },
@@ -152,7 +265,7 @@
                 edge: {
                     normal: {
                         color: "#aaa",
-                        width: 3,
+                        width: 2,
                     },
                     type: "straight",
                 },
@@ -170,7 +283,7 @@
 </script>
 
 <template>
-    <v-network-graph
+    <v-network-graph id="v-graph"
       ref="graph"
       class="graph"
       :nodes="nodes"
@@ -180,7 +293,7 @@
     >
     </v-network-graph>
     <div class="control-panel">
-        <button @click="graph?.fitToContents()">Fit</button>
+        <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
         <button @click="getGraph()">Get</button>
