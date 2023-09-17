@@ -296,37 +296,43 @@ export default {
 
       if (errorMessages.length === 0) {
         console.log('Correct inputs have been detected');
-        
+         // For config, for each field check if they have been entered and return null if not: 
+        // For config overall, return null if no fields have been entered 
           var mainData = ({
-            "total_nodes": this.nodeNumber,
-            "total_endpoints": this.nodeExposed,
-            "total_layers": this.layers,
-            "terminate_compromise_ratio": this.compromisedRatio,
-            "scheme": this.scheme,
-            "mtd_interval": this.interval,
-            "finish_time": this.finishTime,
-            "checkpoints": this.checkpoints,
-            "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
-            "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
-            MTD_PRIORITY: {
-              "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
-              "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
-              "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
-              "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
-              "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
-              "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
-              "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+            "run": { 
+              "total_nodes": this.nodeNumber,
+              "total_endpoints": this.nodeExposed,
+              "total_layers": this.layers,
+              "terminate_compromise_ratio": this.compromisedRatio,
+              "scheme": this.scheme,
+              "mtd_interval": this.interval,
+              "finish_time": this.finishTime,
+              "checkpoints": this.checkpoints,
+              "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
+              "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
             },
-            MTD_TRIGGER_INTERVAL:{
-              "simultaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
-              "random": this.random !== '' ? parseInt(this.random) : null,
-              "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
-            },
+            "config": this.checkAdvancedDataEntered()
+            // "config": this.ipShuffle !== '' ? { 
+            //   MTD_PRIORITY: this.ipShuffle !== '' ?  {
+            //     "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
+            //     "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
+            //     "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
+            //     "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
+            //     "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
+            //     "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
+            //     "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+            //   } : null,
+            //   MTD_TRIGGER_INTERVAL: this.similtaneous !== '' ? {
+            //     "simultaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
+            //     "random": this.random !== '' ? parseInt(this.random) : null,
+            //     "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
+            //   } : null,
+            // }: null,
           });
           var data = JSON.stringify(mainData);
-          
+          console.log(data)
           //console.log(data);
-          axios.post('/network/update_submit/', data, {headers: {'Content-Type': 'application/json'}})
+          axios.post('/network/update_all_params/', data, {headers: {'Content-Type': 'application/json'}})
           .then((response) => {
             console.log(response);
             Graph.methods.getGraph();
@@ -397,6 +403,34 @@ export default {
 
       return valueOne && valueTwo
     },
+    checkAdvancedDataEntered(){ 
+          var json_string = new Object();
+          var added = 0; 
+          // Check if any MTD_PRIORITY data entered
+          if (this.ipShuffle !== '') { 
+            json_string.MTD_PRIORITY =  {
+                "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
+                "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
+                "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
+                "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
+                "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
+                "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
+                "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+              }
+            added++; 
+          }
+          // Check if any MTD_TRIGGER_INTERVALdata entered
+          if (this.similtaneous !== '') { 
+            json_string.MTD_TRIGGER_INTERVAL = {
+                "simultaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
+                "random": this.random !== '' ? parseInt(this.random) : null,
+                "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
+            }
+            added++; 
+          }
+          console.log(json_string)
+          return added > 0 ? json_string : null
+        }
   },
 };
 </script>

@@ -35,8 +35,20 @@ def test_update_run_parameters():
         },
         "config":
         { 
-            "MTD_PRIORITY": "string",
-            "MTD_TRIGGER_INTERVAL": "string"
+            "MTD_TRIGGER_INTERVAL": {
+                "simultaneous": [700, 0.5],
+                "random": [200, 0.5],
+                "alternative": [200, 0.5]
+            },
+            "MTD_PRIORITY": {
+                "CompleteTopologyShuffle": 1,
+                "HostTopologyShuffle": 2,
+                "IPShuffle": 3,
+                "OSDiversity": 4,
+                "PortShuffle": 5,
+                "ServiceDiversity": 6,
+                "UserShuffle": 7
+            },
         }
     }
 

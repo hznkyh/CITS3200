@@ -1,4 +1,4 @@
-from models.forms import Item,MTD_PRIORITYItem,formData
+# from models.forms import Item,MTD_PRIORITYItem,formData
 from fastapi import APIRouter
 from controllers.serialiser import serialize_graph
 import simpy
@@ -30,10 +30,10 @@ async def read_items():
 def getCurrentConfig(): 
     return config
 
-@router.post("/setCurrent")
-def update_item(item: Item):
-    config=set_config()
-    return {'item':item}
+# @router.post("/setCurrent")
+# def update_item(item: Item):
+#     config=set_config()
+#     return {'item':item}
 
 # { 
 #     run.py { 
