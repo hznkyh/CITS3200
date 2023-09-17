@@ -109,49 +109,19 @@ async def stop_graph():
     env = simpy.Environment()  # create a new environment
     return JSONResponse(content="Simulation stopped", status_code=400)
     
-
-@router.post("/update_submit/")
-def update_item(item: ParameterRequest):
-    global stored_params
-    form_data_values = {
-        "total_nodes": item.total_nodes,
-        "total_endpoints": item.total_endpoints,
-        "total_layers": item.total_layers,
-        "terminate_compromise_ratio": item.terminate_compromise_ratio,
-        "scheme": item.scheme,
-        "mtd_interval": item.mtd_interval,
-        "finish_time": item.finish_time,
-        "checkpoints": item.checkpoints,
-        "total_subnets": item.total_subnets,
-        "target_layer": item.target_layers,
-    }
-    mtd_priority_values = item.MTD_PRIORITY
-    if mtd_priority_values is None:
-        mtd_priority_values = {}
-    mtd_priority = {'MTD_PRIORITY': mtd_priority_values}
-
-    mtd_trigger_values = item.MTD_TRIGGER_INTERVAL
-    if mtd_trigger_values is None:
-        mtd_trigger_values = {}
-    mtd_trigger = {'MTD_TRIGGER_INTERVAL': mtd_trigger_values}
-
-    print(form_data_values)
-    print(mtd_priority)
-    print(mtd_trigger)
-    # return RedirectResponse("https://localhost:8000/network/graph")
-    print("Setting stored params to: ",stored_params)
-    # Todo Update this to work off split json
-    filtered_dict = {key: value for key, value in form_data_values.items() if value is not None}
-    stored_params = filtered_dict
-    config_json = dict(filtered_dict)
-    del config_json["form_data"]
-    return {
-        'form_data': form_data_values, **mtd_priority, **mtd_trigger
-    }
-
-@router.post("/update_all_params/")
+@router.post("/update_all_params")
 def update_item(item: ParameterRequest):
     print(item)
+    # Handle run parameters
+    global stored_params
+    run_params = item.run
+    stored_params = run_params.model_dump() 
+
+    #Handle config_variables
+    config_params = item.config
+    if (item.config is not None): 
+        config_params = config_params.model_dump()
+    # set_config(config_params) 
     return { 
         'item': item
     }

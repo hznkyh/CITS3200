@@ -20,52 +20,29 @@ def test_make_new_default_graph():
 def test_update_run_parameters(): 
     # Define test data
     form_data = {
-        "run":
-        { 
-            "total_nodes": 30,
+        "run": {
+            "total_nodes": 40,
             "total_endpoints": 5,
             "total_layers": 3,
             "terminate_compromise_ratio": 0.7,
             "scheme": "random",
             "mtd_interval": 2.0,
-            "finish_time": 9000,
+            "finish_time": 8000,
             "checkpoints": 1000,
-            "total_subnets": 2,
-            "target_layers": 4  
+            "total_subnets": 3,
+            "target_layer": 2
         },
-        "config":
-        { 
-            "MTD_TRIGGER_INTERVAL": {
-                "simultaneous": [700, 0.5],
-                "random": [200, 0.5],
-                "alternative": [200, 0.5]
-            },
-            "MTD_PRIORITY": {
-                "CompleteTopologyShuffle": 1,
-                "HostTopologyShuffle": 2,
-                "IPShuffle": 3,
-                "OSDiversity": 4,
-                "PortShuffle": 5,
-                "ServiceDiversity": 6,
-                "UserShuffle": 7
-            },
-        }
+        "config": None
     }
-
-    response = client.post("network/update_submit/", json=form_data)
+    response = client.post("network/update_all_params", json=form_data)
 
     assert response.status_code == 200
 
-    response_json = response.json()
-    assert "form_data" in response_json
-    assert "MTD_PRIORITY" in response_json
-    assert "MTD_TRIGGER_INTERVAL" in response_json
+    response_json = response.json()["item"]
+    from routers.network import stored_params
+    assert "run" in response_json
+    assert "config" in response_json
 
-    config_response = client.get("/config/getCurrent")
+    for key in form_data["run"]:
+        assert form_data["run"][key] == stored_params[key]
 
-    assert config_response.status_code == 200 
-    # graph_response = client.get("network/graph")
-
-    # assert graph_response.status_code == 200
-
-    

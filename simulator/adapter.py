@@ -12,7 +12,7 @@ from mtdnetwork.component.adversary import Adversary
 from mtdnetwork.configs import config
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.component.time_network import TimeNetwork
-from mtdnetwork.configs import config
+from mtdnetwork.data import default_config
 from experiments.run import single_mtd_simulation, create_experiment_snapshots, execute_simulation
 import matplotlib.pyplot as plt
 from itertools import chain, count
