@@ -140,7 +140,7 @@ def update_item(item: ParameterRequest):
     print(mtd_trigger)
     # return RedirectResponse("https://localhost:8000/network/graph")
     print("Setting stored params to: ",stored_params)
-    # Todo Update this to work off split json
+    # Todo Update this to work off split json a
     filtered_dict = {key: value for key, value in form_data_values.items() if value is not None}
     stored_params = filtered_dict
     config_json = dict(filtered_dict)
