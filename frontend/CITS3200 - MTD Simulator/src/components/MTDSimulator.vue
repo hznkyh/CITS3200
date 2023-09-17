@@ -447,9 +447,9 @@ export default {
           "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
         };
         added++;
+      } else { 
+        json_string.MTD_PRIORITY = null
       }
-
-      added = 0;
 
       if (
         (this.similtaneous !== '' ||
@@ -460,6 +460,7 @@ export default {
           this.alternative === '')
       ) {
         alert("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
+        json_string.MTD_TRIGGER_INTERVAL = null;
         
       } else if (
         this.similtaneous !== '' ||
@@ -472,6 +473,8 @@ export default {
           "alternative": this.alternative !== '' ? this.triggerConversion(this.alternative) : null,
         };
         added++;
+      } else { 
+        json_string.MTD_TRIGGER_INTERVAL = null
       }
 
       console.log(json_string);
