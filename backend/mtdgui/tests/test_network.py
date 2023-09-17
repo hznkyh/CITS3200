@@ -21,15 +21,15 @@ def test_update_run_parameters():
     # Define test data
     form_data = {
         "run": {
-            "total_nodes": 40,
-            "total_endpoints": 5,
+            "total_nodes": 100,
+            "total_endpoints": 10,
             "total_layers": 3,
             "terminate_compromise_ratio": 0.7,
             "scheme": "random",
             "mtd_interval": 2.0,
             "finish_time": 8000,
             "checkpoints": 1000,
-            "total_subnets": 3,
+            "total_subnets": 10,
             "target_layer": 2
         },
         "config": None
@@ -46,3 +46,18 @@ def test_update_run_parameters():
     for key in form_data["run"]:
         assert form_data["run"][key] == stored_params[key]
 
+
+    graph_response = client.get("network/graph")
+
+    graph_json = graph_response.json()
+    final_params = parameters | stored_params
+    if type(final_params["checkpoints"]) is int: 
+        final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
+    print(graph_json)
+    assert len(graph_json) == len(final_params["checkpoints"])
+    for i in range(0,len(graph_json)): 
+        # Each checkpoint should return directed, multipgraph, graph, nodes and links
+        assert len(graph_json[str(i)]) == 5
+        # Check that each checkpoint has the right number of nodes
+        assert len(graph_json[str(i)]["nodes"]) == final_params["total_nodes"]
+    

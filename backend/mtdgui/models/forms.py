@@ -1,5 +1,5 @@
 from pydantic import BaseModel, conint
-from typing import Optional, Union
+from typing import Optional, Union, List
 # class MTD_PRIORITY(BaseModel):
 #     CompleteTopologyShuffle: Optional[conint(ge=0)] = None
 #     HostTopologyShuffle: Optional[conint(ge=0)] = None
@@ -19,9 +19,9 @@ class MTD_PRIORITY(BaseModel):
     UserShuffle: Union[int, None]
 
 class MTD_TRIGGER_INTERVAL(BaseModel):
-    simultaneous: Union[int, None]
-    random: Union[int, None]
-    alternative: Union[int, None]
+    simultaneous: Union[List[float], None]
+    random: Union[List[float], None]
+    alternative: Union[List[float], None]
 
 class ConfigModel(BaseModel):
     MTD_PRIORITY: Union[MTD_PRIORITY,None]

@@ -6,6 +6,7 @@ client = TestClient(app)
 
 def test_get_defaults(): 
     response = client.get('/config/getCurrent')
-    default_config 
     assert response.status_code == 200
-    
+
+    config_response = response.json()
+    print(config_response)
