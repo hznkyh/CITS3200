@@ -307,7 +307,7 @@ export default {
             "finish_time": this.finishTime,
             "checkpoints": this.checkpoints,
             "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
-            "target_layers": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
+            "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
             MTD_PRIORITY: {
               "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
               "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
@@ -318,7 +318,7 @@ export default {
               "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
             },
             MTD_TRIGGER_INTERVAL:{
-              "similtaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
+              "simultaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
               "random": this.random !== '' ? parseInt(this.random) : null,
               "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
             },

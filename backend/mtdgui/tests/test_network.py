@@ -20,18 +20,24 @@ def test_make_new_default_graph():
 def test_update_run_parameters(): 
     # Define test data
     form_data = {
-        "total_nodes": 30,
-        "total_endpoints": 5,
-        "total_layers": 3,
-        "terminate_compromise_ratio": 0.7,
-        "scheme": "random",
-        "mtd_interval": 2.0,
-        "finish_time": 9000,
-        "checkpoints": 1000,
-        "total_subnets": 2,
-        "target_layers": 4,
-        "MTD_PRIORITY": "string",
-        "MTD_TRIGGER_INTERVAL": "string"
+        "run":
+        { 
+            "total_nodes": 30,
+            "total_endpoints": 5,
+            "total_layers": 3,
+            "terminate_compromise_ratio": 0.7,
+            "scheme": "random",
+            "mtd_interval": 2.0,
+            "finish_time": 9000,
+            "checkpoints": 1000,
+            "total_subnets": 2,
+            "target_layers": 4  
+        },
+        "config":
+        { 
+            "MTD_PRIORITY": "string",
+            "MTD_TRIGGER_INTERVAL": "string"
+        }
     }
 
     response = client.post("network/update_submit/", json=form_data)
@@ -45,7 +51,7 @@ def test_update_run_parameters():
 
     config_response = client.get("/config/getCurrent")
 
-    assert response.status_code == 200 
+    assert config_response.status_code == 200 
     # graph_response = client.get("network/graph")
 
     # assert graph_response.status_code == 200
