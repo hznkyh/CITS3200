@@ -272,7 +272,7 @@ export default {
         {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
         {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
         {field: this.checkpoints, validator: this.validateFloatInputs, fieldName: 'Checkpoints'},
-        {field: this.totalSubnets, validator: this.validateTotalSubets, fieldName: 'Total Subsets'},
+        {field: this.totalSubnets, validator: this.validateTotalSubnets, fieldName: 'Total Subsets'},
         {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
         {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
         {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
@@ -296,37 +296,43 @@ export default {
 
       if (errorMessages.length === 0) {
         console.log('Correct inputs have been detected');
-        
+         // For config, for each field check if they have been entered and return null if not: 
+        // For config overall, return null if no fields have been entered 
           var mainData = ({
-            "total_nodes": this.nodeNumber,
-            "total_endpoints": this.nodeExposed,
-            "total_layers": this.layers,
-            "terminate_compromise_ratio": this.compromisedRatio,
-            "scheme": this.scheme,
-            "mtd_interval": this.interval,
-            "finish_time": this.finishTime,
-            "checkpoints": this.checkpoints,
-            "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
-            "target_layers": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
-            MTD_PRIORITY: {
-              "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
-              "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
-              "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
-              "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
-              "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
-              "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
-              "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+            "run": { 
+              "total_nodes": this.nodeNumber,
+              "total_endpoints": this.nodeExposed,
+              "total_layers": this.layers,
+              "terminate_compromise_ratio": this.compromisedRatio,
+              "scheme": this.scheme,
+              "mtd_interval": this.interval,
+              "finish_time": this.finishTime,
+              "checkpoints": this.checkpoints,
+              "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
+              "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
             },
-            MTD_TRIGGER_INTERVAL:{
-              "similtaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
-              "random": this.random !== '' ? parseInt(this.random) : null,
-              "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
-            },
+            "config": this.checkAdvancedDataEntered()
+            // "config": this.ipShuffle !== '' ? { 
+            //   MTD_PRIORITY: this.ipShuffle !== '' ?  {
+            //     "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
+            //     "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
+            //     "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
+            //     "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
+            //     "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
+            //     "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
+            //     "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+            //   } : null,
+            //   MTD_TRIGGER_INTERVAL: this.similtaneous !== '' ? {
+            //     "simultaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
+            //     "random": this.random !== '' ? parseInt(this.random) : null,
+            //     "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
+            //   } : null,
+            // }: null,
           });
           var data = JSON.stringify(mainData);
-          
+          console.log(data)
           //console.log(data);
-          axios.post('/network/update_submit/', data, {headers: {'Content-Type': 'application/json'}})
+          axios.post('/network/update_all_params/', data, {headers: {'Content-Type': 'application/json'}})
           .then((response) => {
             console.log(response);
             Graph.methods.getGraph();
@@ -370,12 +376,13 @@ export default {
       const parsedValue = parseFloat(time);
       return !isNaN(parsedValue) && parsedValue >= 3000;
     },
-    validateTotalSubets(num){
+    validateTotalSubnets(num){
       if (num === ''){
         return true;
       }
       const parsedNum = parseFloat(num);
-      if (!isNaN(parsedNum) && (this.total_nodes - this.nodeExposed) / (parsedNum - 1) > 2) {
+      console.log((this.nodeNumber - this.nodeExposed) / (parsedNum - 1))
+      if (!isNaN(parsedNum) && (this.nodeNumber - this.nodeExposed) / (parsedNum - 1) > 2) {
         return true;
       }
       return false;
@@ -386,17 +393,98 @@ export default {
       }
       const intPattern = /^\d+$/;
       const floatPattern = /^\d+(\.\d+)?$/;
+      console.log(values)
 
       const separate = values.split(',').map(part => part.trim());
-
+      console.log(separate)
       if (separate.length != 2){
         return false;
       }
+
       const valueOne = intPattern.test(separate[0]);
       const valueTwo = floatPattern.test(separate[1])
 
       return valueOne && valueTwo
     },
+    checkAdvancedDataEntered() {
+      var json_string = new Object();
+      var added = 0;
+
+      if (
+        (this.compTopoShuffle !== '' ||
+          this.hostTopoShuffle !== '' ||
+          this.ipShuffle !== '' ||
+          this.osDiveristy !== '' ||
+          this.portShuffle !== '' ||
+          this.ServDiversity !== '' ||
+          this.userShuffle !== '') &&
+        (this.compTopoShuffle === '' ||
+          this.hostTopoShuffle === '' ||
+          this.ipShuffle === '' ||
+          this.osDiveristy === '' ||
+          this.portShuffle === '' ||
+          this.ServDiversity === '' ||
+          this.userShuffle === '')
+      ) {
+        alert("Please fill all the required form boxes in MTD_PRIORITY.");
+
+      } else if (
+        this.compTopoShuffle !== '' ||
+        this.hostTopoShuffle !== '' ||
+        this.ipShuffle !== '' ||
+        this.osDiveristy !== '' ||
+        this.portShuffle !== '' ||
+        this.ServDiversity !== '' ||
+        this.userShuffle !== ''
+      ) {
+        json_string.MTD_PRIORITY = {
+          "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
+          "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
+          "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
+          "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
+          "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
+          "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
+          "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
+        };
+        added++;
+      } else { 
+        json_string.MTD_PRIORITY = null
+      }
+
+      if (
+        (this.similtaneous !== '' ||
+          this.random !== '' ||
+          this.alternative !== '') &&
+        (this.similtaneous === '' ||
+          this.random === '' ||
+          this.alternative === '')
+      ) {
+        alert("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
+        json_string.MTD_TRIGGER_INTERVAL = null;
+        
+      } else if (
+        this.similtaneous !== '' ||
+        this.random !== '' ||
+        this.alternative !== ''
+      ) {
+        json_string.MTD_TRIGGER_INTERVAL = {
+          "simultaneous": this.similtaneous !== '' ? this.triggerConversion(this.similtaneous) : null,
+          "random": this.random !== '' ? this.triggerConversion(this.random) : null,
+          "alternative": this.alternative !== '' ? this.triggerConversion(this.alternative) : null,
+        };
+        added++;
+      } else { 
+        json_string.MTD_TRIGGER_INTERVAL = null
+      }
+
+      console.log(json_string);
+      return added > 0 ? json_string : null;
+    },
+    triggerConversion(floatStr){
+      const floatArray = floatStr.split(',').map(value => parseFloat(value.trim()));
+      return floatArray
+    }
+
   },
 };
 </script>
