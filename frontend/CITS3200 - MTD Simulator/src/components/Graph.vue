@@ -61,6 +61,7 @@
             // Check if the new coordinates satisfy the minimum distance requirement
             const valid = coordinates.every(([x1, y1]) => {
                 return Math.abs(x - x1) >= minDistance && Math.abs(y - y1) >= minDistance;
+                // return Math.abs(x - x1) >= minDistance
             });
             if (valid) {
             coordinates.push([x, y]);
@@ -77,10 +78,12 @@
         for (var key in nodes) {
             var node = nodes[key]
             var subnet = node.subnet
-            if (subnet in new_subnets) {
-                new_subnets[subnet].push(key)
+            var layer = node.layer
+            var location = `${subnet}-${layer}`
+            if (location in new_subnets) {
+                new_subnets[location].push(key)
             } else {
-               new_subnets[subnet] = [key]
+               new_subnets[location] = [key]
             }
         }
         if (JSON.stringify(new_subnets) == JSON.stringify(old_subnets)) {
@@ -89,13 +92,14 @@
 
         console.log(new_subnets)
 
-        var coordinates = generateCoordinates(Object.keys(new_subnets).length, 100)
+        var coordinates = generateCoordinates(Object.keys(new_subnets).length, 60)
 
         console.log(coordinates)
+        var index = 0
         for (var key in new_subnets) {
             var subnet = new_subnets[key]
-            var centerx = coordinates[key][0]
-            var centery = coordinates[key][1]
+            var centerx = coordinates[index][0]
+            var centery = coordinates[index][1]
             var subnetSize = subnet.length
             var subnetRadius = 30
             var angle = 360 / subnetSize
@@ -106,6 +110,7 @@
                 layouts.nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
+            index++
         }
         old_subnets = new_subnets
     }
@@ -135,7 +140,6 @@
                 if (!this.startSim) {
                     this.startSim = true
                     this.msg = "Start"
-                    this.step()
                     intervalID = setInterval(() => {
                         if (this.startSim) {
                             this.msg = "Running"
@@ -168,7 +172,6 @@
             },
 
             step() {
-                layout()
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     this.startSim = false
@@ -195,6 +198,7 @@
                     const nodeId = `node${node.id + 1}`
                     const name = `N${nextNodeIndex}`
                     var subnet = node.subnet
+                    var layer = node.layer
                     var color = ''
                     if (node.host.compromised == true) {
                         color = `red`
@@ -206,7 +210,7 @@
                         color = `green`
                     }
 
-                    nodes[nodeId] = { name, color, subnet}
+                    nodes[nodeId] = { name, color, subnet, layer}
                     nextNodeIndex++
                 }
                 layout()
