@@ -1,7 +1,7 @@
 import json
 import threading
 import networkx as nx
-from models.forms import Item,MTD_PRIORITYItem,formData,formDataAdv
+from models.forms import Item,MTD_PRIORITYItem,formData
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi import APIRouter, HTTPException
 from itertools import chain, count
@@ -110,7 +110,7 @@ async def stop_graph():
     
 
 @router.post("/update_submit/")
-def update_item(item: formData, itemAdv: formDataAdv):
+def update_item(item: formData):
     global stored_params
     form_data_values = {
         "total_nodes": item.total_nodes,
@@ -125,12 +125,12 @@ def update_item(item: formData, itemAdv: formDataAdv):
         "target_layer": item.target_layers,
     }
     
-    mtd_priority_values = itemAdv.MTD_PRIORITY
+    mtd_priority_values = item.MTD_PRIORITY
     if mtd_priority_values is None:
         mtd_priority_values = {}
     mtd_priority = {'MTD_PRIORITY': mtd_priority_values}
 
-    mtd_trigger_values = itemAdv.MTD_TRIGGER_INTERVAL
+    mtd_trigger_values = item.MTD_TRIGGER_INTERVAL
     if mtd_trigger_values is None:
         mtd_trigger_values = {}
     mtd_trigger = {'MTD_TRIGGER_INTERVAL': mtd_trigger_values}
