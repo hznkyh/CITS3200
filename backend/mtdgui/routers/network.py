@@ -79,7 +79,7 @@ async def get_graph():
     final_params = {'env':env,'res':res} | parameters 
     print("INITIAL PARAMS", final_params)
     if stored_params is not None:
-        final_params = final_params | stored_params 
+        final_params = final_params | stored_params
     print("FINAL PARAMS", final_params)
     if type(final_params["checkpoints"]) is int: 
         final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
@@ -115,7 +115,8 @@ def update_item(item: ParameterRequest):
     # Handle run parameters
     global stored_params
     run_params = item.run
-    stored_params = run_params.model_dump() 
+    run_dict = run_params.model_dump() 
+    stored_params = {key: value for key, value in run_dict.items() if value is not None}
 
     #Handle config_variables
     config_params = item.config
