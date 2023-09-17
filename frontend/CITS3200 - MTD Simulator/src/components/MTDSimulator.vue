@@ -97,7 +97,7 @@
           <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
         </div>
 
-        <button class="advanced" @click="toggleAdvanced()">Advanced</button>
+        <p id="advanced" class="advanced" @click="toggleAdvanced()">Advanced</p>
         <div id="advancedPanel" class="hidden">
           <div>
           <label>Total Subnets: </label>
