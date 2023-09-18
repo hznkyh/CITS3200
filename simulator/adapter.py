@@ -10,7 +10,8 @@ from mtdnetwork.operation.attack_operation import AttackOperation
 from mtdnetwork.component.host import Host
 from mtdnetwork.component.adversary import Adversary
 # from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
-from mtdnetwork.configs import config
+# from mtdnetwork.configs import config,set_config
+from mtdnetwork import configs
 from mtdnetwork.operation.mtd_operation import MTDOperation
 from mtdnetwork.component.time_network import TimeNetwork
 from experiments.run import single_mtd_simulation, create_experiment_snapshots, execute_simulation
@@ -156,7 +157,7 @@ def create_sim_test(
                                    target_layer=target_layer, total_database=total_database,
                                    terminate_compromise_ratio=terminate_compromise_ratio)
         adversary = Adversary(network=time_network,
-                              attack_threshold=config.get("ATTACKER_THRESHOLD"))
+                              attack_threshold=configs.config.get("ATTACKER_THRESHOLD"))
         # snapshot_checkpoint.save_to_array(time_network, adversary, res)
 
 

@@ -1,11 +1,12 @@
 from fastapi.testclient import TestClient
 from ..main import app
-from routers.network import parameters
+from routers.network import parameters,reset
 import json
 client = TestClient(app) 
 
 def test_make_new_default_graph(): 
     default_params = parameters
+    reset()
     response = client.get('/network/graph')
     assert response.status_code == 200 
     data = response.json()
@@ -27,7 +28,7 @@ def test_update_run_parameters():
             "terminate_compromise_ratio": 0.7,
             "scheme": "random",
             "mtd_interval": 2.0,
-            "finish_time": 8000,
+            "finish_time": 9000,
             "checkpoints": 1000,
             "total_subnets": 6,
             "target_layer": 4

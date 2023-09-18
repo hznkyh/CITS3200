@@ -441,7 +441,7 @@ export default {
           "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
           "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
           "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
-          "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
+          "OSDiversity": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
           "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
           "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
           "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,

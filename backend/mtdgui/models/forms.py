@@ -13,7 +13,7 @@ class MTD_PRIORITY(BaseModel):
     CompleteTopologyShuffle: Union[int, None]
     HostTopologyShuffle: Union[int, None]
     IPShuffle: Union[int, None]
-    OSDiveristy: Union[int, None]
+    OSDiversity: Union[int, None]
     PortShuffle: Union[int, None]
     ServiceDiversity: Union[int, None]
     UserShuffle: Union[int, None]

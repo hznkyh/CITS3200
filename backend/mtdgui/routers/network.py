@@ -96,6 +96,10 @@ async def get_graph():
         raise HTTPException(
             status_code=400, detail="Error in simulation execution."
         ) 
+    #Todo add below if possible, then remove from tests 
+    # finally: 
+    #     if stored_params is not None: 
+    #         stored_params = None
     return JSONResponse(content=graph_data)
 
     
@@ -123,11 +127,15 @@ def update_item(item: ParameterRequest):
     config_params = item.config
     if (item.config is not None): 
         config_params = config_params.model_dump()
-    # set_config(config_params) 
+    configs.config = configs.set_config(config_params) 
     return { 
         'item': item
     }
 
+def reset(): 
+    global stored_params
+    if stored_params is not None: 
+        stored_params = None
 # { 
 #     run.py { 
 #         total_nodes
