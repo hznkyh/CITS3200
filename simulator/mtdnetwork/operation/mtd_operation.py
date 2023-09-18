@@ -50,6 +50,7 @@ class MTDOperation:
             if self.network.is_compromised(
                     compromised_hosts=self.attack_operation.get_adversary().get_compromised_hosts()):
                 self.end_event.succeed()
+                
                 return
 
             # register an MTD

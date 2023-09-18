@@ -3,11 +3,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Union, Optional, Dict, Any
 import uvicorn
+from controllers.loggerConfig import setup_logger
 
 from routers import develop, network,config, webSocket ,webSocketDev, streaming #, set_configs#, sim
 from controllers import * 
 
-app = FastAPI()
+import logging
+logger = logging.getLogger()
+
+
+setup_logger(logger)
+
+
+app = FastAPI(debug=True)
 
 app.include_router(config.router)
 app.include_router(network.router)
@@ -37,5 +45,5 @@ async def root():
 # if __name__ == "__main__":
 #     config ={}
 #     app.run(host="0.0.0.0", port=8000, debug=True)
-#     # uvicorn.run(app,host="0.0.0.0", port=8000)
+    # uvicorn.run(app,host="0.0.0.0", port=8000)
 
