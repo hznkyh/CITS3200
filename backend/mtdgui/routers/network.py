@@ -78,6 +78,7 @@ async def get_graph():
     res= []
     final_params = {'env':env,'res':res} | parameters 
     print("INITIAL PARAMS", final_params)
+    print("STORED PARAMS",stored_params)
     if stored_params is not None:
         final_params = final_params | stored_params 
     print("FINAL PARAMS", final_params)

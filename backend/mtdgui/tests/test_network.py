@@ -23,14 +23,14 @@ def test_update_run_parameters():
         "run": {
             "total_nodes": 100,
             "total_endpoints": 10,
-            "total_layers": 3,
+            "total_layers": 4,
             "terminate_compromise_ratio": 0.7,
             "scheme": "random",
             "mtd_interval": 2.0,
             "finish_time": 8000,
             "checkpoints": 1000,
-            "total_subnets": 10,
-            "target_layer": 2
+            "total_subnets": 6,
+            "target_layer": 4
         },
         "config": None
     }
