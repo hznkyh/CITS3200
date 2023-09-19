@@ -60,7 +60,7 @@
             <option value="simultaneous"> simultaneous</option>
             <option value="alternative">alternative</option>
             <option value="single">single</option>
-            <option value="none">None</option>
+            <option value="none">none</option>
           </select>
         </div>
 
