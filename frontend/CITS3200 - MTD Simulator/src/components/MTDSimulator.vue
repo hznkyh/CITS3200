@@ -60,7 +60,7 @@
             <option value="simultaneous"> simultaneous</option>
             <option value="alternative">alternative</option>
             <option value="single">single</option>
-            <option value="none">none</option>
+            <option value="None">none</option>
           </select>
         </div>
 
@@ -372,7 +372,7 @@ export default {
       return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 7 || num == '';
     },
     validateWord(word){
-      const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'none'];
+      const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'None'];
         return possibleWords.includes(word);
     },
     validateFinishTime(time){
