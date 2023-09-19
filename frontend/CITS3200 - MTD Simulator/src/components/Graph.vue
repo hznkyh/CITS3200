@@ -125,15 +125,29 @@
             vNG,
         },
         methods: {
-            getGraph() {
-                this.msg = "Getting graph..."
-                axios.get("/network/graph").then(async (res) => {
-                    storedGraph = res.data
-                    this.msg = "Got graph"
-                    number_of_graphs = Object.keys(storedGraph).length
-                    console.log(storedGraph)
-                    graphIndex = 0
-                });
+            // getGraph() {
+            //     this.msg = "Getting graph..."
+            //     axios.get("/network/graph").then(async (res) => {
+            //         storedGraph = res.data
+            //         this.msg = "Got graph"
+            //         number_of_graphs = Object.keys(storedGraph).length
+            //         console.log(storedGraph)
+            //         graphIndex = 0
+            //     });
+            // },
+
+            async getGraph() {
+                try {
+                    this.msg = "Getting graph...";
+                    const response = await axios.get("/network/graph");
+                    storedGraph = response.data;
+                    number_of_graphs = Object.keys(storedGraph).length;
+                    console.log(storedGraph);
+                    graphIndex = 0;
+                    this.msg = "Got graph";
+                } catch (error) {
+                    console.error(error);
+                }
             },
 
             start() {
