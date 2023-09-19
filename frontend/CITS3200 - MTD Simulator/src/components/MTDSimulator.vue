@@ -550,6 +550,7 @@ export default {
   padding:0;
   margin:1em;
   margin-bottom: 6em;
+  /* margin-bottom: 4em; */
 }
 
 input[type=text] {

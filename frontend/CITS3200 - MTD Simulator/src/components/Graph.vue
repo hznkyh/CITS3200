@@ -19,6 +19,7 @@
     var storedGraph = {}
     var number_of_graphs = 0;
     var graphIndex = 0;
+    var startSim = false;
     var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
@@ -160,8 +161,10 @@
             // },
 
             async getGraph() {
+                startSim = false;
                 try {
                     clearData();
+                    clearInterval(intervalID);
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/graph");
                     storedGraph = response.data;
@@ -175,12 +178,13 @@
             },
 
             start() {
-                if (!this.startSim) {
-                    this.startSim = true
+                console.log(startSim)
+                if (!startSim) {
+                    startSim = true
                     this.msg = "Start"
                     intervalID = setInterval(() => {
-                        if (this.startSim) {
-                            this.msg = "Running"
+                        if (startSim) {
+                            // this.msg = "Running"
                             this.step()
                             graphIndex++
                             
@@ -190,7 +194,7 @@
             },
 
             stop() {
-                this.startSim = false
+                startSim = false
                 this.msg = "Stopped"
 
             },
@@ -198,21 +202,21 @@
             manualStep() {
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
-                    this.startSim = false
+                    startSim = false
                     this.graphIndex = -1
                     clearInterval(intervalID)
                     return
                 }
-                this.startSim = false
+                startSim = false
                 this.step()
                 graphIndex++
-                this.msg = "Stopped"
+                // this.msg = "Stopped"
             },
 
             step() {
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
-                    this.startSim = false
+                    startSim = false
                     this.graphIndex = -1
                     clearInterval(intervalID)
                     return
