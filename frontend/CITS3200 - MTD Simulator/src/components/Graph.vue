@@ -12,9 +12,9 @@
     } from "v-network-graph/lib/force-layout"
 
     const graph = ref<vNG.VNetworkGraphInstance>()
-    const nodes: Nodes = reactive({ ...data.nodes })
-    const edges: Edges = reactive({ ...data.edges })
-    const layouts: Layouts = reactive({ ...data.layouts})
+    var nodes: Nodes = reactive({ ...data.nodes })
+    var edges: Edges = reactive({ ...data.edges })
+    var layouts: Layouts = reactive({ ...data.layouts})
 
     var storedGraph = {}
     var number_of_graphs = 0;
@@ -23,6 +23,29 @@
     var exposed: string[] = [];
     var old_subnets = {}
     var intervalID
+
+    function clearData() {
+        // Clear the nodes object
+        for (const key in nodes) {
+            if (Object.hasOwnProperty.call(nodes, key)) {
+            delete nodes[key];
+            }
+        }
+
+        // Clear the edges object
+        for (const key in edges) {
+            if (Object.hasOwnProperty.call(edges, key)) {
+            delete edges[key];
+            }
+        }
+
+        // Clear the layouts object
+        for (const key in layouts["nodes"]) {
+            if (Object.hasOwnProperty.call(layouts["nodes"], key)) {
+            delete layouts["nodes"][key];
+            }
+        }
+    }
 
     function findExposed(nodeId: string) {
         for (var key in edges) {
@@ -125,15 +148,30 @@
             vNG,
         },
         methods: {
-            getGraph() {
-                this.msg = "Getting graph..."
-                axios.get("/network/graph").then(async (res) => {
-                    storedGraph = res.data
-                    this.msg = "Got graph"
-                    number_of_graphs = Object.keys(storedGraph).length
-                    console.log(storedGraph)
-                    graphIndex = 0
-                });
+            // getGraph() {
+            //     this.msg = "Getting graph..."
+            //     axios.get("/network/graph").then(async (res) => {
+            //         storedGraph = res.data
+            //         this.msg = "Got graph"
+            //         number_of_graphs = Object.keys(storedGraph).length
+            //         console.log(storedGraph)
+            //         graphIndex = 0
+            //     });
+            // },
+
+            async getGraph() {
+                try {
+                    clearData();
+                    this.msg = "Getting graph...";
+                    const response = await axios.get("/network/graph");
+                    storedGraph = response.data;
+                    number_of_graphs = Object.keys(storedGraph).length;
+                    console.log(storedGraph);
+                    graphIndex = 0;
+                    this.msg = "Got graph";
+                } catch (error) {
+                    console.error(error);
+                }
             },
 
             start() {

@@ -60,7 +60,7 @@
             <option value="simultaneous"> simultaneous</option>
             <option value="alternative">alternative</option>
             <option value="single">single</option>
-            <option value="None">None</option>
+            <option value="None">none</option>
           </select>
         </div>
 
@@ -177,8 +177,8 @@
         </div>
 
         <input type="submit" value="Submit">
-
         </form>
+        <p class="message"> {{ msg }} </p>
     </div>
     <div class="network">
       <Graph></Graph>
@@ -229,6 +229,7 @@ export default {
   },
   data(){
     return{
+      msg: '',
       nodeNumber:'',
       nodeExposed:'',
       layers:'',
@@ -329,13 +330,15 @@ export default {
             //   } : null,
             // }: null,
           });
+          this.msg = 'Getting graph';
           var data = JSON.stringify(mainData);
           console.log(data)
           //console.log(data);
           axios.post('/network/update_all_params/', data, {headers: {'Content-Type': 'application/json'}})
-          .then((response) => {
+          .then(async (response) => {
             console.log(response);
-            Graph.methods.getGraph();
+            await Graph.methods.getGraph();
+            this.msg = 'Got graph';
           }) .catch((error) => {
             console.log(error);
           });
@@ -369,7 +372,7 @@ export default {
       return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 7 || num == '';
     },
     validateWord(word){
-      const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'none'];
+      const possibleWords = ['random', 'simultaneous', 'alternative', 'single', 'None'];
         return possibleWords.includes(word);
     },
     validateFinishTime(time){
