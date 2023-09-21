@@ -12,17 +12,41 @@
     } from "v-network-graph/lib/force-layout"
 
     const graph = ref<vNG.VNetworkGraphInstance>()
-    const nodes: Nodes = reactive({ ...data.nodes })
-    const edges: Edges = reactive({ ...data.edges })
-    const layouts: Layouts = reactive({ ...data.layouts})
+    var nodes: Nodes = reactive({ ...data.nodes })
+    var edges: Edges = reactive({ ...data.edges })
+    var layouts: Layouts = reactive({ ...data.layouts})
 
     var storedGraph = {}
     var number_of_graphs = 0;
     var graphIndex = 0;
+    var startSim = false;
     var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
     var intervalID
+
+    function clearData() {
+        // Clear the nodes object
+        for (const key in nodes) {
+            if (Object.hasOwnProperty.call(nodes, key)) {
+            delete nodes[key];
+            }
+        }
+
+        // Clear the edges object
+        for (const key in edges) {
+            if (Object.hasOwnProperty.call(edges, key)) {
+            delete edges[key];
+            }
+        }
+
+        // Clear the layouts object
+        for (const key in layouts["nodes"]) {
+            if (Object.hasOwnProperty.call(layouts["nodes"], key)) {
+            delete layouts["nodes"][key];
+            }
+        }
+    }
 
     function findExposed(nodeId: string) {
         for (var key in edges) {
@@ -125,24 +149,42 @@
             vNG,
         },
         methods: {
-            getGraph() {
-                this.msg = "Getting graph..."
-                axios.get("/network/graph").then(async (res) => {
-                    storedGraph = res.data
-                    this.msg = "Got graph"
-                    number_of_graphs = Object.keys(storedGraph).length
-                    console.log(storedGraph)
-                    graphIndex = 0
-                });
+            // getGraph() {
+            //     this.msg = "Getting graph..."
+            //     axios.get("/network/graph").then(async (res) => {
+            //         storedGraph = res.data
+            //         this.msg = "Got graph"
+            //         number_of_graphs = Object.keys(storedGraph).length
+            //         console.log(storedGraph)
+            //         graphIndex = 0
+            //     });
+            // },
+
+            async getGraph() {
+                startSim = false;
+                try {
+                    clearData();
+                    clearInterval(intervalID);
+                    this.msg = "Getting graph...";
+                    const response = await axios.get("/network/graph");
+                    storedGraph = response.data;
+                    number_of_graphs = Object.keys(storedGraph).length;
+                    console.log(storedGraph);
+                    graphIndex = 0;
+                    this.msg = "Got graph";
+                } catch (error) {
+                    console.error(error);
+                }
             },
 
             start() {
-                if (!this.startSim) {
-                    this.startSim = true
+                console.log(startSim)
+                if (!startSim) {
+                    startSim = true
                     this.msg = "Start"
                     intervalID = setInterval(() => {
-                        if (this.startSim) {
-                            this.msg = "Running"
+                        if (startSim) {
+                            // this.msg = "Running"
                             this.step()
                             graphIndex++
                             
@@ -152,7 +194,7 @@
             },
 
             stop() {
-                this.startSim = false
+                startSim = false
                 this.msg = "Stopped"
 
             },
@@ -160,21 +202,21 @@
             manualStep() {
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
-                    this.startSim = false
+                    startSim = false
                     this.graphIndex = -1
                     clearInterval(intervalID)
                     return
                 }
-                this.startSim = false
+                startSim = false
                 this.step()
                 graphIndex++
-                this.msg = "Stopped"
+                // this.msg = "Stopped"
             },
 
             step() {
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
-                    this.startSim = false
+                    startSim = false
                     this.graphIndex = -1
                     clearInterval(intervalID)
                     return
