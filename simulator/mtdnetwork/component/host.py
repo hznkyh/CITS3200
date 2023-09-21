@@ -689,5 +689,6 @@ class Host:
             "uuid": self.uuid,
             "total_services": self.total_services,
             "total_nodes": self.total_nodes,
-            "compromised": self.compromised
+            "compromised": self.compromised,
+            "compromised_services": self.compromised_services
         }
