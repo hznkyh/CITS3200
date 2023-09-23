@@ -13,4 +13,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  server: { 
+    port: 8080, 
+    host: '0.0.0.0'
+  },
+  build: {
+    rollupOptions: {
+      input: 'src/main.js'
+    }
+  }
 })
