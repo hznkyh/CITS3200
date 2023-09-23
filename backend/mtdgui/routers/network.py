@@ -12,15 +12,16 @@ from controllers.serialiser import serialize_graph
 import sys
 import os
 from pathlib import Path
+from simulator.adapter import * 
 # Construct the path to the "s" directory
-s_directory = os.path.join(Path(__file__).parents[3], "simulator")
-# Add the "s" directory to the Python path
-sys.path.append(s_directory)
-n_directory = os.path.join(Path(__file__).parents[2])
-# Add the "s" directory to the Python path
-sys.path.append(n_directory)
-# from run import get_sim_json
-from adapter import *
+# s_directory = os.path.join(Path(__file__).parents[3], "simulator")
+# # Add the "s" directory to the Python path
+# sys.path.append(s_directory)
+# n_directory = os.path.join(Path(__file__).parents[2])
+# # Add the "s" directory to the Python path
+# sys.path.append(n_directory)
+# # from run import get_sim_json
+# from adapter import *
 #
 # from adapter import sim_params, run_sim
 

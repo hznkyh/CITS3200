@@ -6,12 +6,13 @@ import json
 import sys
 import os
 from pathlib import Path
+from simulator.adapter import *
 # Construct the path to the "s" directory
-s_directory = os.path.join(Path(__file__).parents[3], "simulator")
-sys.path.append(s_directory)
-n_directory = os.path.join(Path(__file__).parents[2])
-sys.path.append(n_directory)
-from adapter import *
+# s_directory = os.path.join(Path(__file__).parents[3], "simulator")
+# sys.path.append(s_directory)
+# n_directory = os.path.join(Path(__file__).parents[2])
+# sys.path.append(n_directory)
+# from adapter import *
 
 
 router = APIRouter(prefix="/config",
