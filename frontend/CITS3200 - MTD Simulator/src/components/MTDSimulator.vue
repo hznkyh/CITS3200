@@ -550,10 +550,16 @@ body {
   margin:2em;
   overflow-y: scroll;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #000;
+  position: relative;
 }
 
 .panel::-webkit-scrollbar {
   width:8px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  bottom: 10px;
 }
 
 .panel::-webkit-scrollbar-thumb {
@@ -565,7 +571,6 @@ body {
   background-color: #aaa;
 }
 
-
 .advanced {
   background-color: #ffffff;
   display: inline-block;
@@ -576,6 +581,11 @@ body {
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+}
+
+.advanced:hover{
+  background-color: lightslategray;
+  color: #ffffff;
 }
 
 .hidden{
