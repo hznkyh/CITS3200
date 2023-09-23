@@ -1,6 +1,7 @@
 <template>
   <div class="content">
-    <div class="panel">
+  <button class="toggle" @click="togglePanel">Toggle Panel</button>
+    <div class="panel" :class="{ 'panel-open': isPanelOpen}">
       <form id="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
         <div>
@@ -274,6 +275,7 @@ export default {
       similtaneous:'',
       random:'',
       alternative:'',
+      isPanelOpen: false,
     };
   },
 
@@ -510,6 +512,9 @@ export default {
     triggerConversion(floatStr){
       const floatArray = floatStr.split(',').map(value => parseFloat(value.trim()));
       return floatArray
+    },
+    togglePanel(){
+      this.isPanelOpen = !this.isPanelOpen;
     }
 
   },
@@ -552,6 +557,12 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 2px solid #000;
   position: relative;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.panel-open{
+  transform: translateX(0);
 }
 
 .panel::-webkit-scrollbar {
@@ -571,6 +582,10 @@ body {
   background-color: #aaa;
 }
 
+.toggle{
+  background-color: #000;
+  color: #fff;
+}
 .advanced {
   background-color: #ffffff;
   display: inline-block;
