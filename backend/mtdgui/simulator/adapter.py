@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the "s" directory
-target_directory = os.path.join(current_script_dir, "..", "backend")
+target_directory = os.path.join(current_script_dir, "..")
 if not os.path.exists(target_directory + '/experimental_data'):
     os.makedirs(target_directory + '/experimental_data')
     os.makedirs(target_directory + '/experimental_data/plots')

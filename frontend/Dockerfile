@@ -4,10 +4,8 @@ WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-RUN npm install @vue/cli@5.0.8 -g
+WORKDIR /app/CITS3200 - MTD Simulator
+RUN npm install @vue/cli -g
 
-COPY package.json .
-COPY package-lock.json .
 RUN npm install
-
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "dev"]
