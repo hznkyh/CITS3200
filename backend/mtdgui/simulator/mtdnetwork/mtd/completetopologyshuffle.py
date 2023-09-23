@@ -1,4 +1,4 @@
-from mtdnetwork.mtd import MTD
+from simulator.mtdnetwork.mtd import MTD
 
 
 class CompleteTopologyShuffle(MTD):

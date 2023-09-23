@@ -1,9 +1,9 @@
 import logging
 import simpy
 import random
-from mtdnetwork.component.time_generator import exponential_variates
-# from mtdnetwork.data.constants import ATTACK_DURATION
-from mtdnetwork.configs import config
+from simulator.mtdnetwork.component.time_generator import exponential_variates
+# from simulator.mtdnetwork.data.constants import ATTACK_DURATION
+from simulator.mtdnetwork.configs import config
 
 logger = logging.getLogger(__name__)
 class AttackOperation:

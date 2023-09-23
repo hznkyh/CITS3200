@@ -10,11 +10,11 @@ sys.path.append(current_directory.replace('experiments', ''))
 import warnings
 import pandas as pd
 import matplotlib.pyplot as plt
-from mtdnetwork.mtd.completetopologyshuffle import CompleteTopologyShuffle
-from mtdnetwork.mtd.ipshuffle import IPShuffle
-from mtdnetwork.mtd.osdiversity import OSDiversity
-from mtdnetwork.mtd.servicediversity import ServiceDiversity
-from mtdnetwork.mtd.osdiversityassignment import OSDiversityAssignment
+from simulator.mtdnetwork.mtd.completetopologyshuffle import CompleteTopologyShuffle
+from simulator.mtdnetwork.mtd.ipshuffle import IPShuffle
+from simulator.mtdnetwork.mtd.osdiversity import OSDiversity
+from simulator.mtdnetwork.mtd.servicediversity import ServiceDiversity
+from simulator.mtdnetwork.mtd.osdiversityassignment import OSDiversityAssignment
 
 warnings.filterwarnings("ignore")
 plt.set_loglevel('WARNING')

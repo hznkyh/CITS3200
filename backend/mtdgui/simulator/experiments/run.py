@@ -2,22 +2,22 @@ import simpy
 import logging
 import os
 import pandas as pd
-from mtdnetwork.component.time_network import TimeNetwork
-from mtdnetwork.operation.mtd_operation import MTDOperation
-from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
-from mtdnetwork.configs import config
-from mtdnetwork.component.adversary import Adversary
-from mtdnetwork.operation.attack_operation import AttackOperation
-from mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
-from mtdnetwork.statistic.evaluation import Evaluation
-from mtdnetwork.mtd.completetopologyshuffle import CompleteTopologyShuffle
-from mtdnetwork.mtd.ipshuffle import IPShuffle
-from mtdnetwork.mtd.hosttopologyshuffle import HostTopologyShuffle
-from mtdnetwork.mtd.portshuffle import PortShuffle
-from mtdnetwork.mtd.osdiversity import OSDiversity
-from mtdnetwork.mtd.servicediversity import ServiceDiversity
-from mtdnetwork.mtd.usershuffle import UserShuffle
-from mtdnetwork.mtd.osdiversityassignment import OSDiversityAssignment
+from simulator.mtdnetwork.component.time_network import TimeNetwork
+from simulator.mtdnetwork.operation.mtd_operation import MTDOperation
+from simulator.mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
+from simulator.mtdnetwork.configs import config
+from simulator.mtdnetwork.component.adversary import Adversary
+from simulator.mtdnetwork.operation.attack_operation import AttackOperation
+from simulator.mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
+from simulator.mtdnetwork.statistic.evaluation import Evaluation
+from simulator.mtdnetwork.mtd.completetopologyshuffle import CompleteTopologyShuffle
+from simulator.mtdnetwork.mtd.ipshuffle import IPShuffle
+from simulator.mtdnetwork.mtd.hosttopologyshuffle import HostTopologyShuffle
+from simulator.mtdnetwork.mtd.portshuffle import PortShuffle
+from simulator.mtdnetwork.mtd.osdiversity import OSDiversity
+from simulator.mtdnetwork.mtd.servicediversity import ServiceDiversity
+from simulator.mtdnetwork.mtd.usershuffle import UserShuffle
+from simulator.mtdnetwork.mtd.osdiversityassignment import OSDiversityAssignment
 import random
 import threading
 import queue

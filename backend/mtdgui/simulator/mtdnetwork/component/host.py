@@ -1,8 +1,8 @@
 import logging
 import random, uuid
 import networkx as nx
-# import mtdnetwork.data.constants as constants
-from mtdnetwork.configs import config
+# import simulator.mtdnetwork.data.constants as constants
+from simulator.mtdnetwork.configs import config
 
 logger = logging.getLogger(__name__)
 

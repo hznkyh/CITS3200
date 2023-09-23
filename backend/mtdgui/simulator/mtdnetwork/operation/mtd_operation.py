@@ -1,6 +1,6 @@
-from mtdnetwork.component.time_generator import exponential_variates
+from simulator.mtdnetwork.component.time_generator import exponential_variates
 import simpy
-from mtdnetwork.component.mtd_scheme import MTDScheme
+from simulator.mtdnetwork.component.mtd_scheme import MTDScheme
 
 import logging
 logger = logging.getLogger(__name__)

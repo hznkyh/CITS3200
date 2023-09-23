@@ -1,5 +1,5 @@
-from mtdnetwork.mtd import MTD
-from mtdnetwork.component import host
+from simulator.mtdnetwork.mtd import MTD
+from simulator.mtdnetwork.component import host
 
 
 class IPShuffle(MTD):

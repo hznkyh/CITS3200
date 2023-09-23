@@ -1,6 +1,6 @@
-from mtdnetwork.statistic.attack_statistics import AttackStatistics
-from mtdnetwork.data.constants import HACKER_ATTACK_ATTEMPT_MULTIPLER
-from mtdnetwork.configs import config
+from simulator.mtdnetwork.statistic.attack_statistics import AttackStatistics
+from simulator.mtdnetwork.data.constants import HACKER_ATTACK_ATTEMPT_MULTIPLER
+from simulator.mtdnetwork.configs import config
 import logging
 
 logger = logging.getLogger(__name__)

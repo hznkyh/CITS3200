@@ -15,6 +15,7 @@
 FROM  continuumio/miniconda3
 
 WORKDIR /app
+COPY mtdgui/ .
 ADD environment.yml /tmp/environment.yml
 
 RUN conda env create -f /tmp/environment.yml

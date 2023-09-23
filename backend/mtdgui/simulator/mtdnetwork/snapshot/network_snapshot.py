@@ -1,6 +1,6 @@
 import pickle
-from mtdnetwork.snapshot import Snapshot
-from mtdnetwork.component.time_network import TimeNetwork
+from simulator.mtdnetwork.snapshot import Snapshot
+from simulator.mtdnetwork.component.time_network import TimeNetwork
 import copy
 
 

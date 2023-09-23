@@ -1,4 +1,4 @@
-# import mtdnetwork.irrelevant_stuff.exceptions as exceptions
+# import simulator.mtdnetwork.irrelevant_stuff.exceptions as exceptions
 import logging
 
 logger = logging.getLogger(__name__)

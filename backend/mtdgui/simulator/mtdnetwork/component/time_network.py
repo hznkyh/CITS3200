@@ -1,7 +1,7 @@
 import logging
-from mtdnetwork.component.network import Network
-from mtdnetwork.statistic.mtd_statistics import MTDStatistics
-from mtdnetwork.component.host import Host
+from simulator.mtdnetwork.component.network import Network
+from simulator.mtdnetwork.statistic.mtd_statistics import MTDStatistics
+from simulator.mtdnetwork.component.host import Host
 import random
 
 logger = logging.getLogger(__name__)

@@ -4,11 +4,11 @@ import pkg_resources
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-# import mtdnetwork.data.constants as constants
-import mtdnetwork.component.services as services
-from mtdnetwork.component.host import Host
-from mtdnetwork.statistic.scorer import Scorer
-from mtdnetwork.configs import config
+# import simulator.mtdnetwork.data.constants as constants
+import simulator.mtdnetwork.component.services as services
+from simulator.mtdnetwork.component.host import Host
+from simulator.mtdnetwork.statistic.scorer import Scorer
+from simulator.mtdnetwork.configs import config
 import os
 
 logger = logging.getLogger(__name__)
@@ -680,7 +680,7 @@ class Network:
             self.total_users = 1
 
         names = [x.decode() for x in pkg_resources.resource_string(
-            'mtdnetwork', "data/first-names.txt").splitlines()]
+            'simulator.mtdnetwork', "data/first-names.txt").splitlines()]
 
         random_users = random.choices(names, k=self.total_users)
         self.users_list = [

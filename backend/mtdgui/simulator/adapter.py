@@ -4,17 +4,16 @@ import simpy
 import json
 from networkx.readwrite import json_graph
 # create_experiment_snapshots([25, 50, 75, 100])
-from mtdnetwork.statistic.evaluation import Evaluation
-from mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
-from mtdnetwork.operation.attack_operation import AttackOperation
-from mtdnetwork.component.host import Host
-from mtdnetwork.component.adversary import Adversary
-# from mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
-# from mtdnetwork.configs import config,set_config
-from mtdnetwork import configs
-from mtdnetwork.operation.mtd_operation import MTDOperation
-from mtdnetwork.component.time_network import TimeNetwork
-from experiments.run import single_mtd_simulation, create_experiment_snapshots, execute_simulation
+from simulator.mtdnetwork.statistic.evaluation import Evaluation
+from simulator.mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
+from simulator.mtdnetwork.operation.attack_operation import AttackOperation
+from simulator.mtdnetwork.component.host import Host
+from simulator.mtdnetwork.component.adversary import Adversary
+# from simulator.mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
+# from simulator.mtdnetwork.configs import config,set_config
+from simulator.mtdnetwork import configs
+from simulator.mtdnetwork.operation.mtd_operation import MTDOperation
+from simulator.mtdnetwork.component.time_network import TimeNetwork
 import matplotlib.pyplot as plt
 from itertools import chain, count
 import networkx as nx

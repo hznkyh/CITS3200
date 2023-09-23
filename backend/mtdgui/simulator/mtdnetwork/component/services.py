@@ -1,8 +1,8 @@
 from pickle import NONE
 import random
 import logging
-# import mtdnetwork.data.constants as constants
-from mtdnetwork.configs import config
+# import simulator.mtdnetwork.data.constants as constants
+from simulator.mtdnetwork.configs import config
 
 import pkg_resources
 import uuid
@@ -388,7 +388,7 @@ class ServicesGenerator:
 
     @staticmethod
     def get_service_name_list():
-        return [x.decode() for x in pkg_resources.resource_string('mtdnetwork', "data/words.txt").splitlines()]
+        return [x.decode() for x in pkg_resources.resource_string('simulator.mtdnetwork', "data/words.txt").splitlines()]
 
     def get_all_generated_services(self):
         return self.os_services
