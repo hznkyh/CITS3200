@@ -29,7 +29,7 @@ import { display } from "@microsoft/fast-foundation";
     var total_services = ''
     var total_nodes = ''
     var compromised = ''
-    var compromised_services = []
+    var compromised_services = ''
 
 
     var storedGraph = {}
@@ -149,12 +149,6 @@ import { display } from "@microsoft/fast-foundation";
         old_subnets = new_subnets
     }
 
-    function metric() {
-        console.log(selectedNodes.value[0])
-        console.log(nodes[selectedNodes.value[0]].host)
-        console.log(nodes[selectedNodes.value[0]].host.os_type)
-    }
-
     export default {
         name: 'Network',
         components: {
@@ -260,10 +254,6 @@ import { display } from "@microsoft/fast-foundation";
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
             },
-            metric() {
-                console.log("test")
-                this.os_type = nodes[selectedNodes.value[0]].host.os_type
-            }
         },
         data() {
             return {
@@ -356,7 +346,6 @@ import { display } from "@microsoft/fast-foundation";
         },
         watch: {
             selectedNodes(newVal, oldVal) {
-                console.log(newVal)
                 if (newVal[0]) {
                     console.log(nodes[newVal[0]].host)
                     this.os_type = nodes[newVal[0]].host.os_type
@@ -369,10 +358,17 @@ import { display } from "@microsoft/fast-foundation";
                     this.total_services = nodes[newVal[0]].host.total_services
                     this.total_nodes = nodes[newVal[0]].host.total_nodes
                     this.compromised = nodes[newVal[0]].host.compromised
-                    this.compromised_services = nodes[newVal[0]].host.compromised_services
+                    var compromised_services = ''
+                    do {
+                        compromised_services += `${nodes[newVal[0]].host.compromised_services[0]}`
+                        nodes[newVal[0]].host.compromised_services.shift()
+                        if (nodes[newVal[0]].host.compromised_services.length > 0) {
+                            compromised_services += ', '
+                        }
+                    } while (nodes[newVal[0]].host.compromised_services.length > 0)
+                    this.compromised_services = compromised_services
                 }
                 else {
-                    console.log("no node selected")
                     this.os_type = ''
                     this.os_version = ''
                     this.host_ip = ''
@@ -383,7 +379,7 @@ import { display } from "@microsoft/fast-foundation";
                     this.total_services = ''
                     this.total_nodes = ''
                     this.compromised = ''
-                    this.compromised_services = []
+                    this.compromised_services = ''
                 }
             }
         },
@@ -405,11 +401,12 @@ import { display } from "@microsoft/fast-foundation";
         <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
+    </div>
+    <div class="control-panel">
         <button @click="getGraph()">Get</button>
-        <button @click="start()">Start</button>
+        <button @click="start()">Start/Continue</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
-        <button @click="metric()">test</button>
     </div>
     <p class="message"> {{ msg }} </p>
     <div class="node-info">
