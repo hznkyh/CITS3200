@@ -15,8 +15,8 @@ EXPOSE 8080
 # RUN npm run dev
 # WORKDIR /app
 # CMD ["npm", "run", "dev"]
-RUN npm run build
-RUN npm run preview
+# RUN npm run build
+# RUN npm run preview
 
 # FROM nginx:stable-alpine as production-stage 
 # COPY --from=build-stage /app/Vite/dist /usr/share/nginx/html
