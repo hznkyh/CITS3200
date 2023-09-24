@@ -16,6 +16,8 @@
     var edges: Edges = reactive({ ...data.edges })
     var layouts: Layouts = reactive({ ...data.layouts})
 
+    const selectedNodes = ref<string[]>([])
+
     var storedGraph = {}
     var number_of_graphs = 0;
     var graphIndex = 0;
@@ -250,6 +252,7 @@
                 nodes,
                 edges,
                 layouts,
+                selectedNodes,
             }
         },
         setup() {
@@ -302,6 +305,7 @@
                     type: "straight",
                 },
             })
+            configs.node.selectable = true
             return {
                 nodeSize,
                 configs,
@@ -318,6 +322,7 @@
     <v-network-graph id="v-graph"
       ref="graph"
       class="graph"
+      v-model:selected-nodes="selectedNodes"
       :nodes="nodes"
       :edges="edges"
       :layouts="layouts"
