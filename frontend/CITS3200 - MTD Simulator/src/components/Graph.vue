@@ -312,11 +312,7 @@ import { display } from "@microsoft/fast-foundation";
 
                     },
                     label: { 
-                        visible: true,
-                        direction: "south", 
-                        color: "#000000",
-                        directionAutoAdjustment: true,
-                        text: node => node.host,
+                        visible: false,
                     },
 
                     draggable: true,
@@ -358,14 +354,14 @@ import { display } from "@microsoft/fast-foundation";
                     this.total_services = nodes[newVal[0]].host.total_services
                     this.total_nodes = nodes[newVal[0]].host.total_nodes
                     this.compromised = nodes[newVal[0]].host.compromised
+                    console.log(nodes[newVal[0]].host.compromised_services)
                     var compromised_services = ''
-                    do {
-                        compromised_services += `${nodes[newVal[0]].host.compromised_services[0]}`
-                        nodes[newVal[0]].host.compromised_services.shift()
-                        if (nodes[newVal[0]].host.compromised_services.length > 0) {
+                    for (var i = 0; i < nodes[newVal[0]].host.compromised_services.length; i++) {
+                        compromised_services += `${nodes[newVal[0]].host.compromised_services[i]}`
+                        if (i != nodes[newVal[0]].host.compromised_services.length - 1) {
                             compromised_services += ', '
                         }
-                    } while (nodes[newVal[0]].host.compromised_services.length > 0)
+                    }
                     this.compromised_services = compromised_services
                 }
                 else {
@@ -442,6 +438,7 @@ import { display } from "@microsoft/fast-foundation";
         margin:0;
         color: white;
         background-color: black;
+        text-align: left;
     }
 </style>
 ```
