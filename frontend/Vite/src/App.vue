@@ -6,10 +6,10 @@
           <img src="@/assets/logo.png" alt="UWA Logo" style="width:30px;" class="">  
         </a>
         <li class="nav-item">
-          <a class="nav-link" href="#" @click="toggleHome">Home</a>
+          <a class="nav-link" href="#" @click="toggleHome" style="color: white;">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" @click="toggleSimulator">Simulator</a>
+          <a class="nav-link" href="#" @click="toggleSimulator" style="color: white;">Simulator</a>
         </li>
       </ul>
     </div>
@@ -46,6 +46,10 @@ export default {
 </script>
 
 <style>
+.navbar{
+  background-color: #3454a4;
+}
+
 header {
   padding: 30px;
   text-align: center;
