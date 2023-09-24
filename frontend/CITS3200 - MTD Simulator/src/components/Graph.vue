@@ -244,6 +244,11 @@
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
             },
+
+            metric() {
+                console.log(selectedNodes.value[0])
+                console.log(nodes[selectedNodes.value[0]].host)
+            }
         },
         data() {
             return {
@@ -258,7 +263,7 @@
         setup() {
             const nodeSize = 16
 
-            const configs = vNG.defineConfigs({
+            const configs = reactive(vNG.defineConfigs({
                 view: {
                     autoPanAndZoomOnLoad: "center-zero",
                     // onBeforeInitialDisplay: () => layout(),
@@ -284,18 +289,26 @@
                     }),
                 },
                 node: {
-                    normal: { 
+                    normal: {
+                        type: "circle", 
                         radius: nodeSize/2,
-                        // color: node => node.color,
+                        color: node => node.color,
 
                     },
                     label: { 
+                        visible: false,
                         direction: "south", 
-                        color: "#fff",
+                        color: "#000000",
                         directionAutoAdjustment: true,
                     },
 
                     draggable: true,
+                    selectable: 1,
+                    selected: {
+                        type: "circle",
+                        color: "#4466cc",
+                        radius: nodeSize/2,
+                    },
                 },
                 edge: {
                     normal: {
@@ -304,8 +317,7 @@
                     },
                     type: "straight",
                 },
-            })
-            configs.node.selectable = true
+            }))
             return {
                 nodeSize,
                 configs,
@@ -337,6 +349,7 @@
         <button @click="start()">Start</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
+        <button @click="metric()">test</button>
     </div>
     <p class="message"> {{ msg }} </p>
   </template>
@@ -346,7 +359,7 @@
       width: 100%;
       height: 100%;
       border: 1px solid #ccc;
-      background-color: black;
+      /* background-color: black; */
     }
     .control-panel {
       gap: 10px;
