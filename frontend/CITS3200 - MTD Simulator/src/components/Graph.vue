@@ -10,6 +10,7 @@
         ForceNodeDatum,
         ForceEdgeDatum,
     } from "v-network-graph/lib/force-layout"
+import { display } from "@microsoft/fast-foundation";
 
     const graph = ref<vNG.VNetworkGraphInstance>()
     var nodes: Nodes = reactive({ ...data.nodes })
@@ -17,6 +18,19 @@
     var layouts: Layouts = reactive({ ...data.layouts})
 
     const selectedNodes = ref<string[]>([])
+
+    var os_type = ''
+    var os_version = ''
+    var host_ip = ''
+    var host_id = ''
+    var p_u_compromise = ''
+    var total_users = ''
+    var uuid = ''
+    var total_services = ''
+    var total_nodes = ''
+    var compromised = ''
+    var compromised_services = []
+
 
     var storedGraph = {}
     var number_of_graphs = 0;
@@ -246,10 +260,25 @@
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
             },
+            metric() {
+                console.log("test")
+                this.os_type = nodes[selectedNodes.value[0]].host.os_type
+            }
         },
         data() {
             return {
                 msg,
+                os_type,
+                os_version,
+                host_ip,
+                host_id,
+                p_u_compromise,
+                total_users,
+                uuid,
+                total_services,
+                total_nodes,
+                compromised,
+                compromised_services,
                 graph,
                 nodes,
                 edges,
@@ -326,29 +355,37 @@
             }
         },
         watch: {
-            selectedNodes: {
-                handler: (newVal, oldVal) => {
-                    console.log(newVal)
-                    console.log(newVal[0])
-                    var selectedNode = newVal[0]
-                    if (selectedNode) {
-                        console.log(nodes[selectedNode].host.os_type)
-                        console.log(nodes[selectedNode].host.os_version)
-                        console.log(nodes[selectedNode].host.host_ip)
-                        console.log(nodes[selectedNode].host.host_id)
-                        console.log(nodes[selectedNode].host.p_u_compromise)
-                        console.log(nodes[selectedNode].host.total_users)
-                        console.log(nodes[selectedNode].host.uuid)
-                        console.log(nodes[selectedNode].host.total_services)
-                        console.log(nodes[selectedNode].host.total_nodes)
-                        console.log(nodes[selectedNode].host.compromised)
-                        for (var i = 0; i < nodes[selectedNode].host.compromised_services.length; i++) {
-                            console.log(nodes[selectedNode].host.compromised_services[i])
-                        }
-                    }
-                },
-                deep: true,
-            },
+            selectedNodes(newVal, oldVal) {
+                console.log(newVal)
+                if (newVal[0]) {
+                    console.log(nodes[newVal[0]].host)
+                    this.os_type = nodes[newVal[0]].host.os_type
+                    this.os_version = nodes[newVal[0]].host.os_version
+                    this.host_ip = nodes[newVal[0]].host.host_ip
+                    this.host_id = nodes[newVal[0]].host.host_id
+                    this.p_u_compromise = nodes[newVal[0]].host.p_u_compromise
+                    this.total_users = nodes[newVal[0]].host.total_users
+                    this.uuid = nodes[newVal[0]].host.uuid
+                    this.total_services = nodes[newVal[0]].host.total_services
+                    this.total_nodes = nodes[newVal[0]].host.total_nodes
+                    this.compromised = nodes[newVal[0]].host.compromised
+                    this.compromised_services = nodes[newVal[0]].host.compromised_services
+                }
+                else {
+                    console.log("no node selected")
+                    this.os_type = ''
+                    this.os_version = ''
+                    this.host_ip = ''
+                    this.host_id = ''
+                    this.p_u_compromise = ''
+                    this.total_users = ''
+                    this.uuid = ''
+                    this.total_services = ''
+                    this.total_nodes = ''
+                    this.compromised = ''
+                    this.compromised_services = []
+                }
+            }
         },
     }
 </script>
@@ -372,9 +409,22 @@
         <button @click="start()">Start</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
-        <!-- <button @click="metric()">test</button> -->
+        <button @click="metric()">test</button>
     </div>
     <p class="message"> {{ msg }} </p>
+    <div class="node-info">
+        <p>os type: {{ os_type }}</p>
+        <p>os version: {{ os_version }}</p>
+        <p>host ip: {{ host_ip }}</p>
+        <p>host id: {{ host_id }}</p>
+        <p>p_u_compromise: {{ p_u_compromise }}</p>
+        <p>total users: {{ total_users }}</p>
+        <p>uuid: {{ uuid }}</p>
+        <p>total services: {{ total_services }}</p>
+        <p>total nodes: {{ total_nodes }}</p>
+        <p>compromised: {{ compromised }}</p>
+        <p>compromised services: {{ compromised_services }}</p>
+    </div>
   </template>
 
 <style>
@@ -390,6 +440,11 @@
     }
     .message {
         margin:0;
+    }
+    .node-info {
+        margin:0;
+        color: white;
+        background-color: black;
     }
 </style>
 ```
