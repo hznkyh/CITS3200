@@ -2,7 +2,7 @@ import { Nodes, Edges, Layouts } from "v-network-graph"
 import { reactive } from "vue"
 
 const nodes: Nodes = {
-  node1: { name: "Node 1", color: "black", subnet: 0,
+  node1: { name: "Node 1", color: "blue", subnet: 2,
     "host": {
       "os_type": "ubuntu",
       "os_version": "14.04",
@@ -14,11 +14,16 @@ const nodes: Nodes = {
       "total_services": 3,
       "total_nodes": 4,
       "compromised": false,
-      "compromised_services": []
+      "compromised_services": [
+        0,
+        1,
+        4,
+        3
+      ]
     }
   },
-  node2: { name: "Node 2", color: "black", subnet: 0 },
-  node3: { name: "Node 3", color: "black", subnet: 1 },
+  node2: { name: "Node 2", color: "black", subnet: 2 },
+  node3: { name: "Node 3", color: "black", subnet: 2 },
   // node4: { name: "Node 4", subnet: 1 },
   // node5: { name: "Node 5", subnet: 2 },
   // node6: { name: "Node 6", subnet: 2 },

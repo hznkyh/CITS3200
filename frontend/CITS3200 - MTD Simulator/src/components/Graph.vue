@@ -135,8 +135,10 @@
         old_subnets = new_subnets
     }
 
-    function test() {
-        this.$refs.myBtn.click()
+    function metric() {
+        console.log(selectedNodes.value[0])
+        console.log(nodes[selectedNodes.value[0]].host)
+        console.log(nodes[selectedNodes.value[0]].host.os_type)
     }
 
     export default {
@@ -244,11 +246,6 @@
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
             },
-
-            metric() {
-                console.log(selectedNodes.value[0])
-                console.log(nodes[selectedNodes.value[0]].host)
-            }
         },
         data() {
             return {
@@ -296,10 +293,11 @@
 
                     },
                     label: { 
-                        visible: false,
+                        visible: true,
                         direction: "south", 
                         color: "#000000",
                         directionAutoAdjustment: true,
+                        text: node => node.host,
                     },
 
                     draggable: true,
@@ -326,7 +324,32 @@
                 edges,
                 layouts,
             }
-        }
+        },
+        watch: {
+            selectedNodes: {
+                handler: (newVal, oldVal) => {
+                    console.log(newVal)
+                    console.log(newVal[0])
+                    var selectedNode = newVal[0]
+                    if (selectedNode) {
+                        console.log(nodes[selectedNode].host.os_type)
+                        console.log(nodes[selectedNode].host.os_version)
+                        console.log(nodes[selectedNode].host.host_ip)
+                        console.log(nodes[selectedNode].host.host_id)
+                        console.log(nodes[selectedNode].host.p_u_compromise)
+                        console.log(nodes[selectedNode].host.total_users)
+                        console.log(nodes[selectedNode].host.uuid)
+                        console.log(nodes[selectedNode].host.total_services)
+                        console.log(nodes[selectedNode].host.total_nodes)
+                        console.log(nodes[selectedNode].host.compromised)
+                        for (var i = 0; i < nodes[selectedNode].host.compromised_services.length; i++) {
+                            console.log(nodes[selectedNode].host.compromised_services[i])
+                        }
+                    }
+                },
+                deep: true,
+            },
+        },
     }
 </script>
 
@@ -349,7 +372,7 @@
         <button @click="start()">Start</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
-        <button @click="metric()">test</button>
+        <!-- <button @click="metric()">test</button> -->
     </div>
     <p class="message"> {{ msg }} </p>
   </template>
