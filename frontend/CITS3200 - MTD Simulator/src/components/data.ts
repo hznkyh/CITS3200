@@ -22,7 +22,26 @@ const nodes: Nodes = {
       ]
     }
   },
-  node2: { name: "Node 2", color: "black", subnet: 2 },
+  node2: { name: "Node 2", color: "black", subnet: 2,
+  "host": {
+    "os_type": "test",
+    "os_version": "test",
+    "host_ip": "test",
+    "host_id": 0,
+    "p_u_compromise": false,
+    "total_users": 4,
+    "uuid": "bbe04d2d-d921-4132-a87b-48e503666bec",
+    "total_services": 3,
+    "total_nodes": 4,
+    "compromised": false,
+    "compromised_services": [
+      1,
+      2,
+      3,
+      4
+    ]
+  }
+  },
   node3: { name: "Node 3", color: "black", subnet: 2 },
   // node4: { name: "Node 4", subnet: 1 },
   // node5: { name: "Node 5", subnet: 2 },
