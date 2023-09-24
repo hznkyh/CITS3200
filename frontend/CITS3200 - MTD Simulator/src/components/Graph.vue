@@ -76,12 +76,10 @@
         ): [number, number][] {
         var coordinates: [number, number][] = [];
         
-        console.log("generateCoordinates")
         while (coordinates.length < numCoordinates) {
             const x = Math.random() * (600 - (-600)) + (-600); // Adjust the range as needed
             const y = Math.random() * (350 - (-350)) + (-350); // Adjust the range as needed
 
-            console.log("one iteration")
             // Check if the new coordinates satisfy the minimum distance requirement
             const valid = coordinates.every(([x1, y1]) => {
                 return Math.abs(x - x1) >= minDistance && Math.abs(y - y1) >= minDistance;
@@ -96,7 +94,6 @@
     }
 
     function layout() {
-        console.log("layout")
         // layout the nodes based on their subnet
         var new_subnets = {}
         for (var key in nodes) {
@@ -114,11 +111,8 @@
             return
         }
 
-        console.log(new_subnets)
-
         var coordinates = generateCoordinates(Object.keys(new_subnets).length, 60)
 
-        console.log(coordinates)
         var index = 0
         for (var key in new_subnets) {
             var subnet = new_subnets[key]
@@ -149,17 +143,6 @@
             vNG,
         },
         methods: {
-            // getGraph() {
-            //     this.msg = "Getting graph..."
-            //     axios.get("/network/graph").then(async (res) => {
-            //         storedGraph = res.data
-            //         this.msg = "Got graph"
-            //         number_of_graphs = Object.keys(storedGraph).length
-            //         console.log(storedGraph)
-            //         graphIndex = 0
-            //     });
-            // },
-
             async getGraph() {
                 startSim = false;
                 try {
@@ -169,16 +152,13 @@
                     const response = await axios.get("/network/graph");
                     storedGraph = response.data;
                     number_of_graphs = Object.keys(storedGraph).length;
-                    console.log(storedGraph);
                     graphIndex = 0;
                     this.msg = "Got graph";
                 } catch (error) {
-                    console.error(error);
                 }
             },
 
             start() {
-                console.log(startSim)
                 if (!startSim) {
                     startSim = true
                     this.msg = "Start"
@@ -251,10 +231,12 @@
                     else {
                         color = `green`
                     }
+                    var host = node.host
 
-                    nodes[nodeId] = { name, color, subnet, layer}
+                    nodes[nodeId] = {color, subnet, layer, host}
                     nextNodeIndex++
                 }
+                console.log(nodes)
                 layout()
                 // const graphComponent = this.$refs.graph;
                 // // Call the fitToContents method of the component
@@ -301,12 +283,16 @@
                 node: {
                     normal: { 
                         radius: nodeSize/2,
-                        color: node => node.color,
+                        // color: node => node.color,
+
                     },
-                    label: { direction: "center", color: "#fff" },
+                    label: { 
+                        direction: "south", 
+                        color: "#fff",
+                        directionAutoAdjustment: true,
+                    },
 
                     draggable: true,
-
                 },
                 edge: {
                     normal: {
@@ -355,6 +341,7 @@
       width: 100%;
       height: 100%;
       border: 1px solid #ccc;
+      background-color: black;
     }
     .control-panel {
       gap: 10px;
