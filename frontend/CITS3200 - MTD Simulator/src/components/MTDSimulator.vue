@@ -1,7 +1,10 @@
 <template>
   <div class="content">
-  <button class="toggle" @click="togglePanel">Toggle Panel</button>
-    <div class="panel" :class="{ 'panel-open': isPanelOpen}">
+  
+    <div class="panel" :class="{ 'panel-visible': isPanelVisible }">
+      <div class="toggle-button" @click="togglePanel()">
+        <i class="fas fa-chevron-left"></i>
+      </div>
       <form id="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
         <div>
@@ -57,25 +60,6 @@
         </div>
 
         <div>
-          <label>Scheme *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-              </span>
-              <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
-            </span>
-          </div>
-          <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
-            <option value="random">random</option>
-            <option value="simultaneous"> simultaneous</option>
-            <option value="alternative">alternative</option>
-            <option value="single">single</option>
-            <option value="None">none</option>
-          </select>
-        </div>
-
-        <div>
           <label>MTD Interval *: </label>
           <div class="tooltip-container">
             <span id="tooltip">
@@ -112,6 +96,25 @@
             </span>
           </div>
           <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
+        </div>
+
+        <div>
+          <label>Scheme *: </label>
+          <div class="tooltip-container">
+            <span id="tooltip">
+              <span class='info'>
+                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+              </span>
+              <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
+            </span>
+          </div>
+          <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+            <option value="random">random</option>
+            <option value="simultaneous"> simultaneous</option>
+            <option value="alternative">alternative</option>
+            <option value="single">single</option>
+            <option value="None">none</option>
+          </select>
         </div>
 
         <p id="advanced" class="advanced" @click="toggleAdvanced()">Advanced</p>
@@ -275,7 +278,7 @@ export default {
       similtaneous:'',
       random:'',
       alternative:'',
-      isPanelOpen: false,
+      isPanelVisible: false,
     };
   },
 
@@ -514,9 +517,13 @@ export default {
       return floatArray
     },
     togglePanel(){
-      this.isPanelOpen = !this.isPanelOpen;
-    }
-
+      var panel = document.querySelector('.panel')
+      if(panel.classList.contains('panel-open')){
+        panel.classList.remove('panel-open');
+      } else {
+        panel.classList.add('panel-open')
+      }
+    },
   },
 };
 </script>
@@ -555,10 +562,14 @@ body {
   margin:2em;
   overflow-y: scroll;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
   position: relative;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
+}
+
+.panel-visble {
+  transform: translate(0);
 }
 
 .panel-open{
@@ -582,24 +593,20 @@ body {
   background-color: #aaa;
 }
 
-.toggle{
-  background-color: #000;
-  color: #fff;
-}
 .advanced {
   background-color: #ffffff;
   display: inline-block;
   padding: 0.5em 1em;
-  margin:0 0 1em 0;
+  margin:10px 0 1em 0;
   width: 100%;
-  text-align: left;
+  text-align: center;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
 .advanced:hover{
-  background-color: lightslategray;
+  background-color: #3454a4;
   color: #ffffff;
 }
 
@@ -735,4 +742,25 @@ form {
   display: inline-block;
 }
 
+.toggle-button{
+  position: absolute;
+  top: 10px;
+  right: -20px;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-button i{
+  font-size: 18px;
+  color: #333;
+}
 </style>
