@@ -15,15 +15,14 @@ from simulator.mtdnetwork import configs
 from simulator.mtdnetwork.operation.mtd_operation import MTDOperation
 from simulator.mtdnetwork.component.time_network import TimeNetwork
 import matplotlib.pyplot as plt
-from itertools import chain, count
-import networkx as nx
-import pandas as pd
 import warnings
 import os
 import sys
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+print("__name__",__name__)
+logger.info('init adapter')
 # current_directory = os.path.dirname(os.path.abspath(__file__))
 # target_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)) , 'experiments')
 # target_directory = os.getcwd()
