@@ -15,7 +15,7 @@ COPY . ./
 # RUN npm run dev
 WORKDIR /app/Vite
 # CMD ["npm", "run", "dev"]
-RUN npm install @vue/cli -g
+# RUN npm install @vue/cli -g
 RUN npm install
 RUN npm run build
 # RUN npm run dev

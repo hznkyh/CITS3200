@@ -17,9 +17,9 @@ export default defineConfig({
     port: 8080, 
     host: '0.0.0.0'
   },
-  build: {
-    rollupOptions: {
-      input: 'src/main.js'
-    }
-  }
+  // build: {
+  //   rollupOptions: {
+  //     input: 'src/main.js'
+  //   }
+  // }
 })
