@@ -339,47 +339,55 @@
     >
     </v-network-graph>
     <div class="control-panel">
-        <button @click="graph?.fitToContents()" ref="myBtn" class="button-style">Fit</button>
-        <button @click="graph?.zoomIn()" class="button-style">Zoom In</button>
-        <button @click="graph?.zoomOut()" class="button-style">Zoom Out</button>
-        <button @click="getGraph()" class="button-style">Get</button>
-        <button @click="start()" class="button-style">Start</button>
-        <button @click="manualStep()" class="button-style">Step</button>
-        <button @click="stop()" class="button-style">Stop</button>
+        <div class="size-button">
+            <button @click="graph?.fitToContents()" ref="myBtn" class="button-style">Fit</button>
+            <button @click="graph?.zoomIn()" class="button-style">Zoom In</button>
+            <button @click="graph?.zoomOut()" class="button-style">Zoom Out</button>
+        </div>
+        <div class="act-button">
+            <button @click="getGraph()" class="button-style">Get</button>
+            <button @click="start()" class="button-style">Start</button>
+            <button @click="manualStep()" class="button-style">Step</button>
+            <button @click="stop()" class="button-style">Stop</button>
+        </div>
+        
     </div>
     <p class="message"> {{ msg }} </p>
   </template>
 
 <style>
-    .graph {
-      width: 100%;
-      height: 100%;
-      border: 1px solid #ccc;
-    }
-    .control-panel {
-      gap: 10px;
-      padding: 10px;
-    }
-    .button-style {
-        background-color: #000;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-right: 2px;
-        transition: background-color 0.3s ease;
-    }
+.graph {
+    width: 100%;
+    height: 60vh;
+    border: 1px solid #ccc;
+}
+.control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 1025px;
+}
+.button-style {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 2px;
+    transition: background-color 0.3s ease;
+}
 
-    .button-style:hover{
-        background-color: #333;
-    }
-    
-    .message {
-        margin:0;
-        font-size: 20px;
-    }
+.button-style:hover{
+    background-color: #333;
+}
+
+.message {
+    margin:0;
+    font-size: 20px;
+}
 </style>
 ```
 
