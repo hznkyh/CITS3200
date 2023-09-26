@@ -186,7 +186,7 @@ def create_sim_test(
     else:
         env.run(until=end_event)
         
-    evaluation = Evaluation(network=time_network, adversary=adversary)
+    # evaluation = Evaluation(network=time_network, adversary=adversary)
     # print("RES:",res)
     print("get_compromised_hosts ",evaluation._adversary.get_compromised_hosts())
     return evaluation

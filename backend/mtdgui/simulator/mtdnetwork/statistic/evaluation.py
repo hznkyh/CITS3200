@@ -226,3 +226,7 @@ class Evaluation:
 
     def get_network(self):
         return self._network
+    def save_all(self):
+        self.visualise_mtd_operation()
+        self.visualise_attack_operation()
+        self.visualise_attack_operation_group_by_host()
