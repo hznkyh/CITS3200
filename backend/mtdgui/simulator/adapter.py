@@ -178,7 +178,7 @@ def create_sim_test(
         snapshot_checkpoint.proceed_save(time_network, adversary,res)
 
     # Evaluate the simulation
-    evaluation = Evaluation(network=time_network, adversary=adversary)
+    # evaluation = Evaluation(network=time_network, adversary=adversary)
     
     # start simulation
     if finish_time is not None:
@@ -186,7 +186,8 @@ def create_sim_test(
     else:
         env.run(until=end_event)
         
-    # evaluation = Evaluation(network=time_network, adversary=adversary)
+    evaluation = Evaluation(network=time_network, adversary=adversary)
+    evaluation.save_all()
     # print("RES:",res)
     print("get_compromised_hosts ",evaluation._adversary.get_compromised_hosts())
     return evaluation

@@ -5,7 +5,7 @@ from typing import Union, Optional, Dict, Any
 import uvicorn
 from controllers.loggerConfig import setup_logger
 
-from routers import develop, network,config, webSocket ,webSocketDev, streaming #, set_configs#, sim
+from routers import develop, network,config, webSocket ,webSocketDev, streaming, statistics #, set_configs#, sim
 from controllers import * 
 
 import logging
@@ -20,6 +20,7 @@ app = FastAPI(debug=True)
 app.include_router(config.router)
 app.include_router(network.router)
 app.include_router(develop.router)
+app.include_router(statistics.router)
 app.include_router(streaming.router)
 app.include_router(webSocket.router)
 app.include_router(webSocketDev.router)

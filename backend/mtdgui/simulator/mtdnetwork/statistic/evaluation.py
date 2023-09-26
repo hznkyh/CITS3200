@@ -107,7 +107,7 @@ class Evaluation:
         plt.figure(1, figsize=(15, 12))
         nx.draw(self._network.graph, pos=self._network.pos, node_color=self._network.colour_map, with_labels=True)
         plt.savefig(directory + '/experimental_data/plots/network.png')
-        plt.show()
+        # plt.show()
 
     def draw_hacker_visible(self):
         """
@@ -116,7 +116,7 @@ class Evaluation:
         subgraph = self._network.get_hacker_visible_graph()
         plt.figure(1, figsize=(15, 12))
         nx.draw(subgraph, pos=self._network.pos, with_labels=True)
-        plt.show()
+        # plt.show()
 
     def draw_compromised(self):
         """
@@ -134,7 +134,7 @@ class Evaluation:
 
         plt.figure(1, figsize=(15, 12))
         nx.draw(subgraph, pos=self._network.pos, node_color=colour_map, with_labels=True)
-        plt.show()
+        # # plt.show()
 
     def visualise_attack_operation_group_by_host(self):
         """
@@ -165,7 +165,7 @@ class Evaluation:
         plt.ylabel('Hosts', weight='bold', fontsize=18)
         fig.tight_layout()
         plt.savefig(directory + '/experimental_data/plots/attack_action_record_group_by_host.png')
-        plt.show()
+        # # plt.show()
 
     def visualise_attack_operation(self):
         """
@@ -197,7 +197,7 @@ class Evaluation:
         plt.ylabel('Attack Actions', weight='bold', fontsize=18)
         fig.tight_layout()
         plt.savefig(directory + '/experimental_data/plots/attack_record.png')
-        plt.show()
+        # # plt.show()
 
     def visualise_mtd_operation(self):
         """
@@ -222,11 +222,14 @@ class Evaluation:
         plt.ylabel('MTD Strategies', weight='bold', fontsize=18)
         fig.tight_layout()
         plt.savefig(directory + '/experimental_data/plots/mtd_record.png')
-        plt.show()
+        # # plt.show()
 
     def get_network(self):
         return self._network
+    
     def save_all(self):
         self.visualise_mtd_operation()
         self.visualise_attack_operation()
         self.visualise_attack_operation_group_by_host()
+        self.draw_network()
+        # self.draw_compromised()
