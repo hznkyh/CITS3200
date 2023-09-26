@@ -1,10 +1,40 @@
 <template>
   <div class="content">
-  
-    <div class="panel" :class="{ 'panel-visible': isPanelVisible }">
-      <div class="toggle-button" @click="togglePanel()">
-        <i class="fas fa-chevron-left"></i>
-      </div>
+    <button class="instructions" @click="toggleInstructions">{{ showInstructions ? 'Hide Instructions' : "Show Instructions" }}</button>
+    <div class="instruction-box" v-if="showInstructions">
+      <h1>Instructions</h1>
+      <ol class="list">
+        <li>Enter inputs to the panel at the right</li>
+        <li>Optional: Click on "Advanced", and enter input for advanced options. Otherwise, leave it as the default values.</li>
+        <li>Click on "Start" to start the simulation</li>
+        <li>Click on "Step" to step through the simulation</li>
+        <li>Click on "Stop" to stop the simulation</li>
+      </ol>
+      <h1>To view</h1>
+      <p>To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
+      <p>Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
+      <p>Click a node and hold it to drag it to anyplace desriable.</p>
+      <h3>Graph</h3>
+      <p>The graph will show the network and the nodes. The nodes will be coloured based on their state. The legend is as follows:</p>
+      <ul class="list">
+        <li>Green: Not compromised and exposed<span class="dot" style="background-color: green;"></span></li>
+        <li>Yellow: Exposed<span class="dot" style="background-color: yellow;"></span></li>
+        <li>Red: Compromised<span class="dot" style="background-color: red;"></span></li>
+      </ul>
+      <h3>Node</h3>
+      <p>Clicking on a node will show the node's information. The information is as follows:</p>
+      <ul class="list">
+        <li>Node ID</li>
+        <li>Node Type</li>
+        <li>Node State</li>
+        <li>Node IP</li>
+        <li>Node OS</li>
+        <li>Node Services</li>
+        <li>Node Users</li>
+      </ul>
+    </div>
+
+    <div class="panel">
       <form id="paramForm" v-on:submit.prevent="submitForm" >
         <h2> Parameters Panel</h2>
         <div>
@@ -212,38 +242,6 @@
       <Graph></Graph>
     </div>
   </div>
-  <div class="instructions">
-    <h1>Instructions</h1>
-    <ol class="list">
-      <li>Enter inputs to the panel at the right</li>
-      <li>Optional: Click on "Advanced", and enter input for advanced options. Otherwise, leave it as the default values.</li>
-      <li>Click on "Start" to start the simulation</li>
-      <li>Click on "Step" to step through the simulation</li>
-      <li>Click on "Stop" to stop the simulation</li>
-    </ol>
-    <h1>To view</h1>
-    <p>To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
-    <p>Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
-    <p>Click a node and hold it to drag it to anyplace desriable.</p>
-    <h3>Graph</h3>
-    <p>The graph will show the network and the nodes. The nodes will be coloured based on their state. The legend is as follows:</p>
-    <ul class="list">
-      <li>Green: Not compromised and exposed<span class="dot" style="background-color: green;"></span></li>
-      <li>Yellow: Exposed<span class="dot" style="background-color: yellow;"></span></li>
-      <li>Red: Compromised<span class="dot" style="background-color: red;"></span></li>
-    </ul>
-    <h3>Node</h3>
-    <p>Clicking on a node will show the node's information. The information is as follows:</p>
-    <ul class="list">
-      <li>Node ID</li>
-      <li>Node Type</li>
-      <li>Node State</li>
-      <li>Node IP</li>
-      <li>Node OS</li>
-      <li>Node Services</li>
-      <li>Node Users</li>
-    </ul>
-  </div>
 </template>
 
 <script>
@@ -278,7 +276,7 @@ export default {
       similtaneous:'',
       random:'',
       alternative:'',
-      isPanelVisible: false,
+      showInstructions: false,
     };
   },
 
@@ -516,64 +514,43 @@ export default {
       const floatArray = floatStr.split(',').map(value => parseFloat(value.trim()));
       return floatArray
     },
-    togglePanel(){
-      var panel = document.querySelector('.panel')
-      if(panel.classList.contains('panel-open')){
-        panel.classList.remove('panel-open');
-      } else {
-        panel.classList.add('panel-open')
-      }
+    toggleInstructions(){
+      this.showInstructions = !this.showInstructions;
     },
   },
 };
 </script>
 
 <style>
-* {
-  box-sizing: border-box; 
-  margin: 0;
-  padding: 0;
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
-}
-
-#app{
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content{
-  display: flex;
-  flex: 1;
-  min-height: 90vh;
-  max-height: 90vh;
+.content {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
 }
 
 .panel{
-  float: left;
-  width: 30%;
-  background: #ffffff;
-  padding: 2em;
-  border-radius: 10px;
-  margin:2em;
-  overflow-y: scroll;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* border: 2px solid #000; */
-  position: relative;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-}
-
-.panel-visble {
-  transform: translate(0);
-}
-
-.panel-open{
-  transform: translateX(0);
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px; 
+    background: #ffffff;
+    padding: 2em;
+    border-radius: 10px;
+    margin:2em;
+    overflow-y: scroll;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #000; 
+    position: relative;
 }
 
 .panel::-webkit-scrollbar {
@@ -614,16 +591,23 @@ body {
   display: none;
 }
 
+label, input, select {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 10px;
+}
+
 .network {
-  float: left;
-  padding: 20px;
-  width: 70%;
-  text-align: center;
-  margin: 2em;
-  margin-bottom: 6em;
-  background-color: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px; 
+  background: #ffffff;
+  padding: 2em;
   border-radius: 10px;
+  margin:2em;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #000; 
+  position: relative;
 }
 
 input[type=text] {
@@ -721,7 +705,24 @@ form {
   color: #333;
  }
 
- .instructions {
+ .instructions{
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+ }
+
+ .instructions:hover{
+  background-color: #333;
+ }
+
+ .instruction-box {
+    width: 100%;
     margin: 2em;
     margin-top: 0;
     padding: 2em;
@@ -730,7 +731,7 @@ form {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
  }
 
-.list {
+ .list {
   margin-bottom: 1em;
  }
 
@@ -740,27 +741,5 @@ form {
   margin-left: 0.5em;
   border-radius: 50%;
   display: inline-block;
-}
-
-.toggle-button{
-  position: absolute;
-  top: 10px;
-  right: -20px;
-  width: 40px;
-  height: 40px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 2;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.toggle-button i{
-  font-size: 18px;
-  color: #333;
 }
 </style>
