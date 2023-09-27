@@ -1,24 +1,21 @@
-from fastapi import FastAPI, Request, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional, Dict, Any
-from jose import jwt, JWTError
-import datetime
-import uvicorn
-import os
-import pathlib
-from controllers.loggerConfig import setup_logger
-import uuid
-from routers import (
-    develop,
-    network,
-    config,
-    webSocket,
-    webSocketDev,
-    streaming,
-)  # , set_configs#, sim
-from controllers import *
-
 import logging
+import pathlib
+from datetime import timedelta
+from typing import Annotated
+from uuid import uuid4
+
+import uvicorn
+from auth import create_access_token, get_current_active_user, verify_session
+from config import settings
+from controllers import setup_logger, shutdown_worker_processes, start_worker_processes
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from models import Token, User
+from routers import (config, develop, network,  # , set_configs#, sim
+                     streaming, webSocket, multiSim)
+from sessions import sessions
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -30,7 +27,7 @@ app.include_router(network.router)
 app.include_router(develop.router)
 app.include_router(streaming.router)
 app.include_router(webSocket.router)
-app.include_router(webSocketDev.router)
+app.include_router(multiSim.router)
 
 
 # app.include_router(set_configs.router)
@@ -49,43 +46,40 @@ app.add_middleware(
 async def root():
     return {"message": "Hello Bigger Applications!"}
 
+@app.get("/uuid")
+async def uuid():
+    return JSONResponse(content=str(uuid4()), status_code=status.HTTP_200_OK)
 
-def create_jwt_token(data: dict) -> str:
-    to_encode = data.copy()
-    to_encode.update({"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=15)})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
 
-@app.post("/generate-token/")
-async def generate_token():
-    session_data = {"session": str(uuid.uuid4()) }
-    token = create_jwt_token(session_data)
-    return {"access_token": token}
+@app.post("/token", response_model=Token)
+async def login_for_access_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+):
+    user = verify_session(sessions=sessions, client_uuid=form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.uuid}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
-@app.middleware("http")
-async def decode_jwt(request: Request, call_next):
-    print("Request:", request.headers)
-    if 'Authorization' in request.headers:
-        token = request.headers['Authorization']
-        print("Received token:", token)
-        try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            print("Decoded payload:", payload)
-            request.state.session_data = payload
-        except jwt.ExpiredSignatureError:
-            logger.error("Token has expired")
-            raise HTTPException(status_code=401, detail="Token has expired")
-        except jwt.InvalidTokenError:
-            logger.error("Invalid token")
-            raise HTTPException(status_code=401, detail="Invalid token")
-    response = await call_next(request)
-    return response
+@app.get("/test-token/", response_model=User)
+async def test_token(client: Annotated[User, Depends(get_current_active_user)]):
+    return JSONResponse(content=client.uuid, status_code=status.HTTP_200_OK)
 
-@app.get("/test-token/")
-async def test_token(request: Request):
-    session_data = request.state.session_data if hasattr(request.state, 'session_data') else None
-    return {"session_data": session_data}
+# @app.on_event("startup")
+# def startup_event():
+#     start_worker_processes()
 
+# @app.on_event("shutdown")
+# def shutdown_event():
+#     shutdown_worker_processes()
 
 if __name__ == "__main__":
     log_file = pathlib.Path('Logs/debug.log')
