@@ -271,7 +271,7 @@
             }
         },
         setup() {
-            const nodeSize = 16
+            const nodeSize = 50
 
             const configs = vNG.defineConfigs({
                 view: {
@@ -311,7 +311,7 @@
                 edge: {
                     normal: {
                         color: "#aaa",
-                        width: 2,
+                        width: 6,
                     },
                     type: "straight",
                 },
@@ -358,7 +358,7 @@
 <style>
 .graph {
     width: 100%;
-    height: 60vh;
+    height: 80vh;
     border: 1px solid #ccc;
 }
 .control-panel {
