@@ -33,147 +33,176 @@
         <li>Node Users</li>
       </ul>
     </div>
-
     <div class="panel">
       <form id="paramForm" v-on:submit.prevent="submitForm" >
-        <h2> Parameters Panel</h2>
-        <div>
-          <label>Number of Nodes *:</label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+        <!-- Row 1 -->
+        <div class="row">
+          <h2> Parameters Panel</h2>
+
+          <div class="group">
+            <label>Graph Number *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">What graph you would like to set configurations for.</span>
               </span>
-              <span class="tip">The number of nodes in the network (network size).</span>
-            </span>
+            </div>
+            <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+              <option value="random">Graph 1</option>
+            </select>
           </div>
-          <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" name="total_nodes" required>
-        </div>
+
+          <div class="group">
+            <label>Number of Nodes *:</label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">The number of nodes in the network (network size).</span>
+              </span>
+            </div>
+            <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" name="total_nodes" required>
+          </div>
         
-        <div>
-          <label>Number of Exposed Nodes *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+
+          <div class="group">
+            <label>Number of Exposed Nodes *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">The number of exposed nodes in the network.</span>
               </span>
-              <span class="tip">The number of exposed nodes in the network.</span>
-            </span>
+            </div>
+            <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" name="total_endpoints" required>
           </div>
-          <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" name="total_endpoints" required>
         </div>
 
-        <div>
-          <label>Number of Layers *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+          <!-- Row 2 -->
+        <div class="row">
+          <div class="group">
+            <label>Number of Layers *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">The number of layers in the network</span>
               </span>
-              <span class="tip">The number of layers in the network</span>
-            </span>
+            </div>
+            <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" name="total_layers" required>
           </div>
-          <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" name="total_layers" required>
+        
+          <div class="group">
+            <label>Compromise Ratio *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">The ratio number that will terminate the simulation if reached.</span>
+              </span>
+            </div>
+            <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" name="terminate_compromise_ratio" required>
+          </div>
+
+          <div class="group">
+            <label>MTD Interval *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">The time interval to trigger an MTD(s)</span>
+              </span>
+            </div>
+            <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" name="mtd_interval" required>
+          </div>
         </div>
 
-        <div>
-          <label>Compromise Ratio *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+          <!-- Row 3 -->
+        <div class="row">
+          <div class="group">
+            <label>Finish Time *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">How long the simulation should run for</span>
               </span>
-              <span class="tip">The ratio number that will terminate the simulation if reached.</span>
-            </span>
+            </div>
+            <input id="param" type="text" placeholder="Finish Time..." v-model="finishTime" name="finish_time" required>
           </div>
-          <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" name="terminate_compromise_ratio" required>
-        </div>
+        
 
-        <div>
-          <label>MTD Interval *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+        
+          <div class="group">
+            <label>Checkpoints *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">How often snapshots are taken of the simulation</span>
               </span>
-              <span class="tip">The time interval to trigger an MTD(s)</span>
-            </span>
+            </div>
+            <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
           </div>
-          <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" name="mtd_interval" required>
-        </div>
 
-        <div>
-          <label>Finish Time *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+          <div class="group">
+            <label>Scheme *: </label>
+            <div class="tooltip-container">
+              <span id="tooltip">
+                <span class='info'>
+                  <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                </span>
+                <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
               </span>
-              <span class="tip">How long the simulation should run for</span>
-            </span>
+            </div>
+            <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
+              <option value="random">random</option>
+              <option value="simultaneous"> simultaneous</option>
+              <option value="alternative">alternative</option>
+              <option value="single">single</option>
+              <option value="None">none</option>
+            </select>
           </div>
-          <input id="param" type="text" placeholder="Finish Time..." v-model="finishTime" name="finish_time" required>
-        </div>
-
-        <div>
-          <label>Checkpoints *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-              </span>
-              <span class="tip">How often snapshots are taken of the simulation</span>
-            </span>
-          </div>
-          <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
-        </div>
-
-        <div>
-          <label>Scheme *: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-              </span>
-              <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
-            </span>
-          </div>
-          <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
-            <option value="random">random</option>
-            <option value="simultaneous"> simultaneous</option>
-            <option value="alternative">alternative</option>
-            <option value="single">single</option>
-            <option value="None">none</option>
-          </select>
         </div>
 
         <p id="advanced" class="advanced" @click="toggleAdvanced()">Advanced</p>
         <div id="advancedPanel" class="hidden">
-          <div>
-          <label>Total Subnets: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-              </span>
-              <span class="tip">The number of subnets</span>
-            </span>
-          </div>
-          <input id="param" type="text" placeholder="Total Subnets..." v-model="totalSubnets" name="total_subnets">
-        </div>
+          <div class="row">
+            <div class="group">
+              <label>Total Subnets: </label>
+              <div class="tooltip-container">
+                <span id="tooltip">
+                  <span class='info'>
+                    <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                  </span>
+                  <span class="tip">The number of subnets</span>
+                </span>
+              </div>
+              <input id="param" type="text" placeholder="Total Subnets..." v-model="totalSubnets" name="total_subnets">
+            </div>
 
-        <div >
-          <label>Target Layers: </label>
-          <div class="tooltip-container">
-            <span id="tooltip">
-              <span class='info'>
-                <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
-              </span>
-              <span class="tip">How often snapshots are taken of the simulation</span>
-            </span>
+            <div class="group">
+              <label>Target Layers: </label>
+              <div class="tooltip-container">
+                <span id="tooltip">
+                  <span class='info'>
+                    <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
+                  </span>
+                  <span class="tip">How often snapshots are taken of the simulation</span>
+                </span>
+              </div>
+              <input id="param" type="text" placeholder="Target Layers..." v-model="targetLayers" name="target_layers">
+            </div>
           </div>
-          <input id="param" type="text" placeholder="Target Layers..." v-model="targetLayers" name="target_layers">
-        </div>
 
           <div >
             <span id="tooltip">
@@ -189,26 +218,39 @@
             </span>
           </div>
 
-          <label>Complete Topology Shuffle: </label>
-          <input id="param" type="text" placeholder="Complete Topology Shuffle..." name="CompleteTopologyShuffle" v-model="compTopoShuffle">
+          <div class="row">
+            <div class="group">
+              <label>Complete Topology Shuffle: </label>
+              <input id="param" type="text" placeholder="Complete Topology Shuffle..." name="CompleteTopologyShuffle" v-model="compTopoShuffle">
+            </div>
+            <div class="group">
+              <label>Host Topology Shuffle: </label>
+              <input id="param" type="text" placeholder="Host Topology Shuffle..." name="HostTopologyShuffle" v-model="hostTopoShuffle">
+            </div>
+            <div class="group">
+              <label>IP Shuffle: </label>
+              <input id="param" type="text" placeholder="IP Shuffle..." name="IPShuffle" v-model="ipShuffle">
+            </div>
+          </div>
 
-          <label>Host Topology Shuffle: </label>
-          <input id="param" type="text" placeholder="Host Topology Shuffle..." name="HostTopologyShuffle" v-model="hostTopoShuffle">
-
-          <label>IP Shuffle: </label>
-          <input id="param" type="text" placeholder="IP Shuffle..." name="IPShuffle" v-model="ipShuffle">
-
-          <label>OS Diversity: </label>
-          <input id="param" type="text" placeholder="OS Diversity..." name="OSDiversity" v-model="osDiveristy">
-
-          <label>Port Shuffle: </label>
-          <input id="param" type="text" placeholder="Port Shuffle..." name="PortShuffle" v-model="portShuffle">
-
-          <label>Service Diversity: </label>
-          <input id="param" type="text" placeholder="Service Diversity..." name="ServiceDivesity" v-model="ServDiversity">
-
-          <label>User Shuffle: </label>
-          <input id="param" type="text" placeholder="User Shuffle..." name="UserShuffle" v-model="userShuffle">
+          <div class="row">
+            <div class="group">
+              <label>OS Diversity: </label>
+              <input id="param" type="text" placeholder="OS Diversity..." name="OSDiversity" v-model="osDiveristy">
+            </div>
+            <div class="group">
+              <label>Port Shuffle: </label>
+              <input id="param" type="text" placeholder="Port Shuffle..." name="PortShuffle" v-model="portShuffle">
+            </div>
+            <div class="group">
+              <label>Service Diversity: </label>
+              <input id="param" type="text" placeholder="Service Diversity..." name="ServiceDivesity" v-model="ServDiversity">
+            </div>
+            <div class="group">
+              <label>User Shuffle: </label>
+              <input id="param" type="text" placeholder="User Shuffle..." name="UserShuffle" v-model="userShuffle">
+            </div>
+          </div>
 
           <div>
             <span id="tooltip">
@@ -223,15 +265,20 @@
             </span>
           </div>
 
-          <label>Simultaneous: </label>
-          <input id="param" type="text" placeholder="(value, value)" name="simultaneous" v-model="similtaneous">
-
-          <label>Random: </label>
-          <input id="param" type="text" placeholder="(value, value)" name="random" v-model="random">
-
-          <label>Alternative: </label>
-          <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="alternative">
-
+          <div class="row">
+            <div class="group">
+              <label>Simultaneous: </label>
+              <input id="param" type="text" placeholder="(value, value)" name="simultaneous" v-model="similtaneous">
+            </div>
+            <div class="group">
+              <label>Random: </label>
+              <input id="param" type="text" placeholder="(value, value)" name="random" v-model="random">
+            </div>
+            <div class="group">
+              <label>Alternative: </label>
+              <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="alternative">
+            </div>
+          </div>
         </div>
 
         <input type="submit" value="Submit">
@@ -241,6 +288,7 @@
     <div class="network">
       <Graph></Graph>
     </div>
+    <button class="addGraph" @click="addGraph">Add Graph</button>
   </div>
 </template>
 
@@ -277,6 +325,7 @@ export default {
       random:'',
       alternative:'',
       showInstructions: false,
+      schemeGraph:'random',
     };
   },
 
@@ -517,6 +566,17 @@ export default {
     toggleInstructions(){
       this.showInstructions = !this.showInstructions;
     },
+    addGraph(){
+      const paramSelect = document.getElementById('param');
+
+      const newOption = document.createElement('option');
+      newOption.text = `Graph ${paramSelect.options.length + 1}`;
+      newOption.value = `graph${paramSelect.options.length + 1}`;
+
+      paramSelect.appendChild(newOption);
+
+      this.schemeGraph = newOption.value;
+   }
   },
 };
 </script>
@@ -647,7 +707,7 @@ form {
 .tooltip-container{
   position: relative;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: auto;
 }
 
 .tooltip-container .info{
@@ -741,5 +801,43 @@ form {
   margin-left: 0.5em;
   border-radius: 50%;
   display: inline-block;
+}
+
+.row{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.group{
+  flex: 1;
+}
+
+.group .tooltip-container{
+  position: relative;
+}
+
+.group .info{
+  margin-right: 5px;
+}
+
+.group select{
+  margin-top: 15px;
+}
+
+.addGraph{
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+ }
+
+ .addGraph:hover{
+  background-color: #333;
 }
 </style>
