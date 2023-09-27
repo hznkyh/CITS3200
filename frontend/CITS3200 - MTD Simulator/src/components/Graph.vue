@@ -366,7 +366,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    gap: 1025px;
+    gap: 400px;
 }
 .button-style {
     background-color: #000;
@@ -389,6 +389,5 @@
     font-size: 20px;
 }
 </style>
-```
 
 
