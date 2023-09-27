@@ -596,6 +596,11 @@ export default {
     addGraph(){
       const paramSelect = document.getElementById('param');
 
+      if(paramSelect.options.length >=5){
+        alert("You can only add up to 5 graphs.");
+        return;
+      }
+
       const newOption = document.createElement('option');
       newOption.text = `Graph ${paramSelect.options.length + 1}`;
       newOption.value = `graph${paramSelect.options.length + 1}`;
