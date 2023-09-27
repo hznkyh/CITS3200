@@ -488,6 +488,33 @@ export default {
     checkAdvancedDataEntered() {
       var json_string = new Object();
       var added = 0;
+      var uniqueValues = new Set();
+
+      var mtdPriorityInputs = [
+        this.compTopoShuffle,
+        this.hostTopoShuffle,
+        this.ipShuffle,
+        this.osDiveristy,
+        this.portShuffle,
+        this.ServDiversity,
+        this.userShuffle
+      ]
+
+      for(var i = 0; i < mtdPriorityInputs.length; i++){
+        var inputValues = mtdPriorityInputs[i];
+        if(inputValues != '');
+        var numericValues = parseInt(inputValues);
+        if(numericValues >= 1 && numericValues <=7){
+          if (uniqueValues.has(numericValues)){
+            alert("Values 1 to 7 can only input once.");
+            return null;
+          }
+          uniqueValues.add(numericValues);
+        } else {
+          alert("Input values must be between 1 and 7");
+          return null;
+        }
+      }
 
       if (
         (this.compTopoShuffle !== '' ||
