@@ -61,7 +61,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The number of nodes in the network (network size).</span>
+                <span class="tip">The number of nodes in the network (network size). E.g., 100</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" name="total_nodes" required>
@@ -75,7 +75,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The number of exposed nodes in the network.</span>
+                <span class="tip">The number of exposed nodes in the network. E.g., 5</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Number of Exposed Nodes..." v-model="nodeExposed" name="total_endpoints" required>
@@ -91,7 +91,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The number of layers in the network</span>
+                <span class="tip">The number of layers in the network. E.g., 4</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" name="total_layers" required>
@@ -104,7 +104,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The ratio number that will terminate the simulation if reached.</span>
+                <span class="tip">The ratio number that will terminate the simulation if reached. This value need to be greater than 0 and less than 1. E.g., 0.8</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Compromise Ratio..." v-model="compromisedRatio" name="terminate_compromise_ratio" required>
@@ -117,7 +117,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The time interval to trigger an MTD(s)</span>
+                <span class="tip">The time interval to trigger an MTD(s). E.g., 5</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="MTD Interval..." v-model="interval" name="mtd_interval" required>
@@ -133,7 +133,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">How long the simulation should run for</span>
+                <span class="tip">How long the simulation should run for. This value needs to be greater than 3000.</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Finish Time..." v-model="finishTime" name="finish_time" required>
@@ -148,7 +148,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">How often snapshots are taken of the simulation</span>
+                <span class="tip">How often snapshots are taken of the simulation. This value needs to be greater than 1000.</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Checkpoints..." v-model="checkpoints" name="checkpoints" required>
@@ -184,7 +184,7 @@
                   <span class='info'>
                     <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                   </span>
-                  <span class="tip">The number of subnets</span>
+                  <span class="tip">The number of subnets. E.g., 4</span>
                 </span>
               </div>
               <input id="param" type="text" placeholder="Total Subnets..." v-model="totalSubnets" name="total_subnets">
@@ -197,7 +197,7 @@
                   <span class='info'>
                     <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                   </span>
-                  <span class="tip">How often snapshots are taken of the simulation</span>
+                  <span class="tip">How often snapshots are taken of the simulation. E.g., 4</span>
                 </span>
               </div>
               <input id="param" type="text" placeholder="Target Layers..." v-model="targetLayers" name="target_layers">
@@ -211,7 +211,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">Below you have the choice to change the priority of options the defender has to avoid an attack. By default (leave empty) it is ordered 1-7 from top to bottom. If you wish
+                <span class="tip">Below you have the choice to change the priority of options the defender has to avoid an attack. By default (leave empty) it is ordered 1 to 7 from top to bottom. If you wish
                   to change the order please fill in the form.
                 </span>
             </div>
@@ -349,7 +349,7 @@ export default {
         {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
         {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
         {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
-        {field: this.checkpoints, validator: this.validateFloatInputs, fieldName: 'Checkpoints'},
+        {field: this.checkpoints, validator: this.validateCheckpoints, fieldName: 'Checkpoints'},
         {field: this.totalSubnets, validator: this.validateTotalSubnets, fieldName: 'Total Subsets'},
         {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
         {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
@@ -442,6 +442,10 @@ export default {
     validateFloatInputs(value){
       const parsedValue = parseFloat(value);
       return !isNaN(parsedValue) && parsedValue >= 0.0;
+    },
+    validateCheckpoints(value){
+      const parsedValue = parseFloat(value);
+      return !isNaN(parsedValue) && parsedValue >= 1000;
     },
     validateRatio(value){
       const parsedValue = parseFloat(value)
