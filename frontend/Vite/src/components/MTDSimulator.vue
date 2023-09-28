@@ -49,8 +49,8 @@
                 <span class="tip">What graph you would like to set configurations for.</span>
               </span>
             </div>
-            <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
-              <option value="random">Graph 1</option>
+            <select id="param" type="text" placeholder="Graph Number" v-model="graphNum" name="Graph Number" required>
+              <option value="graph1">Graph 1</option>
             </select>
           </div>
 
@@ -304,6 +304,7 @@ export default {
   data(){
     return{
       msg: '',
+      graphNum: '',
       nodeNumber:'',
       nodeExposed:'',
       layers:'',
@@ -376,6 +377,9 @@ export default {
          // For config, for each field check if they have been entered and return null if not: 
         // For config overall, return null if no fields have been entered 
           var mainData = ({
+            "graph":{
+              "graph_number": this.graphNum,
+            },
             "run": { 
               "total_nodes": this.nodeNumber,
               "total_endpoints": this.nodeExposed,
