@@ -1,39 +1,20 @@
 import itertools
 import logging
-import sys
 import time
-from concurrent.futures import Future
-from pathlib import Path
-from threading import Lock, Thread
-from typing import Annotated, Any
+from typing import Annotated, List
 from auth import get_current_active_user
-from models import User
-from controllers.loggerConfig import setup_logger
-
-# Setup the logger
-logger = logging.getLogger(__name__)
-setup_logger(logger)
-
-# from models.forms import Item,MTD_PRIORITYItem,formData
-from models.forms import ParameterRequest
-from fastapi.responses import JSONResponse, RedirectResponse
-from fastapi import APIRouter, Depends, HTTPException
-from itertools import chain, count
-
-from concurrent.futures import ProcessPoolExecutor
-from fastapi import APIRouter, HTTPException
-import logging
-from controllers.loggerConfig import setup_logger
-from models.forms import ParameterRequest
-import itertools
-import time
-from threading import Thread, Lock
-
-# from networkx.utils import to_tuple
-from controllers.serialiser import serialize_graph
-import sys
+from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, HTTPException, status
+from concurrent.futures import Future
+from threading import Lock, Thread
+from controllers import serialize_graph, ProcessPoo
 from simulator.adapter import create_sim
+from models import User, ParameterRequest, Parameters
 from sessions import sessions
+from config import parameters
+import copy
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/network", tags=["network"], responses={404: {"description": "Not found"}}
@@ -44,26 +25,8 @@ futuresComplete = False
 messageQueueLock = Lock()
 messageQueue = []
 
-POOL = ProcessPoolExecutor(max_workers=2)  # Assuming 4 processes for simplicity
-parameters = {
-    "start_time": 0,
-    "finish_time": 3000,
-    "checkpoints": range(0, 3000, 1000),
-    "new_network": True,
-    "scheme": "random",
-    "mtd_interval": 4,
-    "custom_strategies": None,
-    "total_nodes": 20,
-    "total_endpoints": 5,
-    "total_subnets": 8,
-    "total_layers": 4,
-    "target_layer": 4,
-    "total_database": 2,
-    "terminate_compromise_ratio": 0.8,
-}
-# ... [rest of your imports and setup]
 
-def checkFuturesCompletion(futures:dict[Future, int], uuid):
+def checkFuturesCompletion(futures: dict[Future, int], uuid):
     """
     The function `checkFuturesCompletion` checks the completion status of a list of futures and adds
     their results to a message queue.
@@ -77,16 +40,17 @@ def checkFuturesCompletion(futures:dict[Future, int], uuid):
     """
     global futuresComplete
     doneFutures = set()
-    messages =[]
+    messages = []
     logger.debug("Started checking futures' completion")
 
     # responsible for checking the completion status of a list of futures and adding their results to
     # a message queue.
     while not futuresComplete:
-        for future in futures:
+        for future, id in futures.items():
             if future.done() and future not in doneFutures:
                 doneFutures.add(future)
                 result = future.result()  # Get the result of the future
+                # print(result, id)
                 logger.debug(
                     f"Future {futures[future]} completed with result: {result}."
                 )
@@ -94,71 +58,142 @@ def checkFuturesCompletion(futures:dict[Future, int], uuid):
                 with messageQueueLock:  # Safely add the result to the message queue
                     messageQueue.append(result)
 
-        # The code block `if len(doneFutures) == len(futures): futuresComplete = True` is checking if all the
-        # futures in the `futures` list have completed. If the number of completed futures (`doneFutures`) is
-        # equal to the total number of futures (`len(futures)`), it means that all the futures have completed
-        # their execution. In that case, the `futuresComplete` flag is set to `True` to indicate that all the
-        # futures are completed. This flag is used in the `checkFuturesCompletion` function to determine when
-        # to stop checking the completion status of the futures.
         if len(doneFutures) == len(futures):
             futuresComplete = True
             logger.debug("All futures are completed.")
         time.sleep(1)
+
     logger.debug("Stopped checking futures' completion.")
-    print(messages)
-    # sessions[uuid]['status'] = "completed"
-    # sessions[uuid]["evaluation"] = [ message for  in messages]
-    # sessions[uuid]["snapshots"] = "completed"
+    sessions[uuid]["evaluation"] = [
+        copy.deepcopy(message["evaluation"]) for message in messages
+    ]
+    sessions[uuid]["snapshots"] = [
+        copy.deepcopy(message["snapshots"]) for message in messages
+    ]
 
 
 @router.get("/muti-graph-prams")
 async def get_prams():
-    listParams = itertools.repeat(parameters, 4)
-    yield JSONResponse(content={"result": listParams})
+    test_config = {
+        "MTD_PRIORITY": {
+            "CompleteTopologyShuffle": 0,
+            "HostTopologyShuffle": 0,
+            "IPShuffle": 0,
+            "OSDiversity": 0,
+            "PortShuffle": 0,
+            "ServiceDiversity": 0,
+            "UserShuffle": 0,
+        },
+        "MTD_TRIGGER_INTERVAL": {
+            "simultaneous": [0],
+            "random": [0],
+            "alternative": [0],
+        },
+    }
 
-@router.get("/muti-graph")
+    test_parameters = parameters | dict(
+        Parameters(checkpoints=list(range(0, 3000, 1000)))
+    )
+    listParams = {
+        i: params for i, params in enumerate(itertools.repeat(test_parameters, 2))
+    }
+
+    dict_run = [{"run": item, "config": test_config} for item in listParams.values()]
+    return JSONResponse(content=dict_run)
+
+
+@router.post("/muti-graph")
 async def get_graph(
-    client: Annotated[User, Depends(get_current_active_user)]
-                    ):
-    global POOL
+    prams: List[ParameterRequest],
+    client: Annotated[User, Depends(get_current_active_user)],
+):
     # The code block you provided is creating a list of parameters (`listParams`) using the
     # `itertools.repeat()` function. The `itertools.repeat()` function returns an iterator that repeats
     # the specified value (`parameters` in this case) a specified number of times (`10` in this case).
+    # print(prams)
+    final_params = parameters
 
-    listParams = itertools.repeat(parameters, 4)
+    if "checkpoints" in final_params:
+        if type(final_params["checkpoints"]) is int:
+            final_params["checkpoints"] = range(
+                final_params["start_time"],
+                int(final_params["finish_time"]),
+                final_params["checkpoints"],
+            )
+    # listParams = itertools.repeat(final_params, 2)
+    print(prams)
 
     futuresList = {
-        POOL.submit(create_sim, **params): i
-        for i, params in enumerate(listParams)
+        ProcessPoo.get_pool().submit(create_sim, **params): i
+        for i, params in enumerate(prams)
     }
-    logger.info(f"Submitted {len(futuresList)} tasks to ProcessPoolExecutor.")
+    logger.debug(f"Submitted {len(futuresList)} tasks to ProcessPoolExecutor.")
 
-    futuresChecker = Thread(target=checkFuturesCompletion, args=(futuresList,client.uuid))
+    futuresChecker = Thread(
+        target=checkFuturesCompletion, args=(futuresList, client.uuid)
+    )
     futuresChecker.start()
-    logger.info("Started futures checker thread.")
-    
+    logger.debug("Started futures checker thread.")
+
     futuresChecker.join()
-    logger.info("Futures checker thread completed.")
-    POOL.shutdown(wait=True)
+    logger.debug("Futures checker thread completed.")
+    # ProcessPoo.shutdown()
     return {"status": "completed", "number_of_results": len(messageQueue)}
 
 
 @router.get("/result/{index}")
-async def get_result(index: int):
-    with messageQueueLock:
-        try:
-            print(messageQueue[index])
-            return JSONResponse(content={"result":"23"})
-        except IndexError:
-            raise HTTPException(status_code=404, detail="Result not found")
-        
+async def get_result(
+    index: int, client: Annotated[User, Depends(get_current_active_user)]
+):
+    try:
+        response = [
+            serialize_graph(graph)
+            for graph in sessions[client.uuid]["snapshots"][index]
+        ]
+        logger.debug(f"Returning result: {response}")
+        return JSONResponse(content=response, status_code=status.HTTP_202_ACCEPTED)
+    except IndexError:
+        logger.error("Result not found")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Result not found"
+        )
+
 
 @router.get("/evaluation/{index}")
-async def get_result(index: int):
-    with messageQueueLock:
-        try:
-            print(messageQueue[index])
-            return JSONResponse(content={"result": "12"})
-            # return JSONResponse(content={"result": messageQueue[index]})
-        except IndexError:
-            raise HTTPException(status_code=404, detail="Result not found")
+async def get_result(
+    index: int, client: Annotated[User, Depends(get_current_active_user)]
+):
+    try:
+        evaluation = sessions[client.uuid]["evaluation"][index]
+        response = evaluation.compromised_num()
+        print(response)
+        logger.debug(f"Returning result: {response}")
+        return JSONResponse(content=response, status_code=status.HTTP_202_ACCEPTED)
+    except IndexError:
+        logger.error("Result not found") 
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Result not found"
+        )
+
+
+@router.post("/config")
+async def get_config(
+    prams: List[ParameterRequest],
+    client: Annotated[User, Depends(get_current_active_user)],
+):
+    print(prams)
+
+    # Handle run parameters
+    global stored_params
+    run_params = [pram.run.model_dump() for pram in prams]
+    stored_params = [
+        {key: value for key, value in pram.items() if value is not None}
+        for pram in run_params
+    ]
+
+    # #Handle config_variables
+    # config_params = prams.config
+    # if (item.config is not None):
+    #     config_params = config_params.model_dump()
+    # configs.config = configs.set_config(config_params)
+    return JSONResponse(content=stored_params, status_code=status.HTTP_202_ACCEPTED)

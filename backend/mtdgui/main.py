@@ -7,24 +7,25 @@ from uuid import uuid4
 import uvicorn
 from auth import create_access_token, get_current_active_user, verify_session
 from config import settings
-from controllers import setup_logger, shutdown_worker_processes, start_worker_processes
+from controllers import setup_logger, ProcessPoo
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from models import Token, User
-from routers import (config, develop, network,  # , set_configs#, sim
+from routers import (network, graphConfig, # , set_configs#, sim 
                      streaming, webSocket, multiSim)
 from sessions import sessions
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
+# Initialize the pool when the app starts
+pool = ProcessPoo().get_pool()
 
 app = FastAPI(debug=True)
 
-app.include_router(config.router)
+app.include_router(graphConfig.router)
 app.include_router(network.router)
-app.include_router(develop.router)
 app.include_router(streaming.router)
 app.include_router(webSocket.router)
 app.include_router(multiSim.router)
@@ -73,13 +74,13 @@ async def login_for_access_token(
 async def test_token(client: Annotated[User, Depends(get_current_active_user)]):
     return JSONResponse(content=client.uuid, status_code=status.HTTP_200_OK)
 
-# @app.on_event("startup")
-# def startup_event():
-#     start_worker_processes()
 
-# @app.on_event("shutdown")
-# def shutdown_event():
-#     shutdown_worker_processes()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    # Shutdown the pool when the app stops
+    ProcessPoo.shutdown()
+
 
 if __name__ == "__main__":
     log_file = pathlib.Path('Logs/debug.log')

@@ -4,37 +4,50 @@ import logging
 
 # Setting up the logger
 logger = logging.getLogger(__name__)
-task_queue = Queue()
-exit_signal = Event()
 
-def worker():
-    """The function executed by each process."""
-    while not exit_signal.is_set():
-        try:
-            # Get a task from the queue and execute it
-            task = task_queue.get(timeout=1)  # waits for 1 second for a task
-            task()  # Assuming the task is a callable function
-            logger.info("Task executed successfully.")
-        except Exception as e:
-            logger.error(f"Error executing task: {e}")
+class ProcessPoo:
+    """
+    A class that implements a Singleton design pattern for ProcessPoolExecutor.
 
-executor = None
+    Attributes:
+    _instance (SingletonExecutor): The SingletonExecutor instance.
+    _pool (ProcessPoolExecutor): The ProcessPoolExecutor instance.
+    """
 
-def start_worker_processes():
-    global executor
-    logger.info("Starting worker processes...")
-    executor = ProcessPoolExecutor(max_workers=3)
-    for _ in range(3):  # or however many processes you want
-        executor.submit(worker)
-    logger.info("Worker processes started.")
+    _instance = None
+    _pool = None
 
-def shutdown_worker_processes():
-    logger.info("Shutting down worker processes...")
-    exit_signal.set()
-    executor.shutdown(wait=True)
-    logger.info("Worker processes shut down.")
+    def __new__(cls):
+        """
+        Creates a new instance of SingletonExecutor if it does not exist.
 
-def add_task_to_worker(task):
-    """Utility function to add a task to the worker processes."""
-    logger.info("Adding task to worker.")
-    task_queue.put(task)
+        Returns:
+        SingletonExecutor: The SingletonExecutor instance.
+        """
+        if cls._instance is None:
+            cls._instance = super(ProcessPoo, cls).__new__(cls)
+            cls._pool = ProcessPoolExecutor(max_workers=2)
+            logger.info("Initialized ProcessPoolExecutor.")
+        return cls._instance
+
+    @classmethod
+    def get_pool(cls):
+        """
+        Returns the ProcessPoolExecutor instance.
+
+        Returns:
+        ProcessPoolExecutor: The ProcessPoolExecutor instance.
+        """
+        return cls._pool
+
+    @classmethod
+    def shutdown(cls, wait=True):
+        """
+        Shuts down the ProcessPoolExecutor instance.
+
+        Args:
+        wait (bool): Whether to wait for all running tasks to complete before shutting down.
+        """
+        if cls._pool:
+            cls._pool.shutdown(wait)
+            logger.debug("Shutdown ProcessPoolExecutor.")
