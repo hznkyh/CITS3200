@@ -11,16 +11,14 @@ import axios from 'axios'
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = 'http://localhost:8000/'
 
-const session = await fetch("http://127.0.0.1:8000/uuid").then((response) => response.json()).then((data) => data)
+const session = await axios.get("http://localhost:8000/uuid").then((data) => data.data)
+console.log('session',session);
 
-const token = await axios.post("/token", {
-    grant_type: null,
-    username: session,
-    password: session,
-    scope: null,
-    client_id: null,
-    client_secret: null,
-}).then((response) => response.json()).then((data) => data);
+const params = new URLSearchParams();
+params.append('username', session);
+params.append('password', session);
+
+const token = await axios.post("http://localhost:8000/token", params).then((data) => data.data.access_token)
 
 console.log('token',token);
 axios.defaults.headers.common = {
