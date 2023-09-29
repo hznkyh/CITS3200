@@ -7,8 +7,6 @@ class SnapshotCheckpoint:
 
     def __init__(self, env=None, checkpoints=None):
         self.env = env
-        print("check env is ")
-        print(env)
         self._proceed_time = 0
         self._checkpoint_stack = checkpoints
 
