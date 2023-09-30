@@ -410,7 +410,7 @@
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
     </div>
-    <p class="message"> {{ msg }} </p>
+    <!-- <p class="message"> {{ msg }} </p> -->
     <div id="node-info" class="node-info" v-if="showNodeInfo">
         <p>os type: {{ os_type }}</p>
         <p>os version: {{ os_version }}</p>
