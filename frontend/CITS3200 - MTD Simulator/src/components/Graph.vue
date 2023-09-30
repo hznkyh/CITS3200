@@ -253,6 +253,10 @@
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
             },
+
+            toggleNodeInfo() {
+                this.showNodeInfo = !this.showNodeInfo
+            }
         },
         data() {
             return {
@@ -273,6 +277,7 @@
                 edges,
                 layouts,
                 selectedNodes,
+                showNodeInfo: false,
             }
         },
         setup() {
@@ -344,6 +349,7 @@
                 if (newVal[0]) {
                     console.log(nodes[newVal[0]].host)
                     if (nodes[newVal[0]].host) {
+                        toggleNode()
                         this.os_type = nodes[newVal[0]].host.os_type
                         this.os_version = nodes[newVal[0]].host.os_version
                         this.host_ip = nodes[newVal[0]].host.host_ip
@@ -385,13 +391,13 @@
 
 <template>
     <v-network-graph id="v-graph"
-      ref="graph"
-      class="graph"
-      v-model:selected-nodes="selectedNodes"
-      :nodes="nodes"
-      :edges="edges"
-      :layouts="layouts"
-      :configs="configs"
+    ref="graph"
+    class="graph"
+    v-model:selected-nodes="selectedNodes"
+    :nodes="nodes"
+    :edges="edges"
+    :layouts="layouts"
+    :configs="configs"
     >
     </v-network-graph>
     <div class="control-panel">
@@ -402,9 +408,10 @@
         <button @click="start()">Start/Continue</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
+        <button @click="toggleNodeInfo()">Toggle Node Info</button>
     </div>
     <p class="message"> {{ msg }} </p>
-    <div class="node-info">
+    <div id="node-info" class="node-info" v-if="showNodeInfo">
         <p>os type: {{ os_type }}</p>
         <p>os version: {{ os_version }}</p>
         <p>host ip: {{ host_ip }}</p>
@@ -435,9 +442,24 @@
         height: 20%;
     }
 
+    .hide {
+        display: none;
+    }
+
+    .active {
+        display: block;
+    }
+
     .node-info {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(123, 123, 123, 0.5);
         border: 1px solid black;
         width: 20em;
+        z-index: 1;
     }
 
     .node-info p {
@@ -445,6 +467,7 @@
         padding: 0;
         text-align: left;
         font-size: 0.6em;
+        color: black;
     }
 </style>
 
