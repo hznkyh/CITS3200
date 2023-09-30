@@ -422,7 +422,7 @@
 <style>
     .graph {
         width: 100%;
-        height: 100%;
+        height: 40em;
         border: 1px solid #ccc;
     }
     .control-panel {
