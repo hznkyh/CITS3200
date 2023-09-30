@@ -349,7 +349,7 @@
                 if (newVal[0]) {
                     console.log(nodes[newVal[0]].host)
                     if (nodes[newVal[0]].host) {
-                        toggleNode()
+                        this.toggleNodeInfo()
                         this.os_type = nodes[newVal[0]].host.os_type
                         this.os_version = nodes[newVal[0]].host.os_version
                         this.host_ip = nodes[newVal[0]].host.host_ip
@@ -372,6 +372,7 @@
                     }
                 }
                 else {
+                    this.toggleNodeInfo()
                     this.os_type = ''
                     this.os_version = ''
                     this.host_ip = ''
@@ -408,7 +409,6 @@
         <button @click="start()">Start/Continue</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
-        <button @click="toggleNodeInfo()">Toggle Node Info</button>
     </div>
     <p class="message"> {{ msg }} </p>
     <div id="node-info" class="node-info" v-if="showNodeInfo">
