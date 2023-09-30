@@ -434,6 +434,18 @@
         width: 20%;
         height: 20%;
     }
+
+    .node-info {
+        border: 1px solid black;
+        width: 20em;
+    }
+
+    .node-info p {
+        margin: 0.5em 0 0.5em 1em;
+        padding: 0;
+        text-align: left;
+        font-size: 0.6em;
+    }
 </style>
 
 
