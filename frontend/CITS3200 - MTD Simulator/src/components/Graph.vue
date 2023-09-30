@@ -399,7 +399,7 @@
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
         <button @click="getGraph()">Get</button>
-        <button @click="start()">Start</button>
+        <button @click="start()">Start/Continue</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
     </div>
