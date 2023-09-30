@@ -277,7 +277,7 @@ import { display } from "@microsoft/fast-foundation";
             }
         },
         setup() {
-            const nodeSize = 16
+            const nodeSize = 50
 
             const configs = reactive(vNG.defineConfigs({
                 view: {
@@ -326,7 +326,7 @@ import { display } from "@microsoft/fast-foundation";
                 edge: {
                     normal: {
                         color: "#aaa",
-                        width: 2,
+                        width: 6,
                     },
                     type: "straight",
                 },
@@ -397,10 +397,8 @@ import { display } from "@microsoft/fast-foundation";
         <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
         <button @click="graph?.zoomIn()">Zoom In</button>
         <button @click="graph?.zoomOut()">Zoom Out</button>
-    </div>
-    <div class="control-panel">
         <button @click="getGraph()">Get</button>
-        <button @click="start()">Start/Continue</button>
+        <button @click="start()">Start</button>
         <button @click="manualStep()">Step</button>
         <button @click="stop()">Stop</button>
     </div>
@@ -425,7 +423,6 @@ import { display } from "@microsoft/fast-foundation";
       width: 100%;
       height: 100%;
       border: 1px solid #ccc;
-      /* background-color: black; */
     }
     .control-panel {
       gap: 10px;
@@ -434,13 +431,6 @@ import { display } from "@microsoft/fast-foundation";
     .message {
         margin:0;
     }
-    .node-info {
-        margin:0;
-        color: white;
-        background-color: black;
-        text-align: left;
-    }
 </style>
-```
 
 
