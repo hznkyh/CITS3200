@@ -454,9 +454,10 @@
         position: absolute;
         top: 0;
         right: 0;
+        margin: 3em;
         background-color: white;
         border-radius: 15px;
-        box-shadow: 0 0 20px rgba(123, 123, 123, 0.5);
+        box-shadow: 0 0 20px rgba(206, 206, 206, 0.5);
         border: 1px solid black;
         width: 20em;
         z-index: 1;
