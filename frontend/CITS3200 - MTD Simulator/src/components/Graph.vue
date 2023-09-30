@@ -276,7 +276,7 @@
             }
         },
         setup() {
-            const nodeSize = 50
+            const nodeSize = 20
 
             const configs = reactive(vNG.defineConfigs({
                 view: {
@@ -325,7 +325,7 @@
                 edge: {
                     normal: {
                         color: "#aaa",
-                        width: 6,
+                        width: 3,
                     },
                     type: "straight",
                 },
