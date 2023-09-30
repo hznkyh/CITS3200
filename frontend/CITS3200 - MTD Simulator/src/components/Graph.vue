@@ -343,25 +343,27 @@
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
                     console.log(nodes[newVal[0]].host)
-                    this.os_type = nodes[newVal[0]].host.os_type
-                    this.os_version = nodes[newVal[0]].host.os_version
-                    this.host_ip = nodes[newVal[0]].host.host_ip
-                    this.host_id = nodes[newVal[0]].host.host_id
-                    this.p_u_compromise = nodes[newVal[0]].host.p_u_compromise
-                    this.total_users = nodes[newVal[0]].host.total_users
-                    this.uuid = nodes[newVal[0]].host.uuid
-                    this.total_services = nodes[newVal[0]].host.total_services
-                    this.total_nodes = nodes[newVal[0]].host.total_nodes
-                    this.compromised = nodes[newVal[0]].host.compromised
-                    console.log(nodes[newVal[0]].host.compromised_services)
-                    var compromised_services = ''
-                    for (var i = 0; i < nodes[newVal[0]].host.compromised_services.length; i++) {
-                        compromised_services += `${nodes[newVal[0]].host.compromised_services[i]}`
-                        if (i != nodes[newVal[0]].host.compromised_services.length - 1) {
-                            compromised_services += ', '
+                    if (nodes[newVal[0]].host) {
+                        this.os_type = nodes[newVal[0]].host.os_type
+                        this.os_version = nodes[newVal[0]].host.os_version
+                        this.host_ip = nodes[newVal[0]].host.host_ip
+                        this.host_id = nodes[newVal[0]].host.host_id
+                        this.p_u_compromise = nodes[newVal[0]].host.p_u_compromise
+                        this.total_users = nodes[newVal[0]].host.total_users
+                        this.uuid = nodes[newVal[0]].host.uuid
+                        this.total_services = nodes[newVal[0]].host.total_services
+                        this.total_nodes = nodes[newVal[0]].host.total_nodes
+                        this.compromised = nodes[newVal[0]].host.compromised
+                        console.log(nodes[newVal[0]].host.compromised_services)
+                        var compromised_services = ''
+                        for (var i = 0; i < nodes[newVal[0]].host.compromised_services.length; i++) {
+                            compromised_services += `${nodes[newVal[0]].host.compromised_services[i]}`
+                            if (i != nodes[newVal[0]].host.compromised_services.length - 1) {
+                                compromised_services += ', '
+                            }
                         }
+                        this.compromised_services = compromised_services
                     }
-                    this.compromised_services = compromised_services
                 }
                 else {
                     this.os_type = ''
@@ -419,16 +421,18 @@
 
 <style>
     .graph {
-      width: 100%;
-      height: 100%;
-      border: 1px solid #ccc;
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
     }
     .control-panel {
-      gap: 10px;
-      padding: 10px;
+        gap: 10px;
+        padding: 10px;
     }
     .message {
         margin:0;
+        width: 20%;
+        height: 20%;
     }
 </style>
 
