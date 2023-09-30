@@ -284,8 +284,8 @@
                     // onBeforeInitialDisplay: () => layout(),
                     autoPanOnResize: true,
                     scalingObjects: true,
-                    minZoomLevel: 0.5,
-                    maxZoomLevel: 0.5,
+                    minZoomLevel: 0.2,
+                    maxZoomLevel: 1.5,
                     panEnabled: true,
                     zoomEnabled: true,
                     layoutHandler: new ForceLayout({
