@@ -254,8 +254,8 @@
                 // graphComponent.fitToContents();
             },
 
-            toggleNodeInfo() {
-                this.showNodeInfo = !this.showNodeInfo
+            toggleNodeInfo(display) {
+                this.showNodeInfo = display
             }
         },
         data() {
@@ -349,7 +349,7 @@
                 if (newVal[0]) {
                     console.log(nodes[newVal[0]].host)
                     if (nodes[newVal[0]].host) {
-                        this.toggleNodeInfo()
+                        this.toggleNodeInfo(true)
                         this.os_type = nodes[newVal[0]].host.os_type
                         this.os_version = nodes[newVal[0]].host.os_version
                         this.host_ip = nodes[newVal[0]].host.host_ip
@@ -372,7 +372,7 @@
                     }
                 }
                 else {
-                    this.toggleNodeInfo()
+                    this.toggleNodeInfo(false)
                     this.os_type = ''
                     this.os_version = ''
                     this.host_ip = ''
