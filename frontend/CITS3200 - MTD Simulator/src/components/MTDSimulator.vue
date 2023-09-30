@@ -24,13 +24,17 @@
       <h3>Node</h3>
       <p>Clicking on a node will show the node's information. The information is as follows:</p>
       <ul class="list">
-        <li>Node ID</li>
-        <li>Node Type</li>
-        <li>Node State</li>
-        <li>Node IP</li>
-        <li>Node OS</li>
-        <li>Node Services</li>
-        <li>Node Users</li>
+        <li>OS Type</li>
+        <li>OS Version</li>
+        <li>Host IP</li>
+        <li>HosT ID</li>
+        <li>P U Compromise</li>
+        <li>Total users</li>
+        <li>UUID</li>
+        <li>Total services</li>
+        <li>Total Nodes</li>
+        <li>Compromised</li>
+        <li>Compromised Services</li>
       </ul>
     </div>
     <div class="panel">
