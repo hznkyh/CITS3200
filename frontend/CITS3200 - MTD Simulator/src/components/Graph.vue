@@ -10,7 +10,6 @@
         ForceNodeDatum,
         ForceEdgeDatum,
     } from "v-network-graph/lib/force-layout"
-import { display } from "@microsoft/fast-foundation";
 
     const graph = ref<vNG.VNetworkGraphInstance>()
     var nodes: Nodes = reactive({ ...data.nodes })
