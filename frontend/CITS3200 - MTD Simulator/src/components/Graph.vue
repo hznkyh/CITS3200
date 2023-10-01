@@ -360,6 +360,7 @@
                 showNodeInfo: false,
                 showLabel1: true,
                 showGraph:false,
+                propNode:null,
 
                 graph2,
                 nodes2,
@@ -368,7 +369,7 @@
                 showNodeInfo2: false,
                 showLabel2: false,
                 showGraph2: false,
-                propNode:null,
+                propNode2:null,
 
                 showLabel3: false,
                 showLabel4: false,
@@ -448,40 +449,12 @@
                     console.log(nodes[newVal[0]].host)
                     if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
-                        this.os_type = nodes[newVal[0]].host.os_type
-                        this.os_version = nodes[newVal[0]].host.os_version
-                        this.host_ip = nodes[newVal[0]].host.host_ip
-                        this.host_id = nodes[newVal[0]].host.host_id
-                        this.p_u_compromise = nodes[newVal[0]].host.p_u_compromise
-                        this.total_users = nodes[newVal[0]].host.total_users
-                        this.uuid = nodes[newVal[0]].host.uuid
-                        this.total_services = nodes[newVal[0]].host.total_services
-                        this.total_nodes = nodes[newVal[0]].host.total_nodes
-                        this.compromised = nodes[newVal[0]].host.compromised
-                        console.log(nodes[newVal[0]].host.compromised_services)
-                        var compromised_services = ''
-                        for (var i = 0; i < nodes[newVal[0]].host.compromised_services.length; i++) {
-                            compromised_services += `${nodes[newVal[0]].host.compromised_services[i]}`
-                            if (i != nodes[newVal[0]].host.compromised_services.length - 1) {
-                                compromised_services += ', '
-                            }
-                        }
-                        this.compromised_services = compromised_services
+                        var propNode = nodes[newVal[0]].host
+                        this.propNode = propNode
                     }
                 }
                 else {
                     this.toggleNodeInfo(1, false)
-                    this.os_type = ''
-                    this.os_version = ''
-                    this.host_ip = ''
-                    this.host_id = ''
-                    this.p_u_compromise = ''
-                    this.total_users = ''
-                    this.uuid = ''
-                    this.total_services = ''
-                    this.total_nodes = ''
-                    this.compromised = ''
-                    this.compromised_services = ''
                 }
             },
             selectedNodes2(newVal, oldVal) {
@@ -490,7 +463,7 @@
                     if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
                         var propNode = nodes[newVal[0]].host
-                        this.propNode = propNode
+                        this.propNode2 = propNode
                     }
                 }
                 else {
@@ -525,17 +498,7 @@
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
-            <p>os type: {{ os_type }}</p>
-            <p>os version: {{ os_version }}</p>
-            <p>host ip: {{ host_ip }}</p>
-            <p>host id: {{ host_id }}</p>
-            <p>p_u_compromise: {{ p_u_compromise }}</p>
-            <p>total users: {{ total_users }}</p>
-            <p>uuid: {{ uuid }}</p>
-            <p>total services: {{ total_services }}</p>
-            <p>total nodes: {{ total_nodes }}</p>
-            <p>compromised: {{ compromised }}</p>
-            <p>compromised services: {{ compromised_services }}</p>
+            <nodeInfo :node="propNode"></nodeInfo>
         </div>
     </div>
 
@@ -562,7 +525,7 @@
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
-            <nodeInfo :node="propNode"></nodeInfo>
+            <nodeInfo :node="propNode2"></nodeInfo>
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
