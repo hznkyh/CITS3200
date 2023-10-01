@@ -6,14 +6,17 @@ from auth import get_current_active_user
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
 from concurrent.futures import Future
+from concurrent.futures import ProcessPoolExecutor,as_completed
 from threading import Lock, Thread
 from controllers import serialize_graph, ProcessPoo
 from simulator.adapter import create_sim
+from simulator import create_sim, configs
+import simpy
 from models import User, ParameterRequest, Parameters
 from sessions import sessions
 from config import parameters
 import copy
-
+from controllers.pools import handleRequest
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
@@ -72,73 +75,79 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
     ]
 
 
-@router.get("/multi-graph-params")
-async def get_prams():
-    test_config = {
-        "MTD_PRIORITY": {
-            "CompleteTopologyShuffle": 0,
-            "HostTopologyShuffle": 0,
-            "IPShuffle": 0,
-            "OSDiversity": 0,
-            "PortShuffle": 0,
-            "ServiceDiversity": 0,
-            "UserShuffle": 0,
-        },
-        "MTD_TRIGGER_INTERVAL": {
-            "simultaneous": [0],
-            "random": [0],
-            "alternative": [0],
-        },
-    }
-
-    test_parameters = parameters | dict(
-        Parameters(checkpoints=list(range(0, 3000, 1000)))
-    )
-    listParams = {
-        i: params for i, params in enumerate(itertools.repeat(test_parameters, 2))
-    }
-
-    dict_run = [{"run": item, "config": test_config} for item in listParams.values()]
-    return JSONResponse(content=dict_run)
-
-
-@router.post("/multi-graph")
-async def get_graph(
-    prams: List[ParameterRequest],
+@router.post("/multi-graph-params")
+async def get_prams(
+    params: List[ParameterRequest],
     client: Annotated[User, Depends(get_current_active_user)],
 ):
-    # The code block you provided is creating a list of parameters (`listParams`) using the
-    # `itertools.repeat()` function. The `itertools.repeat()` function returns an iterator that repeats
-    # the specified value (`parameters` in this case) a specified number of times (`10` in this case).
-    # print(prams)
-    final_params = parameters
+    # test_config = {
+    #     "MTD_PRIORITY": {
+    #         "CompleteTopologyShuffle": 0,
+    #         "HostTopologyShuffle": 0,
+    #         "IPShuffle": 0,
+    #         "OSDiversity": 0,
+    #         "PortShuffle": 0,
+    #         "ServiceDiversity": 0,
+    #         "UserShuffle": 0,
+    #     },
+    #     "MTD_TRIGGER_INTERVAL": {
+    #         "simultaneous": [0],
+    #         "random": [0],
+    #         "alternative": [0],
+    #     },
+    # }
 
-    if "checkpoints" in final_params:
-        if type(final_params["checkpoints"]) is int:
-            final_params["checkpoints"] = range(
-                final_params["start_time"],
-                int(final_params["finish_time"]),
-                final_params["checkpoints"],
-            )
-    # listParams = itertools.repeat(final_params, 2)
-    print(prams)
+    # test_parameters = parameters | dict(
+    #     Parameters(checkpoints=list(range(0, 3000, 1000)))
+    # )
+    # listParams = {
+    #     i: params for i, params in enumerate(itertools.repeat(test_parameters, 2))
+    # }
+    with ProcessPoolExecutor() as executor:
+        futures = [executor.submit(handleRequest, req) for req in params]
+        results = [future.result() for future in as_completed(futures)]
 
-    futuresList = {
-        ProcessPoo.get_pool().submit(create_sim, **params): i
-        for i, params in enumerate(prams)
-    }
-    logger.debug(f"Submitted {len(futuresList)} tasks to ProcessPoolExecutor.")
+    
+    # dict_run = [{"run": item, "config": test_config} for item in listParams.values()]
+    return JSONResponse(content=results)
 
-    futuresChecker = Thread(
-        target=checkFuturesCompletion, args=(futuresList, client.uuid)
-    )
-    futuresChecker.start()
-    logger.debug("Started futures checker thread.")
 
-    futuresChecker.join()
-    logger.debug("Futures checker thread completed.")
-    # ProcessPoo.shutdown()
-    return {"status": "completed", "number_of_results": len(messageQueue)}
+# @router.get("/multi-graph")
+# async def get_graph(
+
+# ):
+#     # The code block you provided is creating a list of parameters (`listParams`) using the
+#     # `itertools.repeat()` function. The `itertools.repeat()` function returns an iterator that repeats
+#     # the specified value (`parameters` in this case) a specified number of times (`10` in this case).
+#     # print(prams)
+#     # final_params = parameters
+
+#     # if "checkpoints" in final_params:
+#     #     if type(final_params["checkpoints"]) is int:
+#     #         final_params["checkpoints"] = range(
+#     #             final_params["start_time"],
+#     #             int(final_params["finish_time"]),
+#     #             final_params["checkpoints"],
+#     #         )
+#     # # listParams = itertools.repeat(final_params, 2)
+#     # print(prams)
+
+#     # futuresList = {
+#     #     ProcessPoo.get_pool().submit(create_sim, **params): i
+#     #     for i, params in enumerate(prams)
+#     # }
+#     # logger.debug(f"Submitted {len(futuresList)} tasks to ProcessPoolExecutor.")
+
+#     # futuresChecker = Thread(
+#     #     target=checkFuturesCompletion, args=(futuresList, client.uuid)
+#     # )
+#     # futuresChecker.start()
+#     # logger.debug("Started futures checker thread.")
+
+#     # futuresChecker.join()
+#     # logger.debug("Futures checker thread completed.")
+#     # # ProcessPoo.shutdown()
+#     return {"status": "completed", "number_of_results": len(messageQueue)}
 
 
 @router.get("/result/{index}")
