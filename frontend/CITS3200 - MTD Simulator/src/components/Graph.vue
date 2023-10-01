@@ -489,6 +489,8 @@
                     console.log(nodes[newVal[0]].host)
                     if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
+                        var propNode = nodes[newVal[0]].host
+                        this.propNode = propNode
                     }
                 }
                 else {
@@ -560,17 +562,7 @@
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
-            <p>os type: {{ os_type }}</p>
-            <p>os version: {{ os_version }}</p>
-            <p>host ip: {{ host_ip }}</p>
-            <p>host id: {{ host_id }}</p>
-            <p>p_u_compromise: {{ p_u_compromise }}</p>
-            <p>total users: {{ total_users }}</p>
-            <p>uuid: {{ uuid }}</p>
-            <p>total services: {{ total_services }}</p>
-            <p>total nodes: {{ total_nodes }}</p>
-            <p>compromised: {{ compromised }}</p>
-            <p>compromised services: {{ compromised_services }}</p>
+            <nodeInfo :node="propNode"></nodeInfo>
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
