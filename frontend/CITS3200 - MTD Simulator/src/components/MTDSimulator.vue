@@ -289,6 +289,7 @@
         </form>
         <p class="message"> {{ msg }} </p>
     </div>
+    <span @click="test">Test</span>
     <div class="network">
       <Graph></Graph>
     </div>
@@ -335,6 +336,9 @@ export default {
   },
 
   methods: {
+    test() {
+      Graph.methods.revealLabel(2);
+    },
     toggleAdvanced(){
       var advancedContent = document.getElementById("advancedPanel");
       if (advancedContent.classList.contains("hidden")) {

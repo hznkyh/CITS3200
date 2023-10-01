@@ -277,12 +277,10 @@
                     case 1:
                         this.showLabel1 = true;
                         this.showLabel2 = false;
-                        this.showLabel3 = false;
                         break;
                     case 2:
                         this.showLabel1 = true;
                         this.showLabel2 = true;
-                        this.showLabel3 = false;
                         break;
                     default:
                         // Handle other cases or set a default behavior
@@ -318,7 +316,7 @@
                 selectedNodes2,
                 showNodeInfo2: false,
                 showLabel2: false,
-                showGraph2:false,
+                showGraph2: false
             }
         },
         setup() {
@@ -434,6 +432,7 @@
 </script>
 
 <template>
+    <span @click="revealLabel(2)">Simulation 1</span>
     <span id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1">Simulation 1</span>
     <div id="graph1" v-if="showGraph">
         <v-network-graph
