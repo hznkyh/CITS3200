@@ -27,7 +27,7 @@ router = APIRouter(
 futuresComplete = False
 messageQueueLock = Lock()
 messageQueue = []
-
+set_params = None
 
 def checkFuturesCompletion(futures: dict[Future, int], uuid):
     """
@@ -77,8 +77,8 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
 
 @router.post("/multi-graph-params")
 async def get_prams(
-    params: List[ParameterRequest],
-    client: Annotated[User, Depends(get_current_active_user)],
+    params: List[ParameterRequest]
+    # client: Annotated[User, Depends(get_current_active_user)],
 ):
     # test_config = {
     #     "MTD_PRIORITY": {
@@ -103,11 +103,13 @@ async def get_prams(
     # listParams = {
     #     i: params for i, params in enumerate(itertools.repeat(test_parameters, 2))
     # }
-    # with ProcessPoolExecutor() as executor:
-    #     futures = [executor.submit(handleRequest, req) for req in params]
-    #     results = [future.result() for future in as_completed(futures)]
-    sessions[client.uuid]["set_params"] = params
+    with ProcessPoolExecutor() as executor:
+        futures = [executor.submit(handleRequest, req) for req in params]
+        results = [future.result() for future in as_completed(futures)]
+    global set_params
+    set_params = params
     print("PARAMS LOADED AS " , params)
+
     # for i in results: 
     #     print(i)
     # dict_run = [{"run": item, "config": test_config} for item in listParams.values()]
@@ -116,9 +118,10 @@ async def get_prams(
 
 @router.get("/multi-graph")
 async def get_graph(
-    client: Annotated[User, Depends(get_current_active_user)]
+    # client: Annotated[User, Depends(get_current_active_user)]
 ):
-    params = sessions[client.uuid]["set_params"]
+    global set_params
+    params = set_params
     print("PARAMS SET TO " , params)
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(handleRequest, req) for req in params]
