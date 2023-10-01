@@ -34,7 +34,7 @@
       </ul>
     </div>
     <div class="panel">
-      <form id="paramForm" v-on:submit.prevent="submitForm" >
+      <form id="paramForm" v-on:submit.prevent="saveForm" >
         <!-- Row 1 -->
         <div class="row">
           <h2> Parameters Panel</h2>
@@ -281,7 +281,19 @@
           </div>
         </div>
 
-        <input type="submit" value="Submit">
+        <div class="row">
+          <div class="group">
+            <button class="saveButton">Save</button>
+          </div>
+          <div class="group">
+            <button class="saveButton" @click="resetForm">Reset Form</button>
+          </div>
+          <div class="group">
+            <input type="submit" value="Submit" @click="submitForm">
+          </div>
+        </div>
+        
+        
         </form>
         <p class="message"> {{ msg }} </p>
     </div>
@@ -327,6 +339,7 @@ export default {
       alternative:'',
       showInstructions: false,
       schemeGraph:'random',
+      savedForms: [],
     };
   },
 
@@ -339,29 +352,29 @@ export default {
         advancedContent.classList.add("hidden");
       }
     },
-  
-    submitForm(){
-      const validationRules = [
-        {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
-        {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
-        {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
-        {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
-        {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
-        {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
-        {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
-        {field: this.checkpoints, validator: this.validateCheckpoints, fieldName: 'Checkpoints'},
-        {field: this.totalSubnets, validator: this.validateTotalSubnets, fieldName: 'Total Subsets'},
-        {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
-        {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
-        {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
-        {field: this.ipShuffle, validator: this.validatePrioityInput, fieldName: 'IP Shuffle'},
-        {field: this.osDiveristy, validator: this.validatePrioityInput, fieldName: 'OS Diversity'},
-        {field: this.portShuffle, validator: this.validatePrioityInput, fieldName: 'Port Shuffle'},
-        {field: this.ServDiversity, validator: this.validatePrioityInput, fieldName: 'Service Diversity'},
-        {field: this.userShuffle, validator: this.validatePrioityInput, fieldName: 'User Shuffle'},
-        {field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
-        {field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
-        {field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
+    saveForm(){
+      if(this.savedForms.length < 5){
+        const validationRules = [
+          {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
+          {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
+          {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
+          {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
+          {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
+          {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
+          {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
+          {field: this.checkpoints, validator: this.validateCheckpoints, fieldName: 'Checkpoints'},
+          {field: this.totalSubnets, validator: this.validateTotalSubnets, fieldName: 'Total Subsets'},
+          {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
+          {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
+          {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
+          {field: this.ipShuffle, validator: this.validatePrioityInput, fieldName: 'IP Shuffle'},
+          {field: this.osDiveristy, validator: this.validatePrioityInput, fieldName: 'OS Diversity'},
+          {field: this.portShuffle, validator: this.validatePrioityInput, fieldName: 'Port Shuffle'},
+          {field: this.ServDiversity, validator: this.validatePrioityInput, fieldName: 'Service Diversity'},
+          {field: this.userShuffle, validator: this.validatePrioityInput, fieldName: 'User Shuffle'},
+          {field: this.similtaneous, validator: this.validateTrigger, fieldName: 'Simultaneous'},
+          {field: this.random, validator: this.validateTrigger, fieldName: 'Random'},
+          {field: this.alternative, validator: this.validateTrigger, fieldName: 'Alternative'}
       ];
 
       const errorMessages = [];
@@ -374,57 +387,62 @@ export default {
 
       if (errorMessages.length === 0) {
         console.log('Correct inputs have been detected');
-         // For config, for each field check if they have been entered and return null if not: 
-        // For config overall, return null if no fields have been entered 
-          var mainData = ({
-            "graph":{
-              "graph_number": this.graphNum,
-            },
-            "run": { 
-              "total_nodes": this.nodeNumber,
-              "total_endpoints": this.nodeExposed,
-              "total_layers": this.layers,
-              "terminate_compromise_ratio": this.compromisedRatio,
-              "scheme": this.scheme,
-              "mtd_interval": this.interval,
-              "finish_time": this.finishTime,
-              "checkpoints": this.checkpoints,
-              "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
-              "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
-            },
-            "config": this.checkAdvancedDataEntered()
-            // "config": this.ipShuffle !== '' ? { 
-            //   MTD_PRIORITY: this.ipShuffle !== '' ?  {
-            //     "CompleteTopologyShuffle": this.compTopoShuffle !== '' ? parseInt(this.compTopoShuffle) : null,
-            //     "HostTopologyShuffle": this.hostTopoShuffle !== '' ? parseInt(this.hostTopoShuffle) : null,
-            //     "IPShuffle": this.ipShuffle !== '' ? parseInt(this.ipShuffle) : null,
-            //     "OSDiveristy": this.osDiveristy !== '' ? parseInt(this.osDiveristy) : null,
-            //     "PortShuffle": this.portShuffle !== '' ? parseInt(this.portShuffle) : null,
-            //     "ServiceDiversity": this.ServDiversity !== '' ? parseInt(this.ServDiversity) : null,
-            //     "UserShuffle": this.userShuffle !== '' ? parseInt(this.userShuffle) : null,
-            //   } : null,
-            //   MTD_TRIGGER_INTERVAL: this.similtaneous !== '' ? {
-            //     "simultaneous": this.similtaneous !== '' ? parseInt(this.similtaneous) : null,
-            //     "random": this.random !== '' ? parseInt(this.random) : null,
-            //     "alternative": this.alternative !== '' ? parseInt(this.alternative) : null,
-            //   } : null,
-            // }: null,
-          });
-          this.msg = 'Getting graph';
-          var data = JSON.stringify(mainData);
-          console.log(data)
-          //console.log(data);
-          axios.post('/network/update_all_params/', data, {headers: {'Content-Type': 'application/json'}})
-          .then(async (response) => {
-            console.log(response);
-            await Graph.methods.getGraph();
-            this.msg = 'Got graph';
-          }) .catch((error) => {
-            console.log(error);
-          });
+        var mainData = {
+          "graph": {
+            "graph_number": this.graphNum,
+          },
+          "run": {
+            "total_nodes": this.nodeNumber,
+            "total_endpoints": this.nodeExposed,
+            "total_layers": this.layers,
+            "terminate_compromise_ratio": this.compromisedRatio,
+            "scheme": this.scheme,
+            "mtd_interval": this.interval,
+            "finish_time": this.finishTime,
+            "checkpoints": this.checkpoints,
+            "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : undefined,
+            "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : undefined,
+          },
+          "config": this.checkAdvancedDataEntered()
+        };
+        this.msg = 'Getting graph';
+        var data = JSON.stringify(mainData);
+        this.savedForms.push(data);
+        console.log(this.savedForms);
       }
+
       else{
         alert(`Validation Errors:\n${errorMessages.join('\n')}`);
+      }
+      }
+      else{
+        alert('Can only save up to five Graphs at a time')
+      }
+    },
+
+    resetForm(){
+      this.savedForms = [];
+    },
+  
+    submitForm() {
+      this.msg = 'Getting graph(s)';
+
+      for (const savedForm of this.savedForms) {
+        const formData = JSON.parse(savedForm);
+
+        axios
+          .post('/network/multi-graph', formData, {
+            headers: { 'Content-Type': 'application/json' },
+          })
+          .then(async (response) => {
+            console.log(response);
+
+            await Graph.methods.getGraph();
+            this.msg = 'Got graph';
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
 
@@ -618,7 +636,7 @@ export default {
       paramSelect.appendChild(newOption);
 
       this.schemeGraph = newOption.value;
-   }
+   },
   },
 };
 </script>
@@ -880,6 +898,38 @@ form {
  }
 
  .addGraph:hover{
+  background-color: #333;
+}
+
+.saveButton{
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton:hover{
+  background-color: #333;
+}
+
+.resetButton{
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.resetButton:hover{
   background-color: #333;
 }
 </style>
