@@ -79,17 +79,17 @@ async def stop_graph():
     return JSONResponse(content="Simulation stopped", status_code=200)
     
 @router.post("/update_all_params")
-def update_item(responce: ParameterRequest):
+def update_item(response: ParameterRequest):
     # Handle run parameters
     global stored_params
     
-    if ( "run" in responce and responce.run is not None ): 
-        stored_params = {key: value for key, value in responce.run.model_dump().items() if value is not None}
+    if ( "run" in response and response.run is not None ): 
+        stored_params = {key: value for key, value in response.run.model_dump().items() if value is not None}
     print()
     
     #Handle config_variables
-    if ( "config" in responce and responce.config is not None ): 
-        configs.config = configs.set_config(responce.config.model_dump()) 
+    if ( "config" in response and response.config is not None ): 
+        configs.config = configs.set_config(response.config.model_dump()) 
     return JSONResponse(content="Parameters Updated", status_code=status.HTTP_202_ACCEPTED)
 
 def reset(): 

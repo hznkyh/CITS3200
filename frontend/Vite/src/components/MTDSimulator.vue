@@ -407,8 +407,8 @@ export default {
         };
         this.msg = 'Getting graph';
         var data = JSON.stringify(mainData);
-        this.savedForms.push(mainData);
-        console.log(this.data);
+        this.savedForms.push(data);
+        console.log(this.savedForms);
       }
 
       else{
@@ -427,10 +427,11 @@ export default {
     submitForm() {
       this.msg = 'Getting graph(s)';
 
+      console.log(this.savedForms);
+
       for (const savedForm of this.savedForms) {
-        // const formData = JSON.parse(savedForm);
-        var formData = savedForm;
-        console.log("form data is:: " + formData);
+        const formData = JSON.parse(savedForm);
+
         axios
           .post('/network/multi-graph', formData, {
             headers: { 'Content-Type': 'application/json' },
