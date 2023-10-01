@@ -6,6 +6,8 @@
     import data from "./data"
     import data2 from "./data2"
 
+    import nodeInfo from "./NodeInfo.vue"
+
     import {
         ForceLayout,
         ForceNodeDatum,
@@ -159,6 +161,7 @@
         name: 'Network',
         components: {
             vNG,
+            nodeInfo,
         },
         methods: {
             async getGraph() {
@@ -261,8 +264,18 @@
                 // graphComponent.fitToContents();
             },
 
-            toggleNodeInfo(display) {
-                this.showNodeInfo = display
+            toggleNodeInfo(id, display) {
+                switch (id) {
+                    case 1:
+                        this.showNodeInfo = display
+                        break;
+                    case 2:
+                        this.showNodeInfo2 = display
+                        break;
+                    default:
+                        // Handle other cases or set a default behavior
+                        break;
+                }
             },
 
             handleLabel(id) {
@@ -338,6 +351,7 @@
                 total_nodes,
                 compromised,
                 compromised_services,
+
                 graph,
                 nodes,
                 edges,
@@ -346,6 +360,7 @@
                 showNodeInfo: false,
                 showLabel1: true,
                 showGraph:false,
+
                 graph2,
                 nodes2,
                 edges2,
@@ -353,6 +368,7 @@
                 showNodeInfo2: false,
                 showLabel2: false,
                 showGraph2: false,
+                propNode:null,
 
                 showLabel3: false,
                 showLabel4: false,
@@ -431,7 +447,7 @@
                 if (newVal[0]) {
                     console.log(nodes[newVal[0]].host)
                     if (nodes[newVal[0]].host) {
-                        this.toggleNodeInfo(true)
+                        this.toggleNodeInfo(1, true)
                         this.os_type = nodes[newVal[0]].host.os_type
                         this.os_version = nodes[newVal[0]].host.os_version
                         this.host_ip = nodes[newVal[0]].host.host_ip
@@ -454,7 +470,7 @@
                     }
                 }
                 else {
-                    this.toggleNodeInfo(false)
+                    this.toggleNodeInfo(1, false)
                     this.os_type = ''
                     this.os_version = ''
                     this.host_ip = ''
@@ -466,6 +482,17 @@
                     this.total_nodes = ''
                     this.compromised = ''
                     this.compromised_services = ''
+                }
+            },
+            selectedNodes2(newVal, oldVal) {
+                if (newVal[0]) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
+                        this.toggleNodeInfo(2, true)
+                    }
+                }
+                else {
+                    this.toggleNodeInfo(2, false)
                 }
             }
         },
@@ -495,7 +522,7 @@
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
-        <div id="node-info" class="node-info" v-if="showNodeInfo">
+        <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
             <p>os type: {{ os_type }}</p>
             <p>os version: {{ os_version }}</p>
             <p>host ip: {{ host_ip }}</p>
@@ -532,7 +559,7 @@
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
-        <div id="node-info" class="node-info" v-if="showNodeInfo">
+        <div id="node-info2" class="node-info" v-if="showNodeInfo2">
             <p>os type: {{ os_type }}</p>
             <p>os version: {{ os_version }}</p>
             <p>host ip: {{ host_ip }}</p>
