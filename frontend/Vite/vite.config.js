@@ -17,6 +17,10 @@ export default defineConfig({
     port: 8080, 
     host: '0.0.0.0'
   },
+  build: {
+    target: 'esnext' //browsers can handle the latest ES features
+  }
+
   // build: {
   //   rollupOptions: {
   //     input: 'src/main.js'
