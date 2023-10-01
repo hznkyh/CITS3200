@@ -4,6 +4,7 @@
     import * as vNG from "v-network-graph"
     import { Nodes, Edges, Layouts } from "v-network-graph"
     import data from "./data"
+    import data2 from "./data2"
 
     import {
         ForceLayout,
@@ -15,8 +16,12 @@
     var nodes: Nodes = reactive({ ...data.nodes })
     var edges: Edges = reactive({ ...data.edges })
     var layouts: Layouts = reactive({ ...data.layouts})
-
     const selectedNodes = ref<string[]>([])
+
+    const graph2 = ref<vNG.VNetworkGraphInstance>()
+    var nodes2: Nodes = reactive({ ...data2.nodes })
+    var edges2: Edges = reactive({ ...data2.edges })
+    const selectedNodes2 = ref<string[]>([])
 
     var os_type = ''
     var os_version = ''
@@ -256,7 +261,34 @@
 
             toggleNodeInfo(display) {
                 this.showNodeInfo = display
-            }
+            },
+
+            handleLabel(id) {
+                if (id == "graph1") {
+                    this.showGraph = !this.showGraph
+                }
+                else if (id == "graph2") {
+                    this.showGraph2 = !this.showGraph2
+                }
+            },
+
+            revealLabel(number) {
+                switch (number) {
+                    case 1:
+                        this.showLabel1 = true;
+                        this.showLabel2 = false;
+                        this.showLabel3 = false;
+                        break;
+                    case 2:
+                        this.showLabel1 = true;
+                        this.showLabel2 = true;
+                        this.showLabel3 = false;
+                        break;
+                    default:
+                        // Handle other cases or set a default behavior
+                        break;
+                }
+            },
         },
         data() {
             return {
@@ -278,6 +310,15 @@
                 layouts,
                 selectedNodes,
                 showNodeInfo: false,
+                showLabel1: true,
+                showGraph:false,
+                graph2,
+                nodes2,
+                edges2,
+                selectedNodes2,
+                showNodeInfo2: false,
+                showLabel2: false,
+                showGraph2:false,
             }
         },
         setup() {
@@ -339,9 +380,11 @@
                 nodeSize,
                 configs,
                 graph,
-                nodes,
-                edges,
-                layouts,
+                // nodes,
+                // edges,
+                // layouts,
+                // selectedNodes,
+                graph2,
             }
         },
         watch: {
@@ -391,38 +434,78 @@
 </script>
 
 <template>
-    <v-network-graph id="v-graph"
-    ref="graph"
-    class="graph"
-    v-model:selected-nodes="selectedNodes"
-    :nodes="nodes"
-    :edges="edges"
-    :layouts="layouts"
-    :configs="configs"
-    >
-    </v-network-graph>
-    <div class="control-panel">
-        <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
-        <button @click="graph?.zoomIn()">Zoom In</button>
-        <button @click="graph?.zoomOut()">Zoom Out</button>
-        <button @click="getGraph()">Get</button>
-        <button @click="start()">Start/Continue</button>
-        <button @click="manualStep()">Step</button>
-        <button @click="stop()">Stop</button>
+    <span id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1">Simulation 1</span>
+    <div id="graph1" v-if="showGraph">
+        <v-network-graph
+        ref="graph"
+        class="graph"
+        v-model:selected-nodes="selectedNodes"
+        :nodes="nodes"
+        :edges="edges"
+        :layouts="layouts"
+        :configs="configs"
+        >
+        </v-network-graph>
+        <div class="control-panel">
+            <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
+            <button @click="graph?.zoomIn()">Zoom In</button>
+            <button @click="graph?.zoomOut()">Zoom Out</button>
+            <button @click="getGraph()">Get</button>
+            <button @click="start()">Start/Continue</button>
+            <button @click="manualStep()">Step</button>
+            <button @click="stop()">Stop</button>
+        </div>
+        <!-- <p class="message"> {{ msg }} </p> -->
+        <div id="node-info" class="node-info" v-if="showNodeInfo">
+            <p>os type: {{ os_type }}</p>
+            <p>os version: {{ os_version }}</p>
+            <p>host ip: {{ host_ip }}</p>
+            <p>host id: {{ host_id }}</p>
+            <p>p_u_compromise: {{ p_u_compromise }}</p>
+            <p>total users: {{ total_users }}</p>
+            <p>uuid: {{ uuid }}</p>
+            <p>total services: {{ total_services }}</p>
+            <p>total nodes: {{ total_nodes }}</p>
+            <p>compromised: {{ compromised }}</p>
+            <p>compromised services: {{ compromised_services }}</p>
+        </div>
     </div>
-    <!-- <p class="message"> {{ msg }} </p> -->
-    <div id="node-info" class="node-info" v-if="showNodeInfo">
-        <p>os type: {{ os_type }}</p>
-        <p>os version: {{ os_version }}</p>
-        <p>host ip: {{ host_ip }}</p>
-        <p>host id: {{ host_id }}</p>
-        <p>p_u_compromise: {{ p_u_compromise }}</p>
-        <p>total users: {{ total_users }}</p>
-        <p>uuid: {{ uuid }}</p>
-        <p>total services: {{ total_services }}</p>
-        <p>total nodes: {{ total_nodes }}</p>
-        <p>compromised: {{ compromised }}</p>
-        <p>compromised services: {{ compromised_services }}</p>
+
+    <span id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2">Simulation 2</span>
+    <div id="graph2" v-if="showGraph2">
+        <v-network-graph 
+        ref="graph2"
+        class="graph"
+        v-model:selected-nodes="selectedNodes2"
+        :nodes="nodes2"
+        :edges="edges2"
+        :layouts="layouts"
+        :configs="configs"
+        >
+        </v-network-graph>
+        <div class="control-panel">
+            <button @click="graph2?.fitToContents()" ref="myBtn">Fit</button>
+            <button @click="graph2?.zoomIn()">Zoom In</button>
+            <button @click="graph2?.zoomOut()">Zoom Out</button>
+            <button @click="getGraph()">Get</button>
+            <button @click="start()">Start/Continue</button>
+            <button @click="manualStep()">Step</button>
+            <button @click="stop()">Stop</button>
+        </div>
+        <!-- <p class="message"> {{ msg }} </p> -->
+        <div id="node-info" class="node-info" v-if="showNodeInfo">
+            <p>os type: {{ os_type }}</p>
+            <p>os version: {{ os_version }}</p>
+            <p>host ip: {{ host_ip }}</p>
+            <p>host id: {{ host_id }}</p>
+            <p>p_u_compromise: {{ p_u_compromise }}</p>
+            <p>total users: {{ total_users }}</p>
+            <p>uuid: {{ uuid }}</p>
+            <p>total services: {{ total_services }}</p>
+            <p>total nodes: {{ total_nodes }}</p>
+            <p>compromised: {{ compromised }}</p>
+            <p>compromised services: {{ compromised_services }}</p>
+        </div>
     </div>
   </template>
 
@@ -469,6 +552,14 @@
         text-align: left;
         font-size: 0.6em;
         color: black;
+    }
+
+    .sim-label {
+        display: block;
+        background-color: lightblue;
+        padding: 1em;
+        border: 1px solid black;
+        margin-bottom: 1em;
     }
 </style>
 
