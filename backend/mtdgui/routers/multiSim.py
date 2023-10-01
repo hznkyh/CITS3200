@@ -72,7 +72,7 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
     ]
 
 
-@router.get("/multi-graph-prams")
+@router.get("/multi-graph-params")
 async def get_prams():
     test_config = {
         "MTD_PRIORITY": {
@@ -102,7 +102,7 @@ async def get_prams():
     return JSONResponse(content=dict_run)
 
 
-@router.post("/muti-graph")
+@router.post("/multi-graph")
 async def get_graph(
     prams: List[ParameterRequest],
     client: Annotated[User, Depends(get_current_active_user)],

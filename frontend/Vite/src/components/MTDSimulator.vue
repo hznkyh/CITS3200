@@ -406,9 +406,9 @@ export default {
           "config": this.checkAdvancedDataEntered()
         };
         this.msg = 'Getting graph';
-        // var data = JSON.stringify(mainData);
+        var data = JSON.stringify(mainData);
         this.savedForms.push(mainData);
-        console.log(this.savedForms);
+        console.log(this.data);
       }
 
       else{
