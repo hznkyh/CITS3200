@@ -289,11 +289,10 @@
         </form>
         <p class="message"> {{ msg }} </p>
     </div>
-    <span @click="test">Test</span>
     <div class="network">
-      <Graph></Graph>
+      <Graph @childData="handleChildData"></Graph>
     </div>
-    <button class="addGraph" @click="addGraph">Add Graph</button>
+    <!-- <button class="addGraph" @click="addGraph">Add Graph</button> -->
   </div>
 </template>
 
@@ -336,6 +335,11 @@ export default {
   },
 
   methods: {
+    handleChildData(data) {
+      // Handle the data received from the child component
+      // console.log(data);
+      this.addGraph();
+    },
     test() {
       Graph.methods.revealLabel(2);
     },

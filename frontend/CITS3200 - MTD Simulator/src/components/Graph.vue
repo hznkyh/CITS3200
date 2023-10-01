@@ -23,6 +23,8 @@
     var edges2: Edges = reactive({ ...data2.edges })
     const selectedNodes2 = ref<string[]>([])
 
+    var number_of_sims = 1;
+
     var os_type = ''
     var os_version = ''
     var host_ip = ''
@@ -273,20 +275,54 @@
             },
 
             revealLabel(number) {
+                console.log("clicked")
                 switch (number) {
                     case 1:
                         this.showLabel1 = true;
                         this.showLabel2 = false;
+                        this.showLabel3 = false;
+                        this.showLabel4 = false;
+                        this.showLabel5 = false;
                         break;
                     case 2:
                         this.showLabel1 = true;
                         this.showLabel2 = true;
+                        this.showLabel3 = false;
+                        this.showLabel4 = false;
+                        this.showLabel5 = false;
+                        break;
+                    case 3:
+                        this.showLabel1 = true;
+                        this.showLabel2 = true;
+                        this.showLabel3 = true;
+                        this.showLabel4 = false;
+                        this.showLabel5 = false;
+                        break;
+                    case 4:
+                        this.showLabel1 = true;
+                        this.showLabel2 = true;
+                        this.showLabel3 = true;
+                        this.showLabel4 = true;
+                        this.showLabel5 = false;
+                        break;
+                    case 5:
+                        this.showLabel1 = true;
+                        this.showLabel2 = true;
+                        this.showLabel3 = true;
+                        this.showLabel4 = true;
+                        this.showLabel5 = true;
                         break;
                     default:
                         // Handle other cases or set a default behavior
                         break;
                 }
             },
+
+            addGraph() {
+                this.$emit('childData', "add graph");
+                number_of_sims++;
+                this.revealLabel(number_of_sims)
+            }
         },
         data() {
             return {
@@ -316,7 +352,12 @@
                 selectedNodes2,
                 showNodeInfo2: false,
                 showLabel2: false,
-                showGraph2: false
+                showGraph2: false,
+
+                showLabel3: false,
+                showLabel4: false,
+                showLabel5: false,
+
             }
         },
         setup() {
@@ -432,7 +473,6 @@
 </script>
 
 <template>
-    <span @click="revealLabel(2)">Simulation 1</span>
     <span id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1">Simulation 1</span>
     <div id="graph1" v-if="showGraph">
         <v-network-graph
@@ -506,6 +546,10 @@
             <p>compromised services: {{ compromised_services }}</p>
         </div>
     </div>
+    <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
+    <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
+    <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
+    <button class="addGraph" @click="addGraph">Add Graph</button>
   </template>
 
 <style>
