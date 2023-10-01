@@ -47,7 +47,7 @@
 
     var storedGraph = {}
     var number_of_graphs = 0;
-    var graphIndex = 0;
+    var graphIndex = -1;
     var startSim = false;
     // var msg = "Simulation not started"
     var exposed: string[] = [];
@@ -178,7 +178,7 @@
                     const response = await axios.get("/network/graph");
                     storedGraph = response.data;
                     number_of_graphs = Object.keys(storedGraph).length;
-                    graphIndex = 0;
+                    graphIndex = -1;
                     this.msg = "Got graph";
                 } catch (error) {
                 }
@@ -192,8 +192,6 @@
                         if (startSim) {
                             // this.msg = "Running"
                             this.step()
-                            graphIndex++
-                            
                         }
                     }, 1500)
                 }
@@ -209,21 +207,24 @@
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     startSim = false
-                    this.graphIndex = -1
+                    graphIndex = -2
                     clearInterval(intervalID)
+                    return
+                }
+                if (graphIndex == -2) {
                     return
                 }
                 startSim = false
                 this.step()
-                graphIndex++
                 // this.msg = "Stopped"
             },
 
             step() {
+                graphIndex++
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     startSim = false
-                    this.graphIndex = -1
+                    graphIndex = -2
                     clearInterval(intervalID)
                     return
                 }
