@@ -56,4 +56,4 @@ def handleRequest(req : ParameterRequest):
     print("FINAL PARAMS", final_params)
     if type(final_params["checkpoints"]) is int: 
         final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
-    return create_sim(final_params)
+    return req.graph , create_sim(final_params)

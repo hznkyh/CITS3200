@@ -166,7 +166,7 @@
                     clearData();
                     clearInterval(intervalID);
                     this.msg = "Getting graph...";
-                    const response = await axios.get("/network/graph");
+                    const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
                     number_of_graphs = Object.keys(storedGraph).length;
                     console.log(storedGraph);

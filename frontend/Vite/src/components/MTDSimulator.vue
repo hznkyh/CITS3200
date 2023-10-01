@@ -406,8 +406,9 @@ export default {
           "config": this.checkAdvancedDataEntered()
         };
         this.msg = 'Getting graph';
-        var data = JSON.stringify(mainData);
-        this.savedForms.push(data);
+        // var data = JSON.stringify(mainData);
+        // this.savedForms.push(mainData);
+        this.savedForms[this.graphNum] = mainData; 
         console.log(this.savedForms);
       }
 
@@ -429,23 +430,22 @@ export default {
 
       console.log(this.savedForms);
 
-      for (const savedForm of this.savedForms) {
-        const formData = JSON.parse(savedForm);
+      // const formData = JSON.parse(savedForm);
+      console.log("SAVED " , JSON.stringify(this.savedForms));
+      axios
+        .post('/network/multi-graph-params', JSON.stringify(this.savedForms), {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(async (response) => {
+          console.log(response);
 
-        axios
-          .post('/network/multi-graph', formData, {
-            headers: { 'Content-Type': 'application/json' },
-          })
-          .then(async (response) => {
-            console.log(response);
-
-            await Graph.methods.getGraph();
-            this.msg = 'Got graph';
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+          await Graph.methods.getGraph();
+          this.msg = 'Got graph';
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      
     },
 
     validateIntInputs(value){
