@@ -5,6 +5,9 @@
     import { Nodes, Edges, Layouts } from "v-network-graph"
     import data from "./data"
     import data2 from "./data2"
+    import data3 from "./data3"
+    import data4 from "./data4"
+    import data5 from "./data5"
 
     import nodeInfo from "./NodeInfo.vue"
 
@@ -26,19 +29,6 @@
     const selectedNodes2 = ref<string[]>([])
 
     var number_of_sims = 1;
-
-    var os_type = ''
-    var os_version = ''
-    var host_ip = ''
-    var host_id = ''
-    var p_u_compromise = ''
-    var total_users = ''
-    var uuid = ''
-    var total_services = ''
-    var total_nodes = ''
-    var compromised = ''
-    var compromised_services = ''
-
 
     var storedGraph = {}
     var number_of_graphs = 0;
