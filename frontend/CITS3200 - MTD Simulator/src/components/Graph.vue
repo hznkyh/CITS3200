@@ -203,28 +203,29 @@
 
             },
 
-            manualStep() {
+            manualStep(direction) {
+                if (direction == "back") {
+                    graphIndex--
+                }
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     startSim = false
-                    graphIndex = -2
                     clearInterval(intervalID)
                     return
                 }
-                if (graphIndex == -2) {
-                    return
-                }
                 startSim = false
+                if (direction == "forward") {
+                    graphIndex++
+                }
+                console.log(graphIndex)
                 this.step()
                 // this.msg = "Stopped"
             },
 
             step() {
-                graphIndex++
                 if (graphIndex == number_of_graphs) {
                     this.msg = "Simulation finished"
                     startSim = false
-                    graphIndex = -2
                     clearInterval(intervalID)
                     return
                 }
@@ -586,7 +587,8 @@
             <button @click="graph?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
             <button @click="start()">Start/Continue</button>
-            <button @click="manualStep()">Step</button>
+            <button @click="manualStep('forward')">Step</button>
+            <button @click="manualStep('back')">Step Back</button>
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
@@ -613,7 +615,8 @@
             <button @click="graph2?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
             <button @click="start()">Start/Continue</button>
-            <button @click="manualStep()">Step</button>
+            <button @click="manualStep('forward')">Step</button>
+            <button @click="manualStep('back')">Step Back</button>
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
@@ -639,7 +642,8 @@
             <button @click="graph3?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
             <button @click="start()">Start/Continue</button>
-            <button @click="manualStep()">Step</button>
+            <button @click="manualStep('forward')">Step</button>
+            <button @click="manualStep('back')">Step Back</button>
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
@@ -665,7 +669,8 @@
             <button @click="graph4?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
             <button @click="start()">Start/Continue</button>
-            <button @click="manualStep()">Step</button>
+            <button @click="manualStep('forward')">Step</button>
+            <button @click="manualStep('back')">Step Back</button>
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
@@ -691,7 +696,8 @@
             <button @click="graph5?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
             <button @click="start()">Start/Continue</button>
-            <button @click="manualStep()">Step</button>
+            <button @click="manualStep('forward')">Step</button>
+            <button @click="manualStep('back')">Step Back</button>
             <button @click="stop()">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
