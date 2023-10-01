@@ -72,7 +72,7 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
     ]
 
 
-@router.get("/muti-graph-prams")
+@router.get("/multi-graph-prams")
 async def get_prams():
     test_config = {
         "MTD_PRIORITY": {
