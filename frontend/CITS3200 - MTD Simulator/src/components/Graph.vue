@@ -501,7 +501,7 @@
 
 <template>
     <span id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1">Simulation 1</span>
-    <div id="graph1" v-if="showGraph">
+    <div id="graph1" class="graph-container" v-if="showGraph">
         <v-network-graph
         ref="graph"
         class="graph"
@@ -538,7 +538,7 @@
     </div>
 
     <span id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2">Simulation 2</span>
-    <div id="graph2" v-if="showGraph2">
+    <div id="graph2" class="graph-container" v-if="showGraph2">
         <v-network-graph 
         ref="graph2"
         class="graph"
@@ -580,6 +580,10 @@
   </template>
 
 <style>
+    .graph-container {
+        position:relative;
+    }
+
     .graph {
         width: 100%;
         height: 40em;
@@ -605,9 +609,8 @@
 
     .node-info {
         position: absolute;
-        top: 0;
-        right: 0;
-        margin: 3em;
+        top: 1em;
+        right: 1em;
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 0 20px rgba(206, 206, 206, 0.5);
