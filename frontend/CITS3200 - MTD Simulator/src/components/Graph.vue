@@ -28,13 +28,28 @@
     var edges2: Edges = reactive({ ...data2.edges })
     const selectedNodes2 = ref<string[]>([])
 
+    const graph3 = ref<vNG.VNetworkGraphInstance>()
+    var nodes3: Nodes = reactive({ ...data3.nodes })
+    var edges3: Edges = reactive({ ...data3.edges })
+    const selectedNodes3 = ref<string[]>([])
+
+    const graph4 = ref<vNG.VNetworkGraphInstance>()
+    var nodes4: Nodes = reactive({ ...data4.nodes })
+    var edges4: Edges = reactive({ ...data4.edges })
+    const selectedNodes4 = ref<string[]>([])
+
+    const graph5 = ref<vNG.VNetworkGraphInstance>()
+    var nodes5: Nodes = reactive({ ...data5.nodes })
+    var edges5: Edges = reactive({ ...data5.edges })
+    const selectedNodes5 = ref<string[]>([])
+
     var number_of_sims = 1;
 
     var storedGraph = {}
     var number_of_graphs = 0;
     var graphIndex = 0;
     var startSim = false;
-    var msg = "Simulation not started"
+    // var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
     var intervalID
@@ -262,6 +277,15 @@
                     case 2:
                         this.showNodeInfo2 = display
                         break;
+                    case 3:
+                        this.showNodeInfo3 = display
+                        break;
+                    case 4:
+                        this.showNodeInfo4 = display
+                        break;
+                    case 5:
+                        this.showNodeInfo5 = display
+                        break;
                     default:
                         // Handle other cases or set a default behavior
                         break;
@@ -269,11 +293,25 @@
             },
 
             handleLabel(id) {
-                if (id == "graph1") {
-                    this.showGraph = !this.showGraph
-                }
-                else if (id == "graph2") {
-                    this.showGraph2 = !this.showGraph2
+                switch(id) {
+                    case "graph1":
+                        this.showGraph = !this.showGraph
+                        break;
+                    case "graph2":
+                        this.showGraph2 = !this.showGraph2
+                        break;
+                    case "graph3":
+                        this.showGraph3 = !this.showGraph3
+                        break;
+                    case "graph4":
+                        this.showGraph4 = !this.showGraph4
+                        break;
+                    case "graph5":
+                        this.showGraph5 = !this.showGraph5
+                        break;
+                    default:
+                        // Handle other cases or set a default behavior
+                        break;
                 }
             },
 
@@ -361,10 +399,32 @@
                 showGraph2: false,
                 propNode2:null,
 
+                graph3,
+                nodes3,
+                edges3,
+                selectedNodes3,
+                showNodeInfo3: false,
                 showLabel3: false,
-                showLabel4: false,
-                showLabel5: false,
+                showGraph3: false,
+                propNode3:null,
 
+                graph4,
+                nodes4,
+                edges4,
+                selectedNodes4,
+                showNodeInfo4: false,
+                showLabel4: false,
+                showGraph4: false,
+                propNode4:null,
+
+                graph5,
+                nodes5,
+                edges5,
+                selectedNodes5,
+                showNodeInfo5: false,
+                showLabel5: false,
+                showGraph5: false,
+                propNode5:null,
             }
         },
         setup() {
@@ -431,6 +491,9 @@
                 // layouts,
                 // selectedNodes,
                 graph2,
+                graph3,
+                graph4,
+                graph5,
             }
         },
         watch: {
@@ -459,7 +522,46 @@
                 else {
                     this.toggleNodeInfo(2, false)
                 }
-            }
+            },
+            selectedNodes3(newVal, oldVal) {
+                if (newVal[0]) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
+                        this.toggleNodeInfo(3, true)
+                        var propNode = nodes[newVal[0]].host
+                        this.propNode3 = propNode
+                    }
+                }
+                else {
+                    this.toggleNodeInfo(3, false)
+                }
+            },
+            selectedNodes4(newVal, oldVal) {
+                if (newVal[0]) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
+                        this.toggleNodeInfo(4, true)
+                        var propNode = nodes[newVal[0]].host
+                        this.propNode4 = propNode
+                    }
+                }
+                else {
+                    this.toggleNodeInfo(4, false)
+                }
+            },
+            selectedNodes5(newVal, oldVal) {
+                if (newVal[0]) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
+                        this.toggleNodeInfo(5, true)
+                        var propNode = nodes[newVal[0]].host
+                        this.propNode5 = propNode
+                    }
+                }
+                else {
+                    this.toggleNodeInfo(5, false)
+                }
+            },
         },
     }
 </script>
@@ -519,8 +621,83 @@
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
+    <div id="graph3" class="graph-container" v-if="showGraph3">
+        <v-network-graph 
+        ref="graph3"
+        class="graph"
+        v-model:selected-nodes="selectedNodes3"
+        :nodes="nodes3"
+        :edges="edges3"
+        :layouts="layouts"
+        :configs="configs"
+        >
+        </v-network-graph>
+        <div class="control-panel">
+            <button @click="graph3?.fitToContents()" ref="myBtn">Fit</button>
+            <button @click="graph3?.zoomIn()">Zoom In</button>
+            <button @click="graph3?.zoomOut()">Zoom Out</button>
+            <button @click="getGraph()">Get</button>
+            <button @click="start()">Start/Continue</button>
+            <button @click="manualStep()">Step</button>
+            <button @click="stop()">Stop</button>
+        </div>
+        <!-- <p class="message"> {{ msg }} </p> -->
+        <div id="node-info2" class="node-info" v-if="showNodeInfo3">
+            <nodeInfo :node="propNode3"></nodeInfo>
+        </div>
+    </div>
     <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
+    <div id="graph4" class="graph-container" v-if="showGraph4">
+        <v-network-graph 
+        ref="graph4"
+        class="graph"
+        v-model:selected-nodes="selectedNodes4"
+        :nodes="nodes4"
+        :edges="edges4"
+        :layouts="layouts"
+        :configs="configs"
+        >
+        </v-network-graph>
+        <div class="control-panel">
+            <button @click="graph4?.fitToContents()" ref="myBtn">Fit</button>
+            <button @click="graph4?.zoomIn()">Zoom In</button>
+            <button @click="graph4?.zoomOut()">Zoom Out</button>
+            <button @click="getGraph()">Get</button>
+            <button @click="start()">Start/Continue</button>
+            <button @click="manualStep()">Step</button>
+            <button @click="stop()">Stop</button>
+        </div>
+        <!-- <p class="message"> {{ msg }} </p> -->
+        <div id="node-info2" class="node-info" v-if="showNodeInfo4">
+            <nodeInfo :node="propNode4"></nodeInfo>
+        </div>
+    </div>
     <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
+    <div id="graph5" class="graph-container" v-if="showGraph5">
+        <v-network-graph 
+        ref="graph5"
+        class="graph"
+        v-model:selected-nodes="selectedNodes5"
+        :nodes="nodes5"
+        :edges="edges5"
+        :layouts="layouts"
+        :configs="configs"
+        >
+        </v-network-graph>
+        <div class="control-panel">
+            <button @click="graph5?.fitToContents()" ref="myBtn">Fit</button>
+            <button @click="graph5?.zoomIn()">Zoom In</button>
+            <button @click="graph5?.zoomOut()">Zoom Out</button>
+            <button @click="getGraph()">Get</button>
+            <button @click="start()">Start/Continue</button>
+            <button @click="manualStep()">Step</button>
+            <button @click="stop()">Stop</button>
+        </div>
+        <!-- <p class="message"> {{ msg }} </p> -->
+        <div id="node-info2" class="node-info" v-if="showNodeInfo5">
+            <nodeInfo :node="propNode5"></nodeInfo>
+        </div>
+    </div>
     <button class="addGraph" @click="addGraph">Add Graph</button>
   </template>
 
