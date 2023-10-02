@@ -126,7 +126,9 @@ async def get_graph(
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(handleRequest, req) for req in params]
         results = [future.result() for future in as_completed(futures)]
-    return {"status": "completed", "params": params,"results":results}    
+    for i in results: 
+        print(i)
+    return {"status": "completed", "params": params}    
 #     # The code block you provided is creating a list of parameters (`listParams`) using the
 #     # `itertools.repeat()` function. The `itertools.repeat()` function returns an iterator that repeats
 #     # the specified value (`parameters` in this case) a specified number of times (`10` in this case).

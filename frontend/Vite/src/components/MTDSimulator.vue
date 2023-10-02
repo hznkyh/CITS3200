@@ -400,15 +400,17 @@ export default {
             "mtd_interval": this.interval,
             "finish_time": this.finishTime,
             "checkpoints": this.checkpoints,
-            "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : undefined,
-            "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : undefined,
+            "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
+            "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
           },
           "config": this.checkAdvancedDataEntered()
         };
-        this.msg = 'Getting graph';
+        this.msg = 'Submitted parameters';
         // var data = JSON.stringify(mainData);
         // this.savedForms.push(mainData);
-        this.savedForms[this.graphNum] = mainData; 
+        var cur_graph = parseInt(this.graphNum.charAt(this.graphNum.length - 1)) - 1;
+        console.log("NUM" ,cur_graph)
+        this.savedForms[cur_graph] = mainData; 
         console.log(this.savedForms);
       }
 
@@ -426,7 +428,7 @@ export default {
     },
   
     submitForm() {
-      this.msg = 'Getting graph(s)';
+      this.msg = 'Submitted parameters';
 
       console.log(this.savedForms);
 
