@@ -467,7 +467,7 @@ export default {
     },
     validateCheckpoints(value){
       const parsedValue = parseFloat(value);
-      return !isNaN(parsedValue) && parsedValue >= 1000;
+      return !isNaN(parsedValue) && parsedValue >= 10;
     },
     validateRatio(value){
       const parsedValue = parseFloat(value)

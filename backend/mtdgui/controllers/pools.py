@@ -47,11 +47,11 @@ def handleRequest(req : ParameterRequest):
         config_params = config_params.model_dump()
         configs.config = configs.set_config(config_params) 
     final_params = parameters 
-    print("INITIAL PARAMS", final_params)
-    print("STORED PARAMS",stored_params)
+    # print("INITIAL PARAMS", final_params)
+    # print("STORED PARAMS",stored_params)
     if stored_params is not None:
         final_params = final_params | stored_params 
     if type(final_params["checkpoints"]) is int: 
         final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
-    print("FINAL PARAMS", final_params)
-    return req.graph , create_sim(**final_params)
+    # print("FINAL PARAMS", final_params)
+    return req.graph.graph_number , create_sim(**final_params)

@@ -6,7 +6,7 @@ from auth import get_current_active_user
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
 from concurrent.futures import Future
-from concurrent.futures import ProcessPoolExecutor,as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from threading import Lock, Thread
 from controllers import serialize_graph, ProcessPoo
 from simulator.adapter import create_sim
@@ -17,6 +17,7 @@ from sessions import sessions
 from config import parameters
 import copy
 from controllers.pools import handleRequest
+
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
@@ -28,6 +29,7 @@ futuresComplete = False
 messageQueueLock = Lock()
 messageQueue = []
 set_params = None
+
 
 def checkFuturesCompletion(futures: dict[Future, int], uuid):
     """
@@ -78,91 +80,49 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
 @router.post("/multi-graph-params")
 async def get_prams(
     params: List[ParameterRequest],
-    client: Annotated[User, Depends(get_current_active_user)],
 ):
-    # test_config = {
-    #     "MTD_PRIORITY": {
-    #         "CompleteTopologyShuffle": 0,
-    #         "HostTopologyShuffle": 0,
-    #         "IPShuffle": 0,
-    #         "OSDiversity": 0,
-    #         "PortShuffle": 0,
-    #         "ServiceDiversity": 0,
-    #         "UserShuffle": 0,
-    #     },
-    #     "MTD_TRIGGER_INTERVAL": {
-    #         "simultaneous": [0],
-    #         "random": [0],
-    #         "alternative": [0],
-    #     },
-    # }
-
-    # test_parameters = parameters | dict(
-    #     Parameters(checkpoints=list(range(0, 3000, 1000)))
-    # )
-    # listParams = {
-    #     i: params for i, params in enumerate(itertools.repeat(test_parameters, 2))
-    # }
-    print("CLIENT IS ", client.uuid)
-    # with ProcessPoolExecutor() as executor:
-    #     futures = [executor.submit(handleRequest, req) for req in params]
-    #     results = [future.result() for future in as_completed(futures)]
     global set_params
     set_params = params
-    print("PARAMS LOADED AS " , params)
-
-    # for i in results: 
-    #     print(i)
-    # dict_run = [{"run": item, "config": test_config} for item in listParams.values()]
-    return JSONResponse(content='results')
+    return JSONResponse(content="prams set" , status_code=status.HTTP_202_ACCEPTED)
 
 
 @router.get("/multi-graph")
-async def get_graph(
-    client: Annotated[User, Depends(get_current_active_user)]
-):
-    print("CLIENT IS ", client.uuid)
+async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
     global set_params
     params = set_params
-    print("PARAMS SET TO " , params)
+
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(handleRequest, req) for req in params]
         results = [future.result() for future in as_completed(futures)]
-    for i in results: 
-        print(i)
-    return {"status": "completed", "params": params}    
-#     # The code block you provided is creating a list of parameters (`listParams`) using the
-#     # `itertools.repeat()` function. The `itertools.repeat()` function returns an iterator that repeats
-#     # the specified value (`parameters` in this case) a specified number of times (`10` in this case).
-#     # print(prams)
-#     # final_params = parameters
+        
+        # print(results)
+        
+        logger.debug("Stopped checking futures' completion.")
 
-#     # if "checkpoints" in final_params:
-#     #     if type(final_params["checkpoints"]) is int:
-#     #         final_params["checkpoints"] = range(
-#     #             final_params["start_time"],
-#     #             int(final_params["finish_time"]),
-#     #             final_params["checkpoints"],
-#     #         )
-#     # # listParams = itertools.repeat(final_params, 2)
-#     # print(prams)
+        sessions[client.uuid]["snapshots"] = {
+            result[0]:copy.deepcopy(result[1]["snapshots"]) for result in results
+        }
+        
+        sessions[client.uuid]["evaluation"] = {
+            result[0]:copy.deepcopy(result[1]["evaluation"]) for result in results
+        }
 
-#     # futuresList = {
-#     #     ProcessPoo.get_pool().submit(create_sim, **params): i
-#     #     for i, params in enumerate(prams)
-#     # }
-#     # logger.debug(f"Submitted {len(futuresList)} tasks to ProcessPoolExecutor.")
 
-#     # futuresChecker = Thread(
-#     #     target=checkFuturesCompletion, args=(futuresList, client.uuid)
-#     # )
-#     # futuresChecker.start()
-#     # logger.debug("Started futures checker thread.")
-
-#     # futuresChecker.join()
-#     # logger.debug("Futures checker thread completed.")
-#     # # ProcessPoo.shutdown()
-#     return {"status": "completed", "number_of_results": len(messageQueue)}
+    try:
+        
+        response = {
+            graphNumber: [serialize_graph(graph_item) for graph_item in graph]
+            for graphNumber,graph in sessions[client.uuid]["snapshots"].items()
+            
+        }
+        
+        logger.debug(f"Returning result: {response}")
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    except IndexError:
+        logger.error("Result not found")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Result not found"
+        )
 
 
 @router.get("/result/{index}")
@@ -194,7 +154,7 @@ async def get_result(
         logger.debug(f"Returning result: {response}")
         return JSONResponse(content=response, status_code=status.HTTP_202_ACCEPTED)
     except IndexError:
-        logger.error("Result not found") 
+        logger.error("Result not found")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Result not found"
         )
