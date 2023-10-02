@@ -175,12 +175,14 @@
                     clearData();
                     clearInterval(intervalID);
                     this.msg = "Getting graph...";
-                    const response = await axios.get("/network/graph");
+                    const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
                     number_of_graphs = Object.keys(storedGraph).length;
+                    console.log(storedGraph);
                     graphIndex = -1;
                     this.msg = "Got graph";
                 } catch (error) {
+                    console.error(error);
                 }
             },
 

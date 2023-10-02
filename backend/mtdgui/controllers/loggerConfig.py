@@ -45,7 +45,7 @@ def setup_logger(logger):
     logger.setLevel(logging.INFO)  # Adjust the level as needed
 
     # Create file handler
-    file_handler = logging.handlers.RotatingFileHandler('Logs/debug.log', maxBytes=5000000, backupCount=50)
+    file_handler = RotatingFileHandler('Logs/debug.log', maxBytes=5000000, backupCount=10)
     formatter = logging.Formatter("%(asctime)s - [%(levelname)s] - %(name)s - (PID: %(process)d) - Message: %(message)s - %(exc_info)s")
     file_handler.setFormatter(formatter)
 

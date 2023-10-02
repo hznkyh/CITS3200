@@ -56,3 +56,7 @@ Open a terminal running your conda environment in the base project directory \\C
 > `cd mtdgui`
 
 > `pytest -rx -W ignore::DeprecationWarning`
+
+### Running docker env 
+docker build -t backend .   
+docker run -it backend 
