@@ -104,9 +104,9 @@ async def get_prams(
     #     i: params for i, params in enumerate(itertools.repeat(test_parameters, 2))
     # }
     print("CLIENT IS ", client.uuid)
-    with ProcessPoolExecutor() as executor:
-        futures = [executor.submit(handleRequest, req) for req in params]
-        results = [future.result() for future in as_completed(futures)]
+    # with ProcessPoolExecutor() as executor:
+    #     futures = [executor.submit(handleRequest, req) for req in params]
+    #     results = [future.result() for future in as_completed(futures)]
     global set_params
     set_params = params
     print("PARAMS LOADED AS " , params)
