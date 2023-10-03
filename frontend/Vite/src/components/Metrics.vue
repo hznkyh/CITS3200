@@ -32,13 +32,6 @@
 <script>
 export default {
     name: 'Metrics',
-    props: {
-        node: {
-            type: Object,
-            required: true
-        }
-    },
-
     data(){
         return{
             activePng: null
