@@ -19,31 +19,26 @@
     } from "v-network-graph/lib/force-layout"
 
     const graph = ref<vNG.VNetworkGraphInstance>()
-    var nodes: Nodes = reactive({ ...data.nodes })
-    var edges: Edges = reactive({ ...data.edges })
-    var layouts: Layouts = reactive({ ...data.layouts})
+    // var nodes: Nodes = reactive({ ...data.nodes })
+    // var edges: Edges = reactive({ ...data.edges })
+    // var layouts: Layouts = reactive({ ...data.layouts})
     const selectedNodes = ref<string[]>([])
 
     const graph2 = ref<vNG.VNetworkGraphInstance>()
-    var nodes2: Nodes = reactive({ ...data2.nodes })
-    var edges2: Edges = reactive({ ...data2.edges })
     const selectedNodes2 = ref<string[]>([])
 
     const graph3 = ref<vNG.VNetworkGraphInstance>()
-    var nodes3: Nodes = reactive({ ...data3.nodes })
-    var edges3: Edges = reactive({ ...data3.edges })
     const selectedNodes3 = ref<string[]>([])
 
     const graph4 = ref<vNG.VNetworkGraphInstance>()
-    var nodes4: Nodes = reactive({ ...data4.nodes })
-    var edges4: Edges = reactive({ ...data4.edges })
     const selectedNodes4 = ref<string[]>([])
 
     const graph5 = ref<vNG.VNetworkGraphInstance>()
-    var nodes5: Nodes = reactive({ ...data5.nodes })
-    var edges5: Edges = reactive({ ...data5.edges })
     const selectedNodes5 = ref<string[]>([])
 
+    var nodes = [reactive({ ...data.nodes }), reactive({ ...data2.nodes }), reactive({ ...data3.nodes }), reactive({ ...data4.nodes }), reactive({ ...data5.nodes })]
+    var edges = [reactive({ ...data.edges }), reactive({ ...data2.edges }), reactive({ ...data3.edges }), reactive({ ...data4.edges }), reactive({ ...data5.edges })]
+    var layouts = [reactive({ ...data.layouts }), reactive({ ...data2.layouts }), reactive({ ...data3.layouts }), reactive({ ...data4.layouts }), reactive({ ...data5.layouts })]
     var number_of_sims = 1;
 
     var graphIndex: number[] = [-1, -1, -1, -1, -1];
@@ -57,25 +52,10 @@
     var intervalIDs: number[] = [];
 
     function clearData() {
-        // Clear the nodes object
-        for (const key in nodes) {
-            if (Object.hasOwnProperty.call(nodes, key)) {
-            delete nodes[key];
-            }
-        }
-
-        // Clear the edges object
-        for (const key in edges) {
-            if (Object.hasOwnProperty.call(edges, key)) {
-            delete edges[key];
-            }
-        }
-
-        // Clear the layouts object
-        for (const key in layouts["nodes"]) {
-            if (Object.hasOwnProperty.call(layouts["nodes"], key)) {
-            delete layouts["nodes"][key];
-            }
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i] = reactive({})
+            edges[i] = reactive({})
+            layouts[i] = reactive({nodes: {},})
         }
 
         number_of_graphs = [];
@@ -87,27 +67,14 @@
         }
     }
 
-    function findExposed(nodeId: string) {
-        for (var key in edges) {
-            var edge = edges[key]
+    function findExposed(id, nodeId: string) {
+        for (var key in edges[id]) {
+            var edge = edges[id][key]
             if (edge.source == nodeId) {
                 exposed.push(edge.target)
             }
         }
     }
-
-    function getRandomCoordinates(centerx, centery) {
-        var offset = Math.random() * (350 - (-350)) + (-350);
-        var x = centerx + offset
-        var y = centery + offset
-
-        var rangex = [-700, 700]
-        var rangey = [-350, 350]
-
-        x = Math.min(Math.max(x, rangex[0]), rangex[1])
-        y = Math.min(Math.max(y, rangey[0]), rangey[1])
-        return { x, y };
-    }   
 
     function generateCoordinates(
         numCoordinates: number,
@@ -132,7 +99,7 @@
         return coordinates;
     }
 
-    function layout() {
+    function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
         for (var key in nodes) {
@@ -164,7 +131,7 @@
             for (var i = 0; i < subnetSize; i++) {
                 var x = centerx + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
                 var y = centery + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
-                layouts.nodes[subnet[i]] = { x, y }
+                // layouts.nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
             index++
@@ -267,23 +234,7 @@
                     const edgeId = `edge${nextEdgeIndex}`
                     const source = `node${graph.links[z].source + 1}`
                     const target = `node${graph.links[z].target + 1}`
-                    switch(id) {
-                        case 0:
-                            edges[edgeId] = { source, target }
-                            break;
-                        case 1:
-                            edges2[edgeId] = { source, target }
-                            break;
-                        case 2:
-                            edges3[edgeId] = { source, target }
-                            break;
-                        case 3:
-                            edges4[edgeId] = { source, target }
-                            break;
-                        case 4:
-                            edges5[edgeId] = { source, target }
-                            break;
-                    }
+                    edges[id][edgeId] = { source, target }
                     nextEdgeIndex++
                 };
                 console.log(edges)
@@ -298,7 +249,7 @@
                     var color = ''
                     if (node.host.compromised == true) {
                         color = `red`
-                        findExposed(nodeId)
+                        findExposed(id, nodeId)
                     } else if (exposed.includes(nodeId)) {
                         color = `yellow`
                     }
@@ -306,26 +257,10 @@
                         color = `green`
                     }
                     var host = node.host
-                    switch(id) {
-                        case 0:
-                            nodes[nodeId] = {color, subnet, layer, host}
-                            break;
-                        case 1:
-                            nodes2[nodeId] = {color, subnet, layer, host}
-                            break;
-                        case 2:
-                            nodes3[nodeId] = {color, subnet, layer, host}
-                            break;
-                        case 3:
-                            nodes4[nodeId] = {color, subnet, layer, host}
-                            break;
-                        case 4:
-                            nodes5[nodeId] = {color, subnet, layer, host}
-                            break;
-                    }
+                    nodes[id][nodeId] = {color, subnet, layer, host}
                     nextNodeIndex++
                 }
-                layout()
+                layout(id)
                 // const graphComponent = this.$refs.graph;
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
@@ -442,10 +377,14 @@
                 // compromised,
                 // compromised_services,
 
-                graph,
                 nodes,
                 edges,
                 layouts,
+
+                graph,
+                // nodes,
+                // edges,
+                // layouts,
                 selectedNodes,
                 showNodeInfo: false,
                 showLabel1: true,
@@ -453,8 +392,9 @@
                 propNode:null,
 
                 graph2,
-                nodes2,
-                edges2,
+                // nodes2,
+                // edges2,
+                // layouts2,
                 selectedNodes2,
                 showNodeInfo2: false,
                 showLabel2: false,
@@ -462,8 +402,9 @@
                 propNode2:null,
 
                 graph3,
-                nodes3,
-                edges3,
+                // nodes3,
+                // edges3,
+                // layouts3,
                 selectedNodes3,
                 showNodeInfo3: false,
                 showLabel3: false,
@@ -471,8 +412,9 @@
                 propNode3:null,
 
                 graph4,
-                nodes4,
-                edges4,
+                // nodes4,
+                // edges4,
+                // layouts4,
                 selectedNodes4,
                 showNodeInfo4: false,
                 showLabel4: false,
@@ -480,8 +422,9 @@
                 propNode4:null,
 
                 graph5,
-                nodes5,
-                edges5,
+                // nodes5,
+                // edges5,
+                // layouts5,
                 selectedNodes5,
                 showNodeInfo5: false,
                 showLabel5: false,
@@ -635,9 +578,9 @@
         ref="graph"
         class="graph"
         v-model:selected-nodes="selectedNodes"
-        :nodes="nodes"
-        :edges="edges"
-        :layouts="layouts"
+        :nodes="nodes[0]"
+        :edges="edges[0]"
+        :layouts="layouts[0]"
         :configs="configs"
         >
         </v-network-graph>
@@ -666,9 +609,9 @@
         ref="graph2"
         class="graph"
         v-model:selected-nodes="selectedNodes2"
-        :nodes="nodes2"
-        :edges="edges2"
-        :layouts="layouts"
+        :nodes="nodes[1]"
+        :edges="edges[1]"
+        :layouts="layouts[1]"
         :configs="configs"
         >
         </v-network-graph>
@@ -696,9 +639,9 @@
         ref="graph3"
         class="graph"
         v-model:selected-nodes="selectedNodes3"
-        :nodes="nodes3"
-        :edges="edges3"
-        :layouts="layouts"
+        :nodes="nodes[2]"
+        :edges="edges[2]"
+        :layouts="layouts[2]"
         :configs="configs"
         >
         </v-network-graph>
@@ -726,9 +669,9 @@
         ref="graph4"
         class="graph"
         v-model:selected-nodes="selectedNodes4"
-        :nodes="nodes4"
-        :edges="edges4"
-        :layouts="layouts"
+        :nodes="nodes[3]"
+        :edges="edges[3]"
+        :layouts="layouts[3]"
         :configs="configs"
         >
         </v-network-graph>
@@ -756,9 +699,9 @@
         ref="graph5"
         class="graph"
         v-model:selected-nodes="selectedNodes5"
-        :nodes="nodes5"
-        :edges="edges5"
-        :layouts="layouts"
+        :nodes="nodes[4]"
+        :edges="edges[4]"
+        :layouts="layouts[4]"
         :configs="configs"
         >
         </v-network-graph>
