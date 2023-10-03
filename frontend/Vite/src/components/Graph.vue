@@ -102,8 +102,9 @@
     function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
-        for (var key in nodes) {
-            var node = nodes[key]
+        console.log(nodes[id])
+        for (var key in nodes[id]) {
+            var node = nodes[id][key]
             var subnet = node.subnet
             var layer = node.layer
             var location = `${subnet}-${layer}`
@@ -131,7 +132,7 @@
             for (var i = 0; i < subnetSize; i++) {
                 var x = centerx + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
                 var y = centery + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
-                // layouts.nodes[subnet[i]] = { x, y }
+                layouts[id].nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
             index++
@@ -200,18 +201,22 @@
             },
 
             manualStep(id, direction) {
+                clearInterval(intervalIDs[id])
+                startSim[id] = false
                 if (direction == "back") {
+                    if (graphIndex[id] == 0) {
+                        return
+                    }
                     graphIndex[id] = graphIndex[id] - 1
-                }
-                if (graphIndex[id] == number_of_graphs[id]) {
-                    this.msg = "Simulation finished"
-                    startSim[id] = false
-                    clearInterval(intervalIDs[id])
-                    return
                 }
                 startSim[id] = false
                 if (direction == "forward") {
                     graphIndex[id] = graphIndex[id] + 1
+                    if (graphIndex[id] == number_of_graphs[id]) {
+                        this.msg = "Simulation finished"
+                        graphIndex[id] = graphIndex[id] - 1
+                        return
+                    }
                 }
                 this.step(id)
                 // this.msg = "Stopped"
