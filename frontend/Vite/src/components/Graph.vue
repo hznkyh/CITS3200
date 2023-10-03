@@ -10,6 +10,7 @@
     import data5 from "./data5"
 
     import nodeInfo from "./NodeInfo.vue"
+    import Metrics from "./Metrics.vue"
 
     import {
         ForceLayout,
@@ -167,6 +168,7 @@
         components: {
             vNG,
             nodeInfo,
+            Metrics,
         },
         methods: {
             async getGraph() {
@@ -584,7 +586,7 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
+            <button @click="graph?.fitToContents()" ref="myBtn" class="btn">Fit</button>
             <button @click="graph?.zoomIn()">Zoom In</button>
             <button @click="graph?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
@@ -596,6 +598,9 @@
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
             <nodeInfo :node="propNode"></nodeInfo>
+        </div>
+        <div>
+            <Metrics></Metrics>
         </div>
     </div>
 
@@ -625,6 +630,9 @@
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
+        <div>
+            <Metrics></Metrics>
+        </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
     <div id="graph3" class="graph-container" v-if="showGraph3">
@@ -651,6 +659,9 @@
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
             <nodeInfo :node="propNode3"></nodeInfo>
+        </div>
+        <div>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
@@ -679,6 +690,9 @@
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
+        <div>
+            <Metrics></Metrics>
+        </div>
     </div>
     <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
     <div id="graph5" class="graph-container" v-if="showGraph5">
@@ -705,6 +719,9 @@
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
             <nodeInfo :node="propNode5"></nodeInfo>
+        </div>
+        <div>
+            <Metrics class="metricBtn"></Metrics>
         </div>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button>
