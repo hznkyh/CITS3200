@@ -162,6 +162,21 @@
         }
         old_subnets = new_subnets
     }
+    
+    function getSim(id) {
+        switch (id) {
+            case 1:
+                return storedGraph['graph1']
+            case 2:
+                return storedGraph['graph2']
+            case 3:
+                return storedGraph['graph3']
+            case 4:
+                return storedGraph['graph4']
+            case 5:
+                return storedGraph['graph5']
+        }
+    }
 
     export default {
         name: 'Network',
@@ -181,6 +196,8 @@
                     storedGraph = response.data;
                     number_of_graphs = Object.keys(storedGraph).length;
                     console.log(storedGraph);
+                    console.log("test")
+                    console.log[getSim(1)]
                     graphIndex = -1;
                     this.msg = "Got graph";
                 } catch (error) {
