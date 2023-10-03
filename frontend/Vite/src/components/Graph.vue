@@ -46,14 +46,15 @@
 
     var number_of_sims = 1;
 
+    var graphIndex: number[] = [-1, -1, -1, -1, -1];
+    var startSim: boolean[] = [false, false, false, false, false];
     var storedGraph = {}
-    var number_of_graphs = 0;
-    var graphIndex = -1;
-    var startSim = false;
+    var number_of_graphs: number[] = [];
     // var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
-    var intervalID
+
+    var intervalIDs: number[] = [];
 
     function clearData() {
         // Clear the nodes object
@@ -75,6 +76,14 @@
             if (Object.hasOwnProperty.call(layouts["nodes"], key)) {
             delete layouts["nodes"][key];
             }
+        }
+
+        number_of_graphs = [];
+        graphIndex = [-1, -1, -1, -1, -1];
+        startSim = [false, false, false, false, false];
+
+        for (var i = 0; i < intervalIDs.length; i++) {
+            clearInterval(intervalIDs[i])
         }
     }
 
@@ -187,71 +196,70 @@
         },
         methods: {
             async getGraph() {
-                startSim = false;
                 try {
                     clearData();
-                    clearInterval(intervalID);
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
-                    number_of_graphs = Object.keys(storedGraph).length;
                     console.log(storedGraph);
-                    console.log("test")
-                    console.log[getSim(1)]
-                    graphIndex = -1;
-                    this.msg = "Got graph";
+                    for (var i = 1; i <= number_of_sims; i ++) {
+                        number_of_graphs.push(storedGraph[`graph${i}`].length)
+                    }
+                    console.log (number_of_graphs)
+                    // this.msg = "Got graph";
                 } catch (error) {
                     console.error(error);
                 }
             },
 
-            start() {
-                if (!startSim) {
-                    startSim = true
+            start(id) {
+                if (!startSim[id]) {
+                    startSim[id] = true
                     this.msg = "Start"
-                    intervalID = setInterval(() => {
-                        if (startSim) {
+                    intervalIDs[id] = setInterval(() => {
+                        if (startSim[id]) {
                             // this.msg = "Running"
-                            this.step()
+                            graphIndex[id]++
+                            this.step(id)
                         }
                     }, 1500)
                 }
             },
 
-            stop() {
-                startSim = false
+            stop(id) {
+                startSim[id] = false
                 this.msg = "Stopped"
 
             },
 
-            manualStep(direction) {
+            manualStep(id, direction) {
                 if (direction == "back") {
-                    graphIndex--
+                    graphIndex[id] = graphIndex[id] - 1
                 }
-                if (graphIndex == number_of_graphs) {
+                if (graphIndex[id] == number_of_graphs[id]) {
                     this.msg = "Simulation finished"
-                    startSim = false
-                    clearInterval(intervalID)
+                    startSim[id] = false
+                    clearInterval(intervalIDs[id])
                     return
                 }
-                startSim = false
+                startSim[id] = false
                 if (direction == "forward") {
-                    graphIndex++
+                    graphIndex[id] = graphIndex[id] + 1
                 }
-                console.log(graphIndex)
-                this.step()
+                this.step(id)
                 // this.msg = "Stopped"
             },
 
-            step() {
-                if (graphIndex == number_of_graphs) {
+            step(id) {
+                if (graphIndex[id] == number_of_graphs[id]) {
                     this.msg = "Simulation finished"
-                    startSim = false
-                    clearInterval(intervalID)
+                    startSim[id] = false
+                    clearInterval(intervalIDs[id])
                     return
                 }
                 exposed = [];
-                var graph = storedGraph[graphIndex]
+                var graph = storedGraph[`graph${id+1}`][graphIndex[id]]
+                console.log(id)
 
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
@@ -259,9 +267,26 @@
                     const edgeId = `edge${nextEdgeIndex}`
                     const source = `node${graph.links[z].source + 1}`
                     const target = `node${graph.links[z].target + 1}`
-                    edges[edgeId] = { source, target }
+                    switch(id) {
+                        case 0:
+                            edges[edgeId] = { source, target }
+                            break;
+                        case 1:
+                            edges2[edgeId] = { source, target }
+                            break;
+                        case 2:
+                            edges3[edgeId] = { source, target }
+                            break;
+                        case 3:
+                            edges4[edgeId] = { source, target }
+                            break;
+                        case 4:
+                            edges5[edgeId] = { source, target }
+                            break;
+                    }
                     nextEdgeIndex++
                 };
+                console.log(edges)
 
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
@@ -281,11 +306,25 @@
                         color = `green`
                     }
                     var host = node.host
-
-                    nodes[nodeId] = {color, subnet, layer, host}
+                    switch(id) {
+                        case 0:
+                            nodes[nodeId] = {color, subnet, layer, host}
+                            break;
+                        case 1:
+                            nodes2[nodeId] = {color, subnet, layer, host}
+                            break;
+                        case 2:
+                            nodes3[nodeId] = {color, subnet, layer, host}
+                            break;
+                        case 3:
+                            nodes4[nodeId] = {color, subnet, layer, host}
+                            break;
+                        case 4:
+                            nodes5[nodeId] = {color, subnet, layer, host}
+                            break;
+                    }
                     nextNodeIndex++
                 }
-                console.log(nodes)
                 layout()
                 // const graphComponent = this.$refs.graph;
                 // // Call the fitToContents method of the component
@@ -607,10 +646,10 @@
             <button @click="graph?.zoomIn()">Zoom In</button>
             <button @click="graph?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <button @click="start(0)">Start/Continue</button>
+            <button @click="manualStep(0, 'forward')">Step</button>
+            <button @click="manualStep(0, 'back')">Step Back</button>
+            <button @click="stop(0)">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
@@ -638,10 +677,10 @@
             <button @click="graph2?.zoomIn()">Zoom In</button>
             <button @click="graph2?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <button @click="start(1)">Start/Continue</button>
+            <button @click="manualStep(1, 'forward')">Step</button>
+            <button @click="manualStep(1, 'back')">Step Back</button>
+            <button @click="stop(1)">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
@@ -668,10 +707,10 @@
             <button @click="graph3?.zoomIn()">Zoom In</button>
             <button @click="graph3?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <button @click="start(2)">Start/Continue</button>
+            <button @click="manualStep(2, 'forward')">Step</button>
+            <button @click="manualStep(2, 'back')">Step Back</button>
+            <button @click="stop(2)">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
@@ -698,10 +737,10 @@
             <button @click="graph4?.zoomIn()">Zoom In</button>
             <button @click="graph4?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <button @click="start(3, )">Start/Continue</button>
+            <button @click="manualStep(3, 'forward')">Step</button>
+            <button @click="manualStep(3, 'back')">Step Back</button>
+            <button @click="stop(3)">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
@@ -728,10 +767,10 @@
             <button @click="graph5?.zoomIn()">Zoom In</button>
             <button @click="graph5?.zoomOut()">Zoom Out</button>
             <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <button @click="start(4)">Start/Continue</button>
+            <button @click="manualStep(4, 'forward')">Step</button>
+            <button @click="manualStep(4, 'back')">Step Back</button>
+            <button @click="stop(4, )">Stop</button>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
