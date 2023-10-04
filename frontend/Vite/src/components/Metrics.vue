@@ -3,25 +3,25 @@
         <div class="row">
             <div class="group">
                 <button class="btn1" @click="togglePng('png1')">Network</button>
-                <div class="png-box" v-if="activePng === 'png1'">
+                <div class="png-box" v-if="pngStates.png1">
                     <h1>PNG</h1>
                 </div>
             </div>
             <div class="group">
                 <button class="btn2" @click="togglePng('png2')">MTD Record</button>
-                <div class="png-box" v-if="activePng === 'png2'">
+                <div class="png-box" v-if="pngStates.png2">
                     <h1>PNG</h1>
                 </div>
             </div>
             <div class="group">
                 <button class="btn3" @click="togglePng('png3')"> Attack Record</button>
-                <div class="png-box" v-if="activePng === 'png3'">
+                <div class="png-box" v-if="pngStates.png3">
                     <h1>PNG</h1>
                 </div>
             </div>
             <div class="group">
                 <button class="btn4" @click="togglePng('png4')">Attack Action</button>
-                <div class="png-box" v-if="activePng === 'png4'">
+                <div class="png-box" v-if="pngStates.png4">
                     <h1>PNG</h1>
                 </div>
             </div>
@@ -34,25 +34,25 @@ export default {
     name: 'Metrics',
     data(){
         return{
-            activePng: null
+            pngStates: {
+                png1: false,
+                png2: false,
+                png3: false,
+                png4: false
+            }
         };
     },
 
     methods: {
         togglePng(png){
-            if(this.activePng === png){
-                this.activePng = null;
-            } else {
-                this.activePng = png;
-            }
+            this.pngStates[png] = !this.pngStates[png];
         }
     }
 };
-
 </script>
 
 <style>
-.btn1 {
+.btn1, .btn2, .btn3, .btn4 {
   width: 100%;
   background-color: #000;
   color: #fff;
@@ -64,55 +64,7 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.btn1:hover:hover{
-  background-color: #333;
-}
-
-.btn2 {
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.btn2:hover:hover{
-  background-color: #333;
-}
-
-.btn3 {
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.btn3:hover:hover{
-  background-color: #333;
-}
-
-.btn4 {
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.btn4:hover:hover{
+.btn1:hover:hover, .btn2:hover:hover, .btn3:hover:hover, .btn4:hover:hover{
   background-color: #333;
 }
 
@@ -123,7 +75,7 @@ export default {
 }
 
 .group{
-  flex-basis: 25%;
+  flex: 1;
   padding: 0 10px;
 }
 .group:last-child{
