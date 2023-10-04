@@ -1,29 +1,29 @@
-
 import logging
 import simpy
 import json
 from networkx.readwrite import json_graph
+
 # create_experiment_snapshots([25, 50, 75, 100])
 from simulator.mtdnetwork.statistic.evaluation import Evaluation
 from simulator.mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
 from simulator.mtdnetwork.operation.attack_operation import AttackOperation
 from simulator.mtdnetwork.component.host import Host
 from simulator.mtdnetwork.component.adversary import Adversary
+
 # from simulator.mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
 # from simulator.mtdnetwork.configs import config,set_config
 from simulator.mtdnetwork import configs
 from simulator.mtdnetwork.operation.mtd_operation import MTDOperation
 from simulator.mtdnetwork.component.time_network import TimeNetwork
 import matplotlib.pyplot as plt
-from itertools import chain, count
-import networkx as nx
-import pandas as pd
 import warnings
 import os
 import sys
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+print("__name__", __name__)
+logger.info("init adapter")
 # current_directory = os.path.dirname(os.path.abspath(__file__))
 # target_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)) , 'experiments')
 # target_directory = os.getcwd()
@@ -31,15 +31,16 @@ current_script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the "s" directory
 target_directory = os.path.join(current_script_dir, "..")
-if not os.path.exists(target_directory + '/experimental_data'):
-    os.makedirs(target_directory + '/experimental_data')
-    os.makedirs(target_directory + '/experimental_data/plots')
-    os.makedirs(target_directory + '/experimental_data/results')
-sys.path.append(target_directory.replace('experiments', ''))
+print("target_directory", target_directory)
+if not os.path.exists(target_directory + "/experimental_data"):
+    os.makedirs(target_directory + "/experimental_data")
+    os.makedirs(target_directory + "/experimental_data/plots")
+    os.makedirs(target_directory + "/experimental_data/results")
+sys.path.append(target_directory.replace("experiments", ""))
 # print(current_directory)
 print(target_directory)
 warnings.filterwarnings("ignore")
-plt.set_loglevel('WARNING')
+plt.set_loglevel("WARNING")
 
 
 class GraphEncoder(json.JSONEncoder):
@@ -49,15 +50,12 @@ class GraphEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-
-def create_sim_test(
-    env: simpy.Environment,
-    res: list,
+def create_sim(
     start_time=0,
     finish_time=None,
     checkpoints=None,
     new_network=False,
-    scheme='random',
+    scheme="random",
     mtd_interval=None,
     custom_strategies=None,
     total_nodes=50,
@@ -69,10 +67,10 @@ def create_sim_test(
     terminate_compromise_ratio=0.8,
     callback=None,
 ):
-    '''The `create_sim` function creates a simulation environment for a network attack and defense
+    """The `create_sim` function creates a simulation environment for a network attack and defense
     scenario, with options for different attack and defense strategies, network parameters, and
     checkpointing.
-    
+
     Parameters
     ----------
     env : simpy.Environment
@@ -125,13 +123,15 @@ def create_sim_test(
         A boolean value indicating whether to create a new network or load an existing one. If set to True,
     a new network will be created. If set to False, an existing network will be loaded if available,
     otherwise an error message will be printed.
-    
+
     Returns
     -------
         The function `create_sim` returns two values: `evaluation` and `res`.
-    
-    '''
-    logger.info('init simulation')
+
+    """
+    logger.info("init simulation")
+    env: simpy.Environment = simpy.Environment()
+    snapshot_list: list = []
     end_event = env.event()
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
@@ -140,42 +140,63 @@ def create_sim_test(
     if start_time > 0:
         try:
             time_network, adversary = snapshot_checkpoint.load_snapshots_by_time(
-                start_time)
+                start_time
+            )
         except FileNotFoundError:
-            print('No timestamp-based snapshots available! Set start_time = 0 !')
+            print("No timestamp-based snapshots available! Set start_time = 0 !")
             return
     elif not new_network:
         try:
-            time_network, adversary = snapshot_checkpoint.load_snapshots_by_network_size(
-                total_nodes)
+            (
+                time_network,
+                adversary,
+            ) = snapshot_checkpoint.load_snapshots_by_network_size(total_nodes)
         except FileNotFoundError:
-            print('set new_network=True')
+            print("set new_network=True")
     else:
-        time_network = TimeNetwork(total_nodes=total_nodes, total_endpoints=total_endpoints,
-                                   total_subnets=total_subnets, total_layers=total_layers,
-                                   target_layer=target_layer, total_database=total_database,
-                                   terminate_compromise_ratio=terminate_compromise_ratio)
-        adversary = Adversary(network=time_network,
-                              attack_threshold=configs.config.get("ATTACKER_THRESHOLD"))
+        time_network = TimeNetwork(
+            total_nodes=total_nodes,
+            total_endpoints=total_endpoints,
+            total_subnets=total_subnets,
+            total_layers=total_layers,
+            target_layer=target_layer,
+            total_database=total_database,
+            terminate_compromise_ratio=terminate_compromise_ratio,
+        )
+        adversary = Adversary(
+            network=time_network,
+            attack_threshold=configs.config.get("ATTACKER_THRESHOLD"),
+        )
         # snapshot_checkpoint.save_to_array(time_network, adversary, res)
-
 
     # start attack
     attack_operation = AttackOperation(
-        env=env, end_event=end_event, callback = callback, adversary=adversary, proceed_time=0)
+        env=env,
+        end_event=end_event,
+        callback=callback,
+        adversary=adversary,
+        proceed_time=0,
+    )
     attack_operation.proceed_attack()
 
     # start mtd
-    if scheme != 'None':
-        mtd_operation = MTDOperation(env=env, end_event=end_event, network=time_network, scheme=scheme,
-                                     attack_operation=attack_operation, proceed_time=0,
-                                     mtd_trigger_interval=mtd_interval, custom_strategies=custom_strategies)
+    if scheme != "None":
+        mtd_operation = MTDOperation(
+            env=env,
+            end_event=end_event,
+            network=time_network,
+            scheme=scheme,
+            attack_operation=attack_operation,
+            proceed_time=0,
+            mtd_trigger_interval=mtd_interval,
+            custom_strategies=custom_strategies,
+        )
         mtd_operation.proceed_mtd()
 
     # save snapshot by time
     # print("proceed save checkpoints",checkpoints)
     if checkpoints is not None:
-        snapshot_checkpoint.proceed_save(time_network, adversary,res)
+        snapshot_checkpoint.proceed_save(time_network, adversary, snapshot_list)
 
     # Evaluate the simulation
     # evaluation = Evaluation(network=time_network, adversary=adversary)
@@ -185,9 +206,9 @@ def create_sim_test(
         env.run(until=(finish_time - start_time))
     else:
         env.run(until=end_event)
-        
+
     evaluation = Evaluation(network=time_network, adversary=adversary)
     evaluation.save_all()
     # print("RES:",res)
-    print("get_compromised_hosts ",evaluation._adversary.get_compromised_hosts())
-    return evaluation
+    print("get_compromised_hosts ", evaluation._adversary.get_compromised_hosts())
+    return {"evaluation": evaluation, "snapshots": snapshot_list}

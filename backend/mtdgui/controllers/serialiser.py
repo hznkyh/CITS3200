@@ -48,7 +48,6 @@ def serialize_graph(G:nx.Graph, attrs=None):
         attrs.update({k: v for (k, v) in _attrs.items() if k not in attrs})
     name = attrs["name"]
     source = attrs["source"]
-    print(source)
     target = attrs["target"]
     links = attrs["link"]
     # Allow 'key' to be omitted from attrs if the graph is not a multigraph.

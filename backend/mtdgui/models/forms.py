@@ -9,6 +9,9 @@ from typing import Optional, Union, List
 #     ServiceDiversity: Optional[conint(ge=0)] = None
 #     UserShuffle: Optional[conint(ge=0)] = None
 
+class graphNumber(BaseModel):
+    graph_number: str
+
 class MTD_PRIORITY(BaseModel):
     CompleteTopologyShuffle: Union[int, None]
     HostTopologyShuffle: Union[int, None]
@@ -40,6 +43,7 @@ class RunModel(BaseModel):
     target_layer: Union[int, None]
 
 class ParameterRequest(BaseModel):
+    graph: graphNumber
     run: RunModel
     config: Union[ConfigModel,None]
 # from pydantic import BaseModel, validator

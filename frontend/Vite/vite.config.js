@@ -18,8 +18,12 @@ export default defineConfig({
     host: '0.0.0.0'
   },
   build: {
-    rollupOptions: {
-      input: 'src/main.js'
-    }
+    target: 'esnext' //browsers can handle the latest ES features
   }
+
+  // build: {
+  //   rollupOptions: {
+  //     input: 'src/main.js'
+  //   }
+  // }
 })
