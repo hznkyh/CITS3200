@@ -1,16 +1,13 @@
 <template>
   <div class="button-container">
-    <button class="png-btn" @click="togglePng('png1')">Network</button>
-    <button class="png-btn" @click="togglePng('png2')">MTD Record</button>
-    <button class="png-btn" @click="togglePng('png3')"> Attack Record</button>
-    <button class="png-btn" @click="togglePng('png4')">Attack Action</button>
+    <button class="png-btn" @click="getImageURL('network')">Network</button>
+    <button class="png-btn" @click="getImageURL('mtd_record')">MTD Record</button>
+    <button class="png-btn" @click="getImageURL('attack_record')"> Attack Record</button>
+    <button class="png-btn" @click="getImageURL('attack_action')">Attack Action</button>
   </div>
 
   <div class="pngs">
-    <img class="png" src="http://localhost:8000/statistics/network" alt="Network" v-if="activePng === 'png1'">
-    <img class="png" src="http://localhost:8000/statistics/mtd_record" alt="MTD Record" v-if="activePng === 'png2'">
-    <img class="png" src="http://localhost:8000/statistics/attack_record" alt="Attack Record" v-if="activePng === 'png3'">
-    <img class="png" src="http://localhost:8000/statistics/attack_action" alt="Attack Action" v-if="activePng === 'png4'">
+    <img class="png" :src=imageURL alt="Network">
   </div>
 </template>
 
@@ -29,14 +26,24 @@ export default {
     },
 
     methods: {
-      togglePng(png){
-        // console.log(this.sim_num)
-        if(this.activePng === png){
-            this.activePng = null;
-        } else {
-            this.activePng = png;
-        }
-      },
+      // togglePng(png){
+      //   // console.log(this.sim_num)
+      //   if(this.activePng === png){
+      //       this.activePng = null;
+      //   } else {
+      //       this.activePng = png;
+      //   }
+      // },
+    
+      // getImageURL(type){
+      //   this.imageURL = `http://localhost:8000/statistics/${this.sim_num}/${type}`
+      //   console.log(this.imageURL)
+      // }
+
+      getImageURL(type){
+        this.imageURL = `http://localhost:8000/statistics/${type}`
+        console.log(this.imageURL)
+      }
     },
 };
 
