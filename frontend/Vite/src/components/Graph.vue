@@ -593,7 +593,7 @@
             <button @click="graph?.fitToContents()" ref="myBtn" class="btn">Fit</button>
             <button @click="graph?.zoomIn()">Zoom In</button>
             <button @click="graph?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
+            <!-- <button @click="getGraph()">Get</button> -->
             <button @click="start(0)">Start/Continue</button>
             <button @click="manualStep(0, 'forward')">Step</button>
             <button @click="manualStep(0, 'back')">Step Back</button>
@@ -624,7 +624,7 @@
             <button @click="graph2?.fitToContents()" ref="myBtn">Fit</button>
             <button @click="graph2?.zoomIn()">Zoom In</button>
             <button @click="graph2?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
+            <!-- <button @click="getGraph()">Get</button> -->
             <button @click="start(1)">Start/Continue</button>
             <button @click="manualStep(1, 'forward')">Step</button>
             <button @click="manualStep(1, 'back')">Step Back</button>
@@ -654,7 +654,7 @@
             <button @click="graph3?.fitToContents()" ref="myBtn">Fit</button>
             <button @click="graph3?.zoomIn()">Zoom In</button>
             <button @click="graph3?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
+            <!-- <button @click="getGraph()">Get</button> -->
             <button @click="start(2)">Start/Continue</button>
             <button @click="manualStep(2, 'forward')">Step</button>
             <button @click="manualStep(2, 'back')">Step Back</button>
@@ -684,7 +684,7 @@
             <button @click="graph4?.fitToContents()" ref="myBtn">Fit</button>
             <button @click="graph4?.zoomIn()">Zoom In</button>
             <button @click="graph4?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
+            <!-- <button @click="getGraph()">Get</button> -->
             <button @click="start(3, )">Start/Continue</button>
             <button @click="manualStep(3, 'forward')">Step</button>
             <button @click="manualStep(3, 'back')">Step Back</button>
@@ -714,7 +714,7 @@
             <button @click="graph5?.fitToContents()" ref="myBtn">Fit</button>
             <button @click="graph5?.zoomIn()">Zoom In</button>
             <button @click="graph5?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
+            <!-- <button @click="getGraph()">Get</button> -->
             <button @click="start(4)">Start/Continue</button>
             <button @click="manualStep(4, 'forward')">Step</button>
             <button @click="manualStep(4, 'back')">Step Back</button>
