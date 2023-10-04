@@ -6,11 +6,11 @@
     <button class="png-btn" @click="togglePng('png4')">Attack Action</button>
   </div>
 
-  <div class="png">
-    <img src="http://localhost:8000/statistics/network" alt="Network" v-if="activePng === 'png1'">
-    <img src="http://localhost:8000/statistics/mtd_record" alt="MTD Record" v-if="activePng === 'png2'">
-    <img src="http://localhost:8000/statistics/attack_record" alt="Attack Record" v-if="activePng === 'png3'">
-    <img src="http://localhost:8000/statistics/attack_action" alt="Attack Action" v-if="activePng === 'png4'">
+  <div class="pngs">
+    <img class="png" src="http://localhost:8000/statistics/network" alt="Network" v-if="activePng === 'png1'">
+    <img class="png" src="http://localhost:8000/statistics/mtd_record" alt="MTD Record" v-if="activePng === 'png2'">
+    <img class="png" src="http://localhost:8000/statistics/attack_record" alt="Attack Record" v-if="activePng === 'png3'">
+    <img class="png" src="http://localhost:8000/statistics/attack_action" alt="Attack Action" v-if="activePng === 'png4'">
   </div>
 </template>
 
@@ -60,11 +60,16 @@ export default {
     color: white;
   }
 
-  .png{
-    size: 80%;
+  .pngs{
+    max-width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 20px;
     max-width: fit-content;
+  }
+
+  .png {
+    max-width: 100%;
+    max-height: 100%;
   }
 </style>
