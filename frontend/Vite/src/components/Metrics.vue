@@ -1,14 +1,16 @@
 <template>
-  <div class="png">
-    <div class="row">
-        <button class="btn" @click="togglePng('png1')">Network</button>
-        <button class="btn" @click="togglePng('png2')">MTD Record</button>
-        <button class="btn" @click="togglePng('png3')"> Attack Record</button>
-        <button class="btn" @click="togglePng('png4')">Attack Action</button>
-      </div>
+  <div class="button-container">
+    <button class="png-btn" @click="togglePng('png1')">Network</button>
+    <button class="png-btn" @click="togglePng('png2')">MTD Record</button>
+    <button class="png-btn" @click="togglePng('png3')"> Attack Record</button>
+    <button class="png-btn" @click="togglePng('png4')">Attack Action</button>
   </div>
-  <div class="png-box">
-    <img src="http://localhost:8000/statistics/network" alt="Network" />
+
+  <div class="png">
+    <img src="http://localhost:8000/statistics/network" alt="Network" v-if="activePng === 'png1'">
+    <img src="http://localhost:8000/statistics/mtd_record" alt="MTD Record" v-if="activePng === 'png2'">
+    <img src="http://localhost:8000/statistics/attack_record" alt="Attack Record" v-if="activePng === 'png3'">
+    <img src="http://localhost:8000/statistics/attack_action" alt="Attack Action" v-if="activePng === 'png4'">
   </div>
 </template>
 
@@ -30,42 +32,39 @@ export default {
             this.activePng = png;
         }
       },
-      getNetwork() {
-        this.imageURL = 'http://localhost:8000/statistics/network';
-      }
     },
 };
 
 </script>
 
 <style>
-.btn {
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
+  .button-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+  }
 
-.row{
-  /* display: flex; */
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-.group:last-child{
-    margin-right: 0;
-}
+  .png-btn{
+    border: 1px solid black;
+    border-radius: 15px;
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+  }
 
-.png-box {
-    width: 100%; 
-    margin: 2em 0;
-    padding: 2em;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+  .png-btn:hover{
+    background-color: black;
+    color: white;
+  }
+
+  .png{
+    size: 80%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    max-width: fit-content;
+  }
 </style>
