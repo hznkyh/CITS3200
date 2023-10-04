@@ -2,18 +2,25 @@
   <div class="content">
     <button class="instructions" @click="toggleInstructions">{{ showInstructions ? 'Hide Instructions' : "Show Instructions" }}</button>
     <div class="instruction-box" v-if="showInstructions">
-      <h1>Instructions</h1>
+      <h1 class="h1-instructions"> Panel Instructions</h1>
       <ol class="list">
-        <li>Enter inputs to the panel at the right</li>
-        <li>Optional: Click on "Advanced", and enter input for advanced options. Otherwise, leave it as the default values.</li>
+        <li>Enter you desired values into the fields below.</li>
+        <li>Optional: Click on "Advanced", and enter the inputs for the advanced options. Otherwise, leave it empty (this will set them to the default values).</li>
+        <li>One all fields have been entered, click the save button.</li>
+        <li>Note: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
+        <li>Once you have saved your graph(s), click on submit to submit your data.</li>
+      </ol>
+      <h1 class="h1-instructions">Graph Instructions</h1>
+      <ol class="list">
+        <li>Click on "Get" to retrieve the graph data</li>
         <li>Click on "Start" to start the simulation</li>
         <li>Click on "Step" to step through the simulation</li>
         <li>Click on "Stop" to stop the simulation</li>
       </ol>
       <h1>To view</h1>
-      <p>To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
-      <p>Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
-      <p>Click a node and hold it to drag it to anyplace desriable.</p>
+      <p class="p-instructions">To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
+      <p class="p-instructions">Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
+      <p class="p-instructions">Click a node and hold it to drag it to anyplace desriable.</p>
       <h3>Graph</h3>
       <p>The graph will show the network and the nodes. The nodes will be coloured based on their state. The legend is as follows:</p>
       <ul class="list">
@@ -44,7 +51,7 @@
           <h2> Parameters Panel</h2>
 
           <div class="group">
-            <label>Graph Number *: </label>
+            <label>Graph Number <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -59,7 +66,7 @@
           </div>
 
           <div class="group">
-            <label>Number of Nodes *:</label>
+            <label>Number of Nodes <span style="color: red;">*</span>:</label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -73,7 +80,7 @@
         
 
           <div class="group">
-            <label>Number of Exposed Nodes *: </label>
+            <label>Number of Exposed Nodes <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -89,7 +96,7 @@
           <!-- Row 2 -->
         <div class="row">
           <div class="group">
-            <label>Number of Layers *: </label>
+            <label>Number of Layers <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -102,7 +109,7 @@
           </div>
         
           <div class="group">
-            <label>Compromise Ratio *: </label>
+            <label>Compromise Ratio <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -115,7 +122,7 @@
           </div>
 
           <div class="group">
-            <label>MTD Interval *: </label>
+            <label>MTD Interval <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -131,7 +138,7 @@
           <!-- Row 3 -->
         <div class="row">
           <div class="group">
-            <label>Finish Time *: </label>
+            <label>Finish Time <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -146,7 +153,7 @@
 
         
           <div class="group">
-            <label>Checkpoints *: </label>
+            <label>Checkpoints <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -159,7 +166,7 @@
           </div>
 
           <div class="group">
-            <label>Scheme *: </label>
+            <label>Scheme <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
@@ -667,6 +674,13 @@ body, html {
     margin: 0;
     padding: 0;
 }
+.h1-instructions {
+  text-align: left;
+}
+
+.p-instructions {
+  text-align: left;
+}
 
 .content {
     width: 100%;
@@ -687,9 +701,13 @@ body, html {
     border-radius: 10px;
     margin:2em;
     overflow-y: scroll;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 2px solid #000; 
+    border: none;
     position: relative;
+    box-shadow: 
+      inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+      -2px -2px 5px rgba(255, 255, 255, 0.9), 
+      2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .panel::-webkit-scrollbar {
@@ -854,6 +872,7 @@ form {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    margin-bottom: 5px;
  }
 
  .instructions:hover{
@@ -863,11 +882,15 @@ form {
  .instruction-box {
     width: 100%;
     margin: 2em;
-    margin-top: 0;
+    margin-top: 5px;
     padding: 2em;
     background-color: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+      -2px -2px 5px rgba(255, 255, 255, 0.9), 
+      2px 2px 5px rgba(0, 0, 0, 0.2);
  }
 
  .list {
