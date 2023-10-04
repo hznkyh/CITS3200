@@ -5,8 +5,10 @@ from matplotlib.lines import Line2D
 import networkx as nx
 import pandas as pd
 import os
+from auth import get_current_active_user
+from sessions import sessions
 
-directory = os.getcwd()
+path = os.getcwd()
 logger = logging.getLogger(__name__)
 
 class Evaluation:
@@ -106,8 +108,11 @@ class Evaluation:
         """
         plt.figure(1, figsize=(15, 12))
         nx.draw(self._network.graph, pos=self._network.pos, node_color=self._network.colour_map, with_labels=True)
-        plt.savefig(directory + '/experimental_data/plots/network.png')
-        plt.show()
+        if path == os.getcwd():
+            plt.savefig(path + '/experimental_data/plots/network.png')
+        else: 
+            plt.savefig(path)
+        # plt.show()
 
     def draw_hacker_visible(self):
         """
@@ -116,7 +121,7 @@ class Evaluation:
         subgraph = self._network.get_hacker_visible_graph()
         plt.figure(1, figsize=(15, 12))
         nx.draw(subgraph, pos=self._network.pos, with_labels=True)
-        plt.show()
+        # plt.show()
 
     def draw_compromised(self):
         """
@@ -134,7 +139,7 @@ class Evaluation:
 
         plt.figure(1, figsize=(15, 12))
         nx.draw(subgraph, pos=self._network.pos, node_color=colour_map, with_labels=True)
-        plt.show()
+        # # plt.show()
 
     def visualise_attack_operation_group_by_host(self):
         """
@@ -164,8 +169,11 @@ class Evaluation:
         plt.xlabel('Time', weight='bold', fontsize=18)
         plt.ylabel('Hosts', weight='bold', fontsize=18)
         fig.tight_layout()
-        plt.savefig(directory + '/experimental_data/plots/attack_action_record_group_by_host.png')
-        plt.show()
+        if path == os.getcwd():
+            plt.savefig(path + '/experimental_data/plots/attack_action_record_group_by_host.png')
+        else: 
+            plt.savefig(path)
+        # # plt.show()
 
     def visualise_attack_operation(self):
         """
@@ -196,8 +204,11 @@ class Evaluation:
         plt.xlabel('Time', weight='bold', fontsize=18)
         plt.ylabel('Attack Actions', weight='bold', fontsize=18)
         fig.tight_layout()
-        plt.savefig(directory + '/experimental_data/plots/attack_record.png')
-        plt.show()
+        if path == os.getcwd():
+            plt.savefig(path + '/experimental_data/plots/attack_record.png')
+        else: 
+            plt.savefig(path)
+        # # plt.show()
 
     def visualise_mtd_operation(self):
         """
@@ -221,8 +232,31 @@ class Evaluation:
         plt.xlabel('Time', weight='bold', fontsize=18)
         plt.ylabel('MTD Strategies', weight='bold', fontsize=18)
         fig.tight_layout()
-        plt.savefig(directory + '/experimental_data/plots/mtd_record.png')
-        plt.show()
+        if path == os.getcwd():
+            plt.savefig(path + '/experimental_data/plots/mtd_record.png')
+        else: 
+            plt.savefig(path)
+        # # plt.show()
 
     def get_network(self):
         return self._network
+    
+    def save_all(self):
+        self.visualise_mtd_operation()
+        self.visualise_attack_operation()
+        self.visualise_attack_operation_group_by_host()
+        self.draw_network()
+        # self.draw_compromised()
+
+    def save_to_temp(self,temp_path,img_type): 
+        req_types = { 
+            "mtd_record": self.visualise_mtd_operation,
+            "attack_record": self.visualise_attack_operation,
+            "attack_action": self.visualise_attack_operation_group_by_host,
+            "network": self.draw_network
+        }
+        global path
+        path = temp_path; 
+        save_func = req_types[img_type]
+        save_func()
+        path = os.getcwd()
