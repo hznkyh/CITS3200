@@ -1,3 +1,11 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+from controllers.loggerConfig import setup_logger
+
+from routers import network,config, webSocket ,webSocketDev, streaming, statistics #, set_configs#, sim
+from controllers import * 
+
 import logging
 import pathlib
 from datetime import timedelta
@@ -26,6 +34,7 @@ app = FastAPI(debug=True)
 
 app.include_router(graphConfig.router)
 app.include_router(network.router)
+app.include_router(statistics.router)
 app.include_router(streaming.router)
 app.include_router(webSocket.router)
 app.include_router(multiSim.router)

@@ -80,7 +80,6 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
 @router.post("/multi-graph-params")
 async def get_prams(
     params: List[ParameterRequest],
-    # client: Annotated[User, Depends(get_current_active_user)],
 ):
     global set_params
     set_params = params
