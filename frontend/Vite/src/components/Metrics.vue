@@ -41,7 +41,7 @@ export default {
   .button-container{
     display: flex;
     justify-content: space-between;
-    margin-top: 1em;
+    margin: 1em 2em;
   }
 
   .png-btn{
