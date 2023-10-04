@@ -208,7 +208,7 @@ def create_sim(
         env.run(until=end_event)
 
     evaluation = Evaluation(network=time_network, adversary=adversary)
-    evaluation.save_all()
+    # evaluation.save_all()
     # print("RES:",res)
     print("get_compromised_hosts ", evaluation._adversary.get_compromised_hosts())
     return {"evaluation": evaluation, "snapshots": snapshot_list}
