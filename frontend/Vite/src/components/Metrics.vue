@@ -27,26 +27,41 @@
             </div>
         </div>
     </div>
+    <img :src="imageURL" alt="Fetched Image" />
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name: 'Metrics',
     data(){
         return{
-            activePng: null
+            activePng: null,
+            imageURL: null
         };
     },
 
     methods: {
-        togglePng(png){
-            if(this.activePng === png){
-                this.activePng = null;
-            } else {
-                this.activePng = png;
-            }
+      togglePng(png){
+        this.getPng();
+        if(this.activePng === png){
+            this.activePng = null;
+        } else {
+            this.activePng = png;
         }
-    }
+      },
+      async getPng() {
+        console.log("getPng");
+        try {
+          const response = await axios.get("/statistics/mtd_record");
+          console.log(response)
+          this.imageURL = response.data.imageURL;
+        }
+        catch (error) {
+          console.log(error);
+        }
+      }
+    },
 };
 
 </script>
