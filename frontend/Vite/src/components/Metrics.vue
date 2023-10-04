@@ -24,8 +24,13 @@ export default {
         };
     },
 
+    props: {
+        sim_num : Number,
+    },
+
     methods: {
       togglePng(png){
+        // console.log(this.sim_num)
         if(this.activePng === png){
             this.activePng = null;
         } else {

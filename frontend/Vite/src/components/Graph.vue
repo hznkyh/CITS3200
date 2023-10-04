@@ -604,7 +604,7 @@
             <nodeInfo :node="propNode"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=1></Metrics>
         </div>
     </div>
 
@@ -635,7 +635,7 @@
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=2></Metrics>
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
@@ -665,7 +665,7 @@
             <nodeInfo :node="propNode3"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=3></Metrics>
         </div>
     </div>
     <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
@@ -695,7 +695,7 @@
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=4></Metrics>
         </div>
     </div>
     <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
@@ -725,7 +725,7 @@
             <nodeInfo :node="propNode5"></nodeInfo>
         </div>
         <div>
-            <Metrics class="metricBtn"></Metrics>
+            <Metrics :sim_num=5></Metrics>
         </div>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button>
