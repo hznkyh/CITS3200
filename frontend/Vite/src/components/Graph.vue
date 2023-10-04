@@ -509,10 +509,10 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[0][newVal[0]].host)
+                    if (nodes[0][newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[0][newVal[0]].host
                         this.propNode = propNode
                     }
                 }
@@ -522,10 +522,10 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[1][newVal[0]].host)
+                    if (nodes[1][newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[1][newVal[0]].host
                         this.propNode2 = propNode
                     }
                 }
@@ -535,10 +535,10 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[2][newVal[0]].host)
+                    if (nodes[2][newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[2][newVal[0]].host
                         this.propNode3 = propNode
                     }
                 }
@@ -548,10 +548,10 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[3][newVal[0]].host)
+                    if (nodes[3][newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[3][newVal[0]].host
                         this.propNode4 = propNode
                     }
                 }
@@ -561,10 +561,10 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[4][newVal[0]].host)
+                    if (nodes[4][newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[4][newVal[0]].host
                         this.propNode5 = propNode
                     }
                 }
