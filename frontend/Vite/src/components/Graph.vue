@@ -590,7 +590,7 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+            <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
             <button @click="graph?.zoomIn()">Zoom In</button>
             <button @click="graph?.zoomOut()">Zoom Out</button>
             <!-- <button @click="getGraph()">Get</button> -->
