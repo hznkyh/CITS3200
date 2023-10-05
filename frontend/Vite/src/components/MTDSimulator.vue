@@ -17,19 +17,19 @@
         <li>Click on "Step" to step through the simulation</li>
         <li>Click on "Stop" to stop the simulation</li>
       </ol>
-      <h1>To view</h1>
+      <h1 class="h1-instruction">To view</h1>
       <p class="p-instructions">To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
       <p class="p-instructions">Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
       <p class="p-instructions">Click a node and hold it to drag it to anyplace desriable.</p>
       <h3>Graph</h3>
-      <p>The graph will show the network and the nodes. The nodes will be coloured based on their state. The legend is as follows:</p>
+      <p class="p-instructions">The graph will show the network and the nodes. The nodes will be coloured based on their state. The legend is as follows:</p>
       <ul class="list">
         <li>Green: Not compromised and exposed<span class="dot" style="background-color: green;"></span></li>
         <li>Yellow: Exposed<span class="dot" style="background-color: yellow;"></span></li>
         <li>Red: Compromised<span class="dot" style="background-color: red;"></span></li>
       </ul>
       <h3>Node</h3>
-      <p>Clicking on a node will show the node's information. The information is as follows:</p>
+      <p class="p-instructions">Clicking on a node will show the node's information. The information is as follows:</p>
       <ul class="list">
         <li>OS Type</li>
         <li>OS Version</li>
