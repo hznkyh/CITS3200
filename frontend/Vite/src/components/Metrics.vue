@@ -16,6 +16,7 @@ export default {
     name: 'Metrics',
     data(){
         return{
+            oldPng: null,
             activePng: false,
             imageURL: null
         };
@@ -32,13 +33,13 @@ export default {
       // }
 
       getImageURL(type){
-        if(this.activePng === true){
-          this.activePng = false;
-          // this.imageURL = null;
-        } else {
-          this.activePng = true;
-          this.imageURL = `http://localhost:8000/statistics/${type}`
-          console.log(this.imageURL)
+        this.imageURL = `http://localhost:8000/statistics/${type}`
+        if(this.oldPng != type){
+          this.activePng = true
+          this.oldPng = type
+        }
+        else{
+          this.activePng = !this.activePng
         }
       }
     },
