@@ -6,7 +6,7 @@
     <button class="png-btn" @click="getImageURL('attack_action')">Attack Action</button>
   </div>
 
-  <div class="pngs">
+  <div class="pngs" v-if="activePng">
     <img class="png" :src=imageURL alt="Network">
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
     name: 'Metrics',
     data(){
         return{
-            activePng: null,
+            activePng: false,
             imageURL: null
         };
     },
@@ -32,11 +32,11 @@ export default {
       // }
 
       getImageURL(type){
-        if(this.activePng === type){
-          this.activePng = null;
-          this.imageURL = null;
+        if(this.activePng === true){
+          this.activePng = false;
+          // this.imageURL = null;
         } else {
-          this.activePng = type;
+          this.activePng = true;
           this.imageURL = `http://localhost:8000/statistics/${type}`
           console.log(this.imageURL)
         }
