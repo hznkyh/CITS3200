@@ -6,7 +6,7 @@
     <button class="png-btn" @click="getImageURL('attack_action')">Attack Action</button>
   </div>
 
-  <div class="pngs">
+  <div class="pngs" v-if="activePng">
     <img class="png" :src=imageURL alt="Network">
   </div>
 </template>
@@ -16,7 +16,8 @@ export default {
     name: 'Metrics',
     data(){
         return{
-            activePng: null,
+            oldPng: null,
+            activePng: false,
             imageURL: null
         };
     },
@@ -26,15 +27,6 @@ export default {
     },
 
     methods: {
-      // togglePng(png){
-      //   // console.log(this.sim_num)
-      //   if(this.activePng === png){
-      //       this.activePng = null;
-      //   } else {
-      //       this.activePng = png;
-      //   }
-      // },
-    
       // getImageURL(type){
       //   this.imageURL = `http://localhost:8000/statistics/${this.sim_num}/${type}`
       //   console.log(this.imageURL)
@@ -42,14 +34,28 @@ export default {
 
       getImageURL(type){
         this.imageURL = `http://localhost:8000/statistics/${type}`
-        console.log(this.imageURL)
+        if(this.oldPng != type){
+          this.activePng = true
+          this.oldPng = type
+        }
+        else{
+          this.activePng = !this.activePng
+        }
       }
     },
 };
-
 </script>
 
 <style>
+  .png-box {
+      width: 100%; 
+      margin: 2em 0;
+      padding: 2em;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
   .button-container{
     display: flex;
     justify-content: space-between;
@@ -57,22 +63,28 @@ export default {
   }
 
   .png-btn{
-    border: 1px solid black;
-    border-radius: 15px;
-    background-color: white;
-    color: black;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
     padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
   }
 
   .png-btn:hover{
-    background-color: black;
-    color: white;
+    background-color: #333;
   }
 
   .pngs{
+    width: 100%; 
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
     max-width: 100%;
     display: flex;
     justify-content: center;

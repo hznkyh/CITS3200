@@ -494,10 +494,10 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[0][newVal[0]].host)
-                    if (nodes[0][newVal[0]].host) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
-                        var propNode = nodes[0][newVal[0]].host
+                        var propNode = nodes[newVal[0]].host
                         this.propNode = propNode
                     }
                 }
@@ -507,10 +507,10 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[1][newVal[0]].host)
-                    if (nodes[1][newVal[0]].host) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
-                        var propNode = nodes[1][newVal[0]].host
+                        var propNode = nodes[newVal[0]].host
                         this.propNode2 = propNode
                     }
                 }
@@ -520,10 +520,10 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[2][newVal[0]].host)
-                    if (nodes[2][newVal[0]].host) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
-                        var propNode = nodes[2][newVal[0]].host
+                        var propNode = nodes[newVal[0]].host
                         this.propNode3 = propNode
                     }
                 }
@@ -533,10 +533,10 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[3][newVal[0]].host)
-                    if (nodes[3][newVal[0]].host) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
-                        var propNode = nodes[3][newVal[0]].host
+                        var propNode = nodes[newVal[0]].host
                         this.propNode4 = propNode
                     }
                 }
@@ -546,10 +546,10 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[4][newVal[0]].host)
-                    if (nodes[4][newVal[0]].host) {
+                    console.log(nodes[newVal[0]].host)
+                    if (nodes[newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
-                        var propNode = nodes[4][newVal[0]].host
+                        var propNode = nodes[newVal[0]].host
                         this.propNode5 = propNode
                     }
                 }
@@ -575,21 +575,39 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph?.zoomIn()">Zoom In</button>
-            <button @click="graph?.zoomOut()">Zoom Out</button>
-            <!-- <button @click="getGraph()">Get</button> -->
-            <button @click="start(0)">Start/Continue</button>
-            <button @click="manualStep(0, 'forward')">Step</button>
-            <button @click="manualStep(0, 'back')">Step Back</button>
-            <button @click="stop(0)">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(0)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(0, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(0, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(0)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
             <nodeInfo :node="propNode"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=1></Metrics>
+            <Metrics></Metrics>
         </div>
     </div>
 
@@ -606,21 +624,39 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph2?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph2?.zoomIn()">Zoom In</button>
-            <button @click="graph2?.zoomOut()">Zoom Out</button>
-            <!-- <button @click="getGraph()">Get</button> -->
-            <button @click="start(1)">Start/Continue</button>
-            <button @click="manualStep(1, 'forward')">Step</button>
-            <button @click="manualStep(1, 'back')">Step Back</button>
-            <button @click="stop(1)">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph2?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph2?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph2?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(1)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(1, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(1, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(1)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=2></Metrics>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
@@ -636,21 +672,39 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph3?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph3?.zoomIn()">Zoom In</button>
-            <button @click="graph3?.zoomOut()">Zoom Out</button>
-            <!-- <button @click="getGraph()">Get</button> -->
-            <button @click="start(2)">Start/Continue</button>
-            <button @click="manualStep(2, 'forward')">Step</button>
-            <button @click="manualStep(2, 'back')">Step Back</button>
-            <button @click="stop(2)">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph3?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph3?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph3?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(2)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(2, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(2, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(2)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
             <nodeInfo :node="propNode3"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=3></Metrics>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
@@ -666,21 +720,39 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph4?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph4?.zoomIn()">Zoom In</button>
-            <button @click="graph4?.zoomOut()">Zoom Out</button>
-            <!-- <button @click="getGraph()">Get</button> -->
-            <button @click="start(3, )">Start/Continue</button>
-            <button @click="manualStep(3, 'forward')">Step</button>
-            <button @click="manualStep(3, 'back')">Step Back</button>
-            <button @click="stop(3)">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph4?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph4?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph4?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(3)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(3, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(3, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(3)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=4></Metrics>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
@@ -696,21 +768,39 @@
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph5?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph5?.zoomIn()">Zoom In</button>
-            <button @click="graph5?.zoomOut()">Zoom Out</button>
-            <!-- <button @click="getGraph()">Get</button> -->
-            <button @click="start(4)">Start/Continue</button>
-            <button @click="manualStep(4, 'forward')">Step</button>
-            <button @click="manualStep(4, 'back')">Step Back</button>
-            <button @click="stop(4, )">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph5?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph5?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph5?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(4)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(4, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(4, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(4)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
             <nodeInfo :node="propNode5"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=5></Metrics>
+            <Metrics class="metricBtn"></Metrics>
         </div>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button>
@@ -766,10 +856,38 @@
 
     .sim-label {
         display: block;
-        background-color: lightblue;
+        background-color: #3454a4;
+        color: white;
         padding: 1em;
         border: 1px solid black;
         margin-bottom: 1em;
+        border-radius: 10px;
+    }
+
+    .btn{
+        background-color: #ffffff;
+        padding: 0.5em 1em;
+        margin:10px 0 1em 0;
+        width: 100%;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        box-shadow: 
+            inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+            inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+            -2px -2px 5px rgba(255, 255, 255, 0.9), 
+            2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .row{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .group{
+        flex: 1;
     }
 </style>
 
