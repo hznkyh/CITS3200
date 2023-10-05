@@ -189,21 +189,23 @@
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
                 if (direction == "back") {
-                    if (graphIndex[id] == 0) {
+                    graphIndex[id] = graphIndex[id] - 1
+                    if (graphIndex[id] < 0) {
+                        this.msg = "Simulation finished"
+                        graphIndex[id] = 0
                         return
                     }
-                    graphIndex[id] = graphIndex[id] - 1
                 }
-                startSim[id] = false
                 if (direction == "forward") {
                     graphIndex[id] = graphIndex[id] + 1
-                    if (graphIndex[id] == number_of_graphs[id]) {
+                    if (graphIndex[id] >= number_of_graphs[id]) {
                         this.msg = "Simulation finished"
-                        graphIndex[id] = graphIndex[id] - 1
+                        graphIndex[id] = number_of_graphs[id] - 1
                         return
                     }
                 }
                 this.step(id)
+                console.log(graphIndex[id])
                 // this.msg = "Stopped"
             },
 
