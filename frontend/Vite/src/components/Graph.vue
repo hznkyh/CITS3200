@@ -139,21 +139,6 @@
         }
         old_subnets = new_subnets
     }
-    
-    function getSim(id) {
-        switch (id) {
-            case 1:
-                return storedGraph['graph1']
-            case 2:
-                return storedGraph['graph2']
-            case 3:
-                return storedGraph['graph3']
-            case 4:
-                return storedGraph['graph4']
-            case 5:
-                return storedGraph['graph5']
-        }
-    }
 
     export default {
         name: 'Network',
