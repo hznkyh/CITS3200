@@ -38,7 +38,7 @@ def delete_temp(path:str) -> None:
 
 @router.get("/{graph_num}/{graph_type}")
 def getGraphType(    
-    graph_num: int,
+    graph_num: str,
     graph_type: str,
     client: Annotated[User, Depends(get_current_active_user)],
     background_tasks: BackgroundTasks
