@@ -494,10 +494,10 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[0][newVal[0]].host)
+                    if (nodes[0][newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[0][newVal[0]].host
                         this.propNode = propNode
                     }
                 }
@@ -507,10 +507,10 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[1][newVal[0]].host)
+                    if (nodes[1][newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[1][newVal[0]].host
                         this.propNode2 = propNode
                     }
                 }
@@ -520,10 +520,10 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[2][newVal[0]].host)
+                    if (nodes[2][newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[2][newVal[0]].host
                         this.propNode3 = propNode
                     }
                 }
@@ -533,10 +533,10 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[3][newVal[0]].host)
+                    if (nodes[3][newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[3][newVal[0]].host
                         this.propNode4 = propNode
                     }
                 }
@@ -546,10 +546,10 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[newVal[0]].host)
-                    if (nodes[newVal[0]].host) {
+                    console.log(nodes[4][newVal[0]].host)
+                    if (nodes[4][newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
-                        var propNode = nodes[newVal[0]].host
+                        var propNode = nodes[4][newVal[0]].host
                         this.propNode5 = propNode
                     }
                 }
@@ -607,7 +607,7 @@
             <nodeInfo :node="propNode"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=1></Metrics>
         </div>
     </div>
 
@@ -656,7 +656,7 @@
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=2></Metrics>
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
@@ -704,7 +704,7 @@
             <nodeInfo :node="propNode3"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=3></Metrics>
         </div>
     </div>
     <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
@@ -752,7 +752,7 @@
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
         <div>
-            <Metrics></Metrics>
+            <Metrics :sim_num=4></Metrics>
         </div>
     </div>
     <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
@@ -800,7 +800,7 @@
             <nodeInfo :node="propNode5"></nodeInfo>
         </div>
         <div>
-            <Metrics class="metricBtn"></Metrics>
+            <Metrics :sim_num=5></Metrics>
         </div>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button>
