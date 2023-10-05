@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: 'Metrics',
     data(){
@@ -27,19 +29,28 @@ export default {
     },
 
     methods: {
-      // getImageURL(type){
-      //   this.imageURL = `http://localhost:8000/statistics/${this.sim_num}/${type}`
-      //   console.log(this.imageURL)
-      // }
-
       getImageURL(type){
-        this.imageURL = `http://localhost:8000/statistics/graph${this.sim_num}/${type}`
         if(this.oldPng != type){
           this.activePng = true
           this.oldPng = type
         }
         else{
           this.activePng = !this.activePng
+        }
+        if (this.activePng) {
+          try {
+            axios.get(`http://localhost:8000/statistics/graph${this.sim_num}/${type}`, {
+              responseType: "blob"
+            }).then((response) => {
+              console.log(response)
+              this.imageURL = URL.createObjectURL(
+                new Blob([response.data], { type: "image/png" })
+              )
+            });
+          }
+          catch (error) {
+            console.log(error);
+          }
         }
       }
     },
