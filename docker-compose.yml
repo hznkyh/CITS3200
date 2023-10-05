@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  backend:
+    build: ./backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend/mtdgui:/app
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+  frontend:
+    build: ./frontend
+    volumes:
+      - './frontend:/app'
+      - '/app/Vite/node_modules'
+    ports:
+      - 8080:80
+    # command: npm run dev

@@ -30,7 +30,7 @@ def test_update_run_parameters():
             "mtd_interval": 2.0,
             "finish_time": 9000,
             "checkpoints": 1000,
-            "total_subnets": 4,
+            "total_subnets": 6,
             "target_layer": 4
         },
         "config": None

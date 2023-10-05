@@ -87,3 +87,5 @@ This was all run on Python 3.9.13 64 Bit. In the root directory in terminal, run
      - `python -m mtdnetwork.run -m IPShuffle -n 50 -e 10 -s 5 -l 3 results.json`
 
 
+## STARTING DOCKER 
+docker-compose up -d --build
