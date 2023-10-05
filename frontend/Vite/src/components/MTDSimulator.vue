@@ -674,11 +674,7 @@ body, html {
     margin: 0;
     padding: 0;
 }
-.h1-instructions {
-  text-align: left;
-}
-
-.p-instructions {
+.h1-instructions, .p-instructions {
   text-align: left;
 }
 
@@ -731,12 +727,17 @@ body, html {
   background-color: #ffffff;
   display: inline-block;
   padding: 0.5em 1em;
-  margin:10px 0 1em 0;
   width: 100%;
   text-align: center;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  box-shadow: 
+      inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+      -2px -2px 5px rgba(255, 255, 255, 0.9), 
+      2px 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
 }
 
 .advanced:hover{
