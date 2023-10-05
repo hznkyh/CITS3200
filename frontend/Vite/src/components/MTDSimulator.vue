@@ -24,13 +24,17 @@
       <h3>Node</h3>
       <p>Clicking on a node will show the node's information. The information is as follows:</p>
       <ul class="list">
-        <li>Node ID</li>
-        <li>Node Type</li>
-        <li>Node State</li>
-        <li>Node IP</li>
-        <li>Node OS</li>
-        <li>Node Services</li>
-        <li>Node Users</li>
+        <li>OS Type</li>
+        <li>OS Version</li>
+        <li>Host IP</li>
+        <li>HosT ID</li>
+        <li>P U Compromise</li>
+        <li>Total users</li>
+        <li>UUID</li>
+        <li>Total services</li>
+        <li>Total Nodes</li>
+        <li>Compromised</li>
+        <li>Compromised Services</li>
       </ul>
     </div>
     <div class="panel">
@@ -298,9 +302,12 @@
         <p class="message"> {{ msg }} </p>
     </div>
     <div class="network">
-      <Graph></Graph>
+      <Graph @childData="handleChildData"></Graph>
     </div>
-    <button class="addGraph" @click="addGraph">Add Graph</button>
+    <!-- <button class="addGraph" @click="addGraph">Add Graph</button> -->
+      <!-- <Graph></Graph>
+    </div>
+    <button class="addGraph" @click="addGraph">Add Graph</button> -->
   </div>
 </template>
 
@@ -344,6 +351,14 @@ export default {
   },
 
   methods: {
+    handleChildData(data) {
+      // Handle the data received from the child component
+      // console.log(data);
+      this.addGraph();
+    },
+    test() {
+      Graph.methods.revealLabel(2);
+    },
     toggleAdvanced(){
       var advancedContent = document.getElementById("advancedPanel");
       if (advancedContent.classList.contains("hidden")) {

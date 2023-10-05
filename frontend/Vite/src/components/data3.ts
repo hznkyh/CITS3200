@@ -43,15 +43,15 @@ const nodes: Nodes = {
   }
   },
   node3: { name: "Node 3", color: "black", subnet: 2 },
-  // node4: { name: "Node 4", subnet: 1 },
-  // node5: { name: "Node 5", subnet: 2 },
-  // node6: { name: "Node 6", subnet: 2 },
-  // node7: { name: "Node 7", subnet: 2 },
-  // node8: { name: "Node 8", subnet: 2 },
-  // node9: { name: "Node 9", subnet: 2 },
-  // node10: { name: "Node 10", subnet: 2 },
-  // node11: { name: "Node 11", subnet: 2 },
-  // node12: { name: "Node 12", subnet: 2 },
+  node4: { name: "Node 4", subnet: 1 },
+  node5: { name: "Node 5", subnet: 2 },
+  node6: { name: "Node 6", subnet: 2 },
+  node7: { name: "Node 7", subnet: 2 },
+  node8: { name: "Node 8", subnet: 2 },
+  node9: { name: "Node 9", subnet: 2 },
+  node10: { name: "Node 10", subnet: 2 },
+  node11: { name: "Node 11", subnet: 2 },
+  node12: { name: "Node 12", subnet: 2 },
 
 }
 
@@ -59,6 +59,15 @@ const edges: Edges = {
   edge1: { source: "node1", target: "node2" },
   edge2: { source: "node2", target: "node3" },
   edge3: { source: "node3", target: "node4" },
+  edge4: { source: "node4", target: "node5" },
+  edge5: { source: "node5", target: "node6" },
+  edge6: { source: "node6", target: "node7" },
+  edge7: { source: "node7", target: "node8" },
+  edge8: { source: "node8", target: "node9" },
+  edge9: { source: "node9", target: "node10" },
+  edge10: { source: "node10", target: "node11" },
+  edge11: { source: "node11", target: "node12" },
+  
 }
 
 const layouts: Layouts = reactive({
