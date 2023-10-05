@@ -1,9 +1,4 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from controllers.loggerConfig import setup_logger
-
-from routers import network,config, webSocket ,webSocketDev, streaming, statistics #, set_configs#, sim
+from routers import network, webSocket ,webSocketDev, streaming, statistics #, set_configs#, sim
 from controllers import * 
 
 import logging
