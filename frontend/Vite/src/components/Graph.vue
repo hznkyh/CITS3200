@@ -10,6 +10,7 @@
     import data5 from "./data5"
 
     import nodeInfo from "./NodeInfo.vue"
+    import Metrics from "./Metrics.vue"
 
     import {
         ForceLayout,
@@ -18,86 +19,62 @@
     } from "v-network-graph/lib/force-layout"
 
     const graph = ref<vNG.VNetworkGraphInstance>()
-    var nodes: Nodes = reactive({ ...data.nodes })
-    var edges: Edges = reactive({ ...data.edges })
-    var layouts: Layouts = reactive({ ...data.layouts})
+    // var nodes: Nodes = reactive({ ...data.nodes })
+    // var edges: Edges = reactive({ ...data.edges })
+    // var layouts: Layouts = reactive({ ...data.layouts})
     const selectedNodes = ref<string[]>([])
 
     const graph2 = ref<vNG.VNetworkGraphInstance>()
-    var nodes2: Nodes = reactive({ ...data2.nodes })
-    var edges2: Edges = reactive({ ...data2.edges })
     const selectedNodes2 = ref<string[]>([])
 
     const graph3 = ref<vNG.VNetworkGraphInstance>()
-    var nodes3: Nodes = reactive({ ...data3.nodes })
-    var edges3: Edges = reactive({ ...data3.edges })
     const selectedNodes3 = ref<string[]>([])
 
     const graph4 = ref<vNG.VNetworkGraphInstance>()
-    var nodes4: Nodes = reactive({ ...data4.nodes })
-    var edges4: Edges = reactive({ ...data4.edges })
     const selectedNodes4 = ref<string[]>([])
 
     const graph5 = ref<vNG.VNetworkGraphInstance>()
-    var nodes5: Nodes = reactive({ ...data5.nodes })
-    var edges5: Edges = reactive({ ...data5.edges })
     const selectedNodes5 = ref<string[]>([])
 
+    var nodes = [reactive({ ...data.nodes }), reactive({ ...data2.nodes }), reactive({ ...data3.nodes }), reactive({ ...data4.nodes }), reactive({ ...data5.nodes })]
+    var edges = [reactive({ ...data.edges }), reactive({ ...data2.edges }), reactive({ ...data3.edges }), reactive({ ...data4.edges }), reactive({ ...data5.edges })]
+    var layouts = [reactive({ ...data.layouts }), reactive({ ...data2.layouts }), reactive({ ...data3.layouts }), reactive({ ...data4.layouts }), reactive({ ...data5.layouts })]
     var number_of_sims = 1;
 
+    var graphIndex: number[] = [-1, -1, -1, -1, -1];
+    var startSim: boolean[] = [false, false, false, false, false];
     var storedGraph = {}
-    var number_of_graphs = 0;
-    var graphIndex = -1;
-    var startSim = false;
+    var number_of_graphs: number[] = [];
     // var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
-    var intervalID
+
+    var intervalIDs: number[] = [];
 
     function clearData() {
-        // Clear the nodes object
-        for (const key in nodes) {
-            if (Object.hasOwnProperty.call(nodes, key)) {
-            delete nodes[key];
-            }
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i] = reactive({})
+            edges[i] = reactive({})
+            layouts[i] = reactive({nodes: {},})
         }
 
-        // Clear the edges object
-        for (const key in edges) {
-            if (Object.hasOwnProperty.call(edges, key)) {
-            delete edges[key];
-            }
-        }
+        number_of_graphs = [];
+        graphIndex = [-1, -1, -1, -1, -1];
+        startSim = [false, false, false, false, false];
 
-        // Clear the layouts object
-        for (const key in layouts["nodes"]) {
-            if (Object.hasOwnProperty.call(layouts["nodes"], key)) {
-            delete layouts["nodes"][key];
-            }
+        for (var i = 0; i < intervalIDs.length; i++) {
+            clearInterval(intervalIDs[i])
         }
     }
 
-    function findExposed(nodeId: string) {
-        for (var key in edges) {
-            var edge = edges[key]
+    function findExposed(id, nodeId: string) {
+        for (var key in edges[id]) {
+            var edge = edges[id][key]
             if (edge.source == nodeId) {
                 exposed.push(edge.target)
             }
         }
     }
-
-    function getRandomCoordinates(centerx, centery) {
-        var offset = Math.random() * (350 - (-350)) + (-350);
-        var x = centerx + offset
-        var y = centery + offset
-
-        var rangex = [-700, 700]
-        var rangey = [-350, 350]
-
-        x = Math.min(Math.max(x, rangex[0]), rangex[1])
-        y = Math.min(Math.max(y, rangey[0]), rangey[1])
-        return { x, y };
-    }   
 
     function generateCoordinates(
         numCoordinates: number,
@@ -122,11 +99,12 @@
         return coordinates;
     }
 
-    function layout() {
+    function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
-        for (var key in nodes) {
-            var node = nodes[key]
+        console.log(nodes[id])
+        for (var key in nodes[id]) {
+            var node = nodes[id][key]
             var subnet = node.subnet
             var layer = node.layer
             var location = `${subnet}-${layer}`
@@ -154,12 +132,27 @@
             for (var i = 0; i < subnetSize; i++) {
                 var x = centerx + subnetRadius * Math.cos(angleIndex * angle * Math.PI / 180) 
                 var y = centery + subnetRadius * Math.sin(angleIndex * angle * Math.PI / 180) 
-                layouts.nodes[subnet[i]] = { x, y }
+                layouts[id].nodes[subnet[i]] = { x, y }
                 angleIndex++
             }
             index++
         }
         old_subnets = new_subnets
+    }
+    
+    function getSim(id) {
+        switch (id) {
+            case 1:
+                return storedGraph['graph1']
+            case 2:
+                return storedGraph['graph2']
+            case 3:
+                return storedGraph['graph3']
+            case 4:
+                return storedGraph['graph4']
+            case 5:
+                return storedGraph['graph5']
+        }
     }
 
     export default {
@@ -167,72 +160,78 @@
         components: {
             vNG,
             nodeInfo,
+            Metrics,
         },
         methods: {
             async getGraph() {
-                startSim = false;
                 try {
                     clearData();
-                    clearInterval(intervalID);
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
-                    number_of_graphs = Object.keys(storedGraph).length;
                     console.log(storedGraph);
-                    graphIndex = -1;
-                    this.msg = "Got graph";
+                    for (var i = 1; i <= number_of_sims; i ++) {
+                        number_of_graphs.push(storedGraph[`graph${i}`].length)
+                    }
+                    console.log (number_of_graphs)
+                    // this.msg = "Got graph";
                 } catch (error) {
                     console.error(error);
                 }
             },
 
-            start() {
-                if (!startSim) {
-                    startSim = true
+            start(id) {
+                if (!startSim[id]) {
+                    startSim[id] = true
                     this.msg = "Start"
-                    intervalID = setInterval(() => {
-                        if (startSim) {
+                    intervalIDs[id] = setInterval(() => {
+                        if (startSim[id]) {
                             // this.msg = "Running"
-                            this.step()
+                            graphIndex[id]++
+                            this.step(id)
                         }
                     }, 1500)
                 }
             },
 
-            stop() {
-                startSim = false
+            stop(id) {
+                startSim[id] = false
                 this.msg = "Stopped"
 
             },
 
-            manualStep(direction) {
+            manualStep(id, direction) {
+                clearInterval(intervalIDs[id])
+                startSim[id] = false
                 if (direction == "back") {
-                    graphIndex--
+                    if (graphIndex[id] == 0) {
+                        return
+                    }
+                    graphIndex[id] = graphIndex[id] - 1
                 }
-                if (graphIndex == number_of_graphs) {
-                    this.msg = "Simulation finished"
-                    startSim = false
-                    clearInterval(intervalID)
-                    return
-                }
-                startSim = false
+                startSim[id] = false
                 if (direction == "forward") {
-                    graphIndex++
+                    graphIndex[id] = graphIndex[id] + 1
+                    if (graphIndex[id] == number_of_graphs[id]) {
+                        this.msg = "Simulation finished"
+                        graphIndex[id] = graphIndex[id] - 1
+                        return
+                    }
                 }
-                console.log(graphIndex)
-                this.step()
+                this.step(id)
                 // this.msg = "Stopped"
             },
 
-            step() {
-                if (graphIndex == number_of_graphs) {
+            step(id) {
+                if (graphIndex[id] == number_of_graphs[id]) {
                     this.msg = "Simulation finished"
-                    startSim = false
-                    clearInterval(intervalID)
+                    startSim[id] = false
+                    clearInterval(intervalIDs[id])
                     return
                 }
                 exposed = [];
-                var graph = storedGraph[graphIndex]
+                var graph = storedGraph[`graph${id+1}`][graphIndex[id]]
+                console.log(id)
 
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
@@ -240,9 +239,10 @@
                     const edgeId = `edge${nextEdgeIndex}`
                     const source = `node${graph.links[z].source + 1}`
                     const target = `node${graph.links[z].target + 1}`
-                    edges[edgeId] = { source, target }
+                    edges[id][edgeId] = { source, target }
                     nextEdgeIndex++
                 };
+                console.log(edges)
 
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
@@ -254,7 +254,7 @@
                     var color = ''
                     if (node.host.compromised == true) {
                         color = `red`
-                        findExposed(nodeId)
+                        findExposed(id, nodeId)
                     } else if (exposed.includes(nodeId)) {
                         color = `yellow`
                     }
@@ -262,12 +262,10 @@
                         color = `green`
                     }
                     var host = node.host
-
-                    nodes[nodeId] = {color, subnet, layer, host}
+                    nodes[id][nodeId] = {color, subnet, layer, host}
                     nextNodeIndex++
                 }
-                console.log(nodes)
-                layout()
+                layout(id)
                 // const graphComponent = this.$refs.graph;
                 // // Call the fitToContents method of the component
                 // graphComponent.fitToContents();
@@ -384,10 +382,14 @@
                 // compromised,
                 // compromised_services,
 
-                graph,
                 nodes,
                 edges,
                 layouts,
+
+                graph,
+                // nodes,
+                // edges,
+                // layouts,
                 selectedNodes,
                 showNodeInfo: false,
                 showLabel1: true,
@@ -395,8 +397,9 @@
                 propNode:null,
 
                 graph2,
-                nodes2,
-                edges2,
+                // nodes2,
+                // edges2,
+                // layouts2,
                 selectedNodes2,
                 showNodeInfo2: false,
                 showLabel2: false,
@@ -404,8 +407,9 @@
                 propNode2:null,
 
                 graph3,
-                nodes3,
-                edges3,
+                // nodes3,
+                // edges3,
+                // layouts3,
                 selectedNodes3,
                 showNodeInfo3: false,
                 showLabel3: false,
@@ -413,8 +417,9 @@
                 propNode3:null,
 
                 graph4,
-                nodes4,
-                edges4,
+                // nodes4,
+                // edges4,
+                // layouts4,
                 selectedNodes4,
                 showNodeInfo4: false,
                 showLabel4: false,
@@ -422,8 +427,9 @@
                 propNode4:null,
 
                 graph5,
-                nodes5,
-                edges5,
+                // nodes5,
+                // edges5,
+                // layouts5,
                 selectedNodes5,
                 showNodeInfo5: false,
                 showLabel5: false,
@@ -577,25 +583,46 @@
         ref="graph"
         class="graph"
         v-model:selected-nodes="selectedNodes"
-        :nodes="nodes"
-        :edges="edges"
-        :layouts="layouts"
+        :nodes="nodes[0]"
+        :edges="edges[0]"
+        :layouts="layouts[0]"
         :configs="configs"
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph?.zoomIn()">Zoom In</button>
-            <button @click="graph?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(0)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(0, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(0, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(0)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
             <nodeInfo :node="propNode"></nodeInfo>
+        </div>
+        <div>
+            <Metrics></Metrics>
         </div>
     </div>
 
@@ -605,25 +632,46 @@
         ref="graph2"
         class="graph"
         v-model:selected-nodes="selectedNodes2"
-        :nodes="nodes2"
-        :edges="edges2"
-        :layouts="layouts"
+        :nodes="nodes[1]"
+        :edges="edges[1]"
+        :layouts="layouts[1]"
         :configs="configs"
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph2?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph2?.zoomIn()">Zoom In</button>
-            <button @click="graph2?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph2?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph2?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph2?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(1)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(1, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(1, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(1)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
             <nodeInfo :node="propNode2"></nodeInfo>
+        </div>
+        <div>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
@@ -632,25 +680,46 @@
         ref="graph3"
         class="graph"
         v-model:selected-nodes="selectedNodes3"
-        :nodes="nodes3"
-        :edges="edges3"
-        :layouts="layouts"
+        :nodes="nodes[2]"
+        :edges="edges[2]"
+        :layouts="layouts[2]"
         :configs="configs"
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph3?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph3?.zoomIn()">Zoom In</button>
-            <button @click="graph3?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph3?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph3?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph3?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(2)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(2, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(2, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(2)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
             <nodeInfo :node="propNode3"></nodeInfo>
+        </div>
+        <div>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
@@ -659,25 +728,46 @@
         ref="graph4"
         class="graph"
         v-model:selected-nodes="selectedNodes4"
-        :nodes="nodes4"
-        :edges="edges4"
-        :layouts="layouts"
+        :nodes="nodes[3]"
+        :edges="edges[3]"
+        :layouts="layouts[3]"
         :configs="configs"
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph4?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph4?.zoomIn()">Zoom In</button>
-            <button @click="graph4?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph4?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph4?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph4?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(3)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(3, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(3, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(3)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
             <nodeInfo :node="propNode4"></nodeInfo>
+        </div>
+        <div>
+            <Metrics></Metrics>
         </div>
     </div>
     <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
@@ -686,25 +776,46 @@
         ref="graph5"
         class="graph"
         v-model:selected-nodes="selectedNodes5"
-        :nodes="nodes5"
-        :edges="edges5"
-        :layouts="layouts"
+        :nodes="nodes[4]"
+        :edges="edges[4]"
+        :layouts="layouts[4]"
         :configs="configs"
         >
         </v-network-graph>
         <div class="control-panel">
-            <button @click="graph5?.fitToContents()" ref="myBtn">Fit</button>
-            <button @click="graph5?.zoomIn()">Zoom In</button>
-            <button @click="graph5?.zoomOut()">Zoom Out</button>
-            <button @click="getGraph()">Get</button>
-            <button @click="start()">Start/Continue</button>
-            <button @click="manualStep('forward')">Step</button>
-            <button @click="manualStep('back')">Step Back</button>
-            <button @click="stop()">Stop</button>
+            <div class="row">
+                <div class="group">
+                    <button @click="graph5?.fitToContents()" ref="myBtn" class="btn">Fit</button>
+                </div>
+                <div class="group">
+                    <button @click="graph5?.zoomIn()" class="btn">Zoom In</button>
+                </div>
+                <div class="group">
+                    <button @click="graph5?.zoomOut()" class="btn">Zoom Out</button>
+                </div>
+                <div class="group">
+                    <button @click="getGraph()" class="btn">Get</button>
+                </div>
+                <div class="group">
+                    <button @click="start(4)" class="btn">Start/Continue</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(4, 'forward')" class="btn">Step</button>
+                </div>
+                <div class="group">
+                    <button @click="manualStep(4, 'back')" class="btn">Step Back</button>
+                </div>
+                <div class="group">
+                    <button @click="stop(4)" class="btn">Stop</button>
+                </div>
+            </div>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
             <nodeInfo :node="propNode5"></nodeInfo>
+        </div>
+        <div>
+            <Metrics class="metricBtn"></Metrics>
         </div>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button>
@@ -760,10 +871,38 @@
 
     .sim-label {
         display: block;
-        background-color: lightblue;
+        background-color: #3454a4;
+        color: white;
         padding: 1em;
         border: 1px solid black;
         margin-bottom: 1em;
+        border-radius: 10px;
+    }
+
+    .btn{
+        background-color: #ffffff;
+        padding: 0.5em 1em;
+        margin:10px 0 1em 0;
+        width: 100%;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        box-shadow: 
+            inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+            inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+            -2px -2px 5px rgba(255, 255, 255, 0.9), 
+            2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .row{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .group{
+        flex: 1;
     }
 </style>
 
