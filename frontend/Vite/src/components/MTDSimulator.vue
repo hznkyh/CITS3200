@@ -375,7 +375,7 @@ export default {
       }
     },
     saveForm(){
-      if(this.savedForms.length < 5){
+      if(this.savedForms.length <= 5){
         const validationRules = [
           {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
           {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},

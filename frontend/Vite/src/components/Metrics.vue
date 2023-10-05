@@ -33,7 +33,7 @@ export default {
       // }
 
       getImageURL(type){
-        this.imageURL = `http://localhost:8000/statistics/${type}`
+        this.imageURL = `http://localhost:8000/statistics/graph${this.sim_num}/${type}`
         if(this.oldPng != type){
           this.activePng = true
           this.oldPng = type
