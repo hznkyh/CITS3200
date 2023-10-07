@@ -363,9 +363,32 @@
                 }
             },
 
-            addGraph() {
-                this.$emit('childData', "add graph");
-                number_of_sims++;
+            addGraph(action) {
+                this.$emit('childData', action);
+                if (action == "add") {
+                    if (number_of_sims < 5) {
+                        number_of_sims++;
+                    }
+                }
+                else if (action == "remove") {
+                    if (number_of_sims > 1) {
+                        switch (number_of_sims) {
+                            case 2:
+                                this.showGraph2 = false;
+                                break;
+                            case 3:
+                                this.showGraph3 = false;
+                                break;
+                            case 4:
+                                this.showGraph4 = false;
+                                break;
+                            case 5:
+                                this.showGraph5 = false;
+                                break;
+                        }
+                        number_of_sims--
+                    }
+                }
                 this.revealLabel(number_of_sims)
             }
         },
@@ -820,7 +843,8 @@
             <Metrics :sim_num=5></Metrics>
         </div>
     </div>
-    <button class="addGraph" @click="addGraph">Add Graph</button>
+    <button class="addGraph" @click="addGraph('add')">Add Graph</button>
+    <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
   </template>
 
 <style>
