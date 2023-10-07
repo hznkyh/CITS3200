@@ -53,9 +53,21 @@
 
     function clearData() {
         for (var i = 0; i < nodes.length; i++) {
-            nodes[i] = reactive({})
-            edges[i] = reactive({})
-            layouts[i] = reactive({nodes: {},})
+            var node = nodes[i]
+            var edge = edges[i]
+            var layout = layouts[i]
+            for (var key in node) {
+                delete node[key]
+            }
+            for (var key in edge) {
+                delete edge[key]
+            }
+            for (var key in layout) {
+                layout[key] = {}
+            }
+            // nodes[i] = reactive({})
+            // edges[i] = reactive({})
+            // layouts[i] = reactive({nodes: {},})
         }
 
         number_of_graphs = [];
