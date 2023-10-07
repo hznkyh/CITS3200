@@ -152,3 +152,5 @@ research-analysis/results/.~lock.3-combinations-ip-and-port-z-statistics.ods#
 node_modules/
 .pkl/
 Logs/
+backend/mtdgui/Logs/debug.log.2
+backend/mtdgui/Logs/debug.log.3
