@@ -150,7 +150,10 @@
         methods: {
             async getGraph() {
                 try {
+                    console.log(nodes[0])
+                    console.log("cleardata")
                     clearData();
+                    console.log(nodes[0])
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;

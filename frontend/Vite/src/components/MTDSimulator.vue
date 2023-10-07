@@ -309,7 +309,7 @@
         <p class="message"> {{ msg }} </p>
     </div>
     <div class="network">
-      <Graph @childData="handleChildData"></Graph>
+      <Graph @childData="handleChildData" :key="componentKey"></Graph>
     </div>
     <!-- <button class="addGraph" @click="addGraph">Add Graph</button> -->
       <!-- <Graph></Graph>
@@ -354,10 +354,14 @@ export default {
       showInstructions: false,
       schemeGraph:'random',
       savedForms: [],
+      componentKey: 0,
     };
   },
 
   methods: {
+    forceRerender() {
+      this.componentKey += 1;
+    },
     handleChildData(data) {
       // Handle the data received from the child component
       // console.log(data);
@@ -464,6 +468,7 @@ export default {
           console.log(response);
 
           await Graph.methods.getGraph();
+          // this.forceRerender();
           this.msg = 'Got graph';
         })
         .catch((error) => {
