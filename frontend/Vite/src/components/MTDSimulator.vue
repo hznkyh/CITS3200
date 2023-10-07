@@ -948,6 +948,7 @@ form {
   background-color: #000;
   color: #fff;
   padding: 10px 20px;
+  margin: 1em;
   border: none;
   border-radius: 10px;
   cursor: pointer;
