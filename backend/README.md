@@ -12,7 +12,7 @@ The application should then launch on localhost:8080.
 
 # Backend setup
 
-This project uses FastAPI for the backend. 
+This project uses FastAPI for the backend. These steps can be used to manually 
 
 ## Setting up the environment
 
