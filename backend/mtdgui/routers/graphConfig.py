@@ -1,24 +1,12 @@
-# from models.forms import Item,MTD_PRIORITYItem,formData
 from fastapi import APIRouter
-from controllers.serialiser import serialize_graph
 import simpy
-import json
-import sys
-import os
-from pathlib import Path
 from simulator.adapter import *
-# Construct the path to the "s" directory
-# s_directory = os.path.join(Path(__file__).parents[3], "simulator")
-# sys.path.append(s_directory)
-# n_directory = os.path.join(Path(__file__).parents[2])
-# sys.path.append(n_directory)
-# from adapter import *
+
 
 
 router = APIRouter(prefix="/config",
                    tags=["config"], responses={404: {"description": "Not found"}})
 
-# env = simpy.Environment()
 env = simpy.Environment()
 simulation_thread = None
 simulation_speed = 1.0

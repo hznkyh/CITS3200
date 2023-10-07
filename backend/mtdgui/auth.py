@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from models.token import *
 from models.User import *
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from config import settings
 from sessions import sessions

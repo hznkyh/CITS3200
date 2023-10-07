@@ -1,17 +1,11 @@
 import logging
 import simpy
 import json
-from networkx.readwrite import json_graph
-
-# create_experiment_snapshots([25, 50, 75, 100])
 from simulator.mtdnetwork.statistic.evaluation import Evaluation
 from simulator.mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
 from simulator.mtdnetwork.operation.attack_operation import AttackOperation
 from simulator.mtdnetwork.component.host import Host
 from simulator.mtdnetwork.component.adversary import Adversary
-
-# from simulator.mtdnetwork.data.constants import ATTACKER_THRESHOLD, OS_TYPES
-# from simulator.mtdnetwork.configs import config,set_config
 from simulator.mtdnetwork import configs
 from simulator.mtdnetwork.operation.mtd_operation import MTDOperation
 from simulator.mtdnetwork.component.time_network import TimeNetwork
@@ -24,9 +18,6 @@ import sys
 logger = logging.getLogger()
 print("__name__", __name__)
 logger.info("init adapter")
-# current_directory = os.path.dirname(os.path.abspath(__file__))
-# target_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)) , 'experiments')
-# target_directory = os.getcwd()
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the "s" directory
