@@ -1,16 +1,10 @@
-import json
 import logging
-import threading
-import networkx as nx
 from models.forms import ParameterRequest
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse
 from fastapi import APIRouter, HTTPException, status
-from itertools import chain, count
-import simpy
 from controllers import serialize_graph, ProcessPoo
-
 from simulator import create_sim, configs
-from typing import Optional, Union, List
+from typing import Union
 from config import parameters
 from concurrent.futures import Future
 logger = logging.getLogger(__name__)

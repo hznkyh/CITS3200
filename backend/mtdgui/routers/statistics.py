@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from fastapi.responses import FileResponse
 import os
-from typing import Annotated, List
+from typing import Annotated
 from sessions import sessions
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from starlette.background import BackgroundTasks
 from auth import get_current_active_user
 from models import User

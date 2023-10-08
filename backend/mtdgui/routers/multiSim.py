@@ -1,4 +1,3 @@
-import itertools
 import logging
 import time
 from typing import Annotated, List
@@ -7,14 +6,10 @@ from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
 from concurrent.futures import Future
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from threading import Lock, Thread
-from controllers import serialize_graph, ProcessPoo
-from simulator.adapter import create_sim
-from simulator import create_sim, configs
-import simpy
-from models import User, ParameterRequest, Parameters
+from threading import Lock
+from controllers import serialize_graph
+from models import User, ParameterRequest
 from sessions import sessions
-from config import parameters
 import copy
 from controllers.pools import handleRequest
 
