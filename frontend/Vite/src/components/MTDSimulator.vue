@@ -466,6 +466,7 @@ export default {
         })
         .then(async (response) => {
           console.log(response);
+          this.msg = 'Receiving graph...';
 
           await Graph.methods.getGraph();
           // this.forceRerender();
