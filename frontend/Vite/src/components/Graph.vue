@@ -602,6 +602,8 @@
 </script>
 
 <template>
+    <button class="addGraph" @click="addGraph('add')">Add Graph</button>
+    <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
     <span id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1">Simulation 1</span>
     <div id="graph1" class="graph-container" v-if="showGraph">
         <v-network-graph
@@ -843,8 +845,6 @@
             <Metrics :sim_num=5></Metrics>
         </div>
     </div>
-    <button class="addGraph" @click="addGraph('add')">Add Graph</button>
-    <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
   </template>
 
 <style>
