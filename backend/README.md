@@ -1,7 +1,18 @@
 
+# Running the application 
+
+## Using Docker
+This web-application has been configured to use a docker container, so can be launched 
+simply using that. Ensure you are working from the main directory, then use the following 
+command to activate the web-app using docker: 
+
+>  `docker-compose up -d --build`
+
+The application should then launch on localhost:8080.
+
 # Backend setup
 
-This project uses FastAPI for the backend. 
+This project uses FastAPI for the backend. These steps can be used to manually 
 
 ## Setting up the environment
 
