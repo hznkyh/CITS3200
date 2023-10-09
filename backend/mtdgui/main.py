@@ -50,21 +50,53 @@ app.add_middleware(
 async def root():
     return HTMLResponse(
         content="""
-        <html>
+            <!DOCTYPE html>
+            <html lang="en">
             <head>
-                <title>Hello Bigger Applications!</title>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>FASTAPI Documentation</title>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
             </head>
             <body>
-                <h1>Hello Bigger Applications!</h1>
-                <p>Welcome to my API.</p>
+            <div class="container mt-5">
+                <h1>Welcome to the FASTAPI Application</h1>
+                <p>This is a brief guide on how to use the API and access its documentation.</p>
+                
+                <h2>Authentication</h2>
+                <p>To authenticate, make a POST request to <code>/token</code> with your username and password:</p>
+                <pre><code>
+                POST /token
+                {
+                "username": "your_username",
+                "password": "your_password"
+                }
+                </code></pre>
+                <p>You'll receive a JWT token in response. Include this token in the Authorization header of your subsequent requests:</p>
+                <pre><code>
+                Authorization: Bearer YOUR_TOKEN_HERE
+                </code></pre>
+                
+                <h2>Accessing the Documentation</h2>
+                <p>FASTAPI provides an interactive API documentation. You can access it by navigating to:</p>
+                <a href="/docs" target="_blank">/docs</a>
+                <p>This will provide you with a list of all available endpoints, their parameters, and expected responses.</p>
+                
+                <h2>Further Information</h2>
+                <p>If you have more questions, please contact the administrator or refer to the official FASTAPI documentation.</p>
+            </div>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
             </body>
-        </html>
+            </html>
     """,
         status_code=status.HTTP_200_OK,
     )
 
 
-{"message": "Hello Bigger Applications!"}
+# {"message": "Hello Bigger Applications!"}
 
 
 @app.get("/uuid")
