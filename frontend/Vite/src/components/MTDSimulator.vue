@@ -431,7 +431,7 @@ export default {
           },
           "config": this.checkAdvancedDataEntered()
         };
-        this.msg = 'Submitted parameters';
+        this.msg = 'Saved parameters';
         // var data = JSON.stringify(mainData);
         // this.savedForms.push(mainData);
         var cur_graph = parseInt(this.graphNum.charAt(this.graphNum.length - 1)) - 1;
@@ -454,7 +454,7 @@ export default {
     },
   
     submitForm() {
-      this.msg = 'Submitted parameters';
+      this.msg = 'Saved parameters';
 
       console.log(this.savedForms);
 
