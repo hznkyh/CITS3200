@@ -114,7 +114,7 @@
     function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
-        console.log(nodes[id])
+        //console.log(nodes[id])
         for (var key in nodes[id]) {
             var node = nodes[id][key]
             var subnet = node.subnet
@@ -162,21 +162,21 @@
         methods: {
             async getGraph() {
                 try {
-                    console.log(nodes[0])
-                    console.log("cleardata")
+                    //console.log(nodes[0])
+                    //console.log("cleardata")
                     clearData();
-                    console.log(nodes[0])
+                    //console.log(nodes[0])
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
-                    console.log(storedGraph);
+                    //console.log(storedGraph);
                     for (var i = 1; i <= number_of_sims; i ++) {
                         number_of_graphs.push(storedGraph[`graph${i}`].length)
                     }
-                    console.log (number_of_graphs)
+                    //console.log (number_of_graphs)
                     // this.msg = "Got graph";
                 } catch (error) {
-                    console.error(error);
+                    //console.error(error);
                 }
             },
 
@@ -220,7 +220,7 @@
                     }
                 }
                 this.step(id)
-                console.log(graphIndex[id])
+                //console.log(graphIndex[id])
                 // this.msg = "Stopped"
             },
 
@@ -233,7 +233,7 @@
                 }
                 exposed = [];
                 var graph = storedGraph[`graph${id+1}`][graphIndex[id]]
-                console.log(id)
+                //console.log(id)
 
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
@@ -244,7 +244,7 @@
                     edges[id][edgeId] = { source, target }
                     nextEdgeIndex++
                 };
-                console.log(edges)
+                //console.log(edges)
 
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
@@ -320,7 +320,7 @@
             },
 
             revealLabel(number) {
-                console.log("clicked")
+                //console.log("clicked")
                 switch (number) {
                     case 1:
                         this.showLabel1 = true;
@@ -534,7 +534,7 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[0][newVal[0]].host)
+                    //console.log(nodes[0][newVal[0]].host)
                     if (nodes[0][newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
                         var propNode = nodes[0][newVal[0]].host
@@ -547,7 +547,7 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[1][newVal[0]].host)
+                    //console.log(nodes[1][newVal[0]].host)
                     if (nodes[1][newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
                         var propNode = nodes[1][newVal[0]].host
@@ -560,7 +560,7 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[2][newVal[0]].host)
+                    //console.log(nodes[2][newVal[0]].host)
                     if (nodes[2][newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
                         var propNode = nodes[2][newVal[0]].host
@@ -573,7 +573,7 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[3][newVal[0]].host)
+                    //console.log(nodes[3][newVal[0]].host)
                     if (nodes[3][newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
                         var propNode = nodes[3][newVal[0]].host
@@ -586,7 +586,7 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    console.log(nodes[4][newVal[0]].host)
+                    //console.log(nodes[4][newVal[0]].host)
                     if (nodes[4][newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
                         var propNode = nodes[4][newVal[0]].host

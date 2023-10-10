@@ -12,7 +12,7 @@ axios.defaults.withCredentials = true
 axios.defaults.baseURL = 'http://localhost:8000/'
 
 const session = await axios.get("http://localhost:8000/uuid").then((data) => data.data)
-console.log('session',session);
+//console.log('session',session);
 
 const params = new URLSearchParams();
 params.append('username', session);
@@ -20,7 +20,7 @@ params.append('password', session);
 
 const token = await axios.post("http://localhost:8000/token", params).then((data) => data.data.access_token)
 
-console.log('token',token);
+//console.log('token',token);
 axios.defaults.headers.common = {
     Authorization: `Bearer ${token}`
 }
