@@ -19,9 +19,6 @@
     } from "v-network-graph/lib/force-layout"
 
     const graph = ref<vNG.VNetworkGraphInstance>()
-    // var nodes: Nodes = reactive({ ...data.nodes })
-    // var edges: Edges = reactive({ ...data.edges })
-    // var layouts: Layouts = reactive({ ...data.layouts})
     const selectedNodes = ref<string[]>([])
 
     const graph2 = ref<vNG.VNetworkGraphInstance>()
@@ -45,7 +42,6 @@
     var startSim: boolean[] = [false, false, false, false, false];
     var storedGraph = {}
     var number_of_graphs: number[] = [];
-    // var msg = "Simulation not started"
     var exposed: string[] = [];
     var old_subnets = {}
 
@@ -65,9 +61,6 @@
             for (var key in layout) {
                 layout[key] = {}
             }
-            // nodes[i] = reactive({})
-            // edges[i] = reactive({})
-            // layouts[i] = reactive({nodes: {},})
         }
 
         number_of_graphs = [];
@@ -394,27 +387,11 @@
         },
         data() {
             return {
-                // msg,
-                // os_type,
-                // os_version,
-                // host_ip,
-                // host_id,
-                // p_u_compromise,
-                // total_users,
-                // uuid,
-                // total_services,
-                // total_nodes,
-                // compromised,
-                // compromised_services,
-
                 nodes,
                 edges,
                 layouts,
 
                 graph,
-                // nodes,
-                // edges,
-                // layouts,
                 selectedNodes,
                 showNodeInfo: false,
                 showLabel1: true,
@@ -422,9 +399,6 @@
                 propNode:null,
 
                 graph2,
-                // nodes2,
-                // edges2,
-                // layouts2,
                 selectedNodes2,
                 showNodeInfo2: false,
                 showLabel2: false,
@@ -432,9 +406,6 @@
                 propNode2:null,
 
                 graph3,
-                // nodes3,
-                // edges3,
-                // layouts3,
                 selectedNodes3,
                 showNodeInfo3: false,
                 showLabel3: false,
@@ -442,9 +413,6 @@
                 propNode3:null,
 
                 graph4,
-                // nodes4,
-                // edges4,
-                // layouts4,
                 selectedNodes4,
                 showNodeInfo4: false,
                 showLabel4: false,
@@ -452,9 +420,6 @@
                 propNode4:null,
 
                 graph5,
-                // nodes5,
-                // edges5,
-                // layouts5,
                 selectedNodes5,
                 showNodeInfo5: false,
                 showLabel5: false,
