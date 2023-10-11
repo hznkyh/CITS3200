@@ -176,3 +176,13 @@ async def get_config(
     #     config_params = config_params.model_dump()
     # configs.config = configs.set_config(config_params)
     return JSONResponse(content=stored_params, status_code=status.HTTP_202_ACCEPTED)
+
+@router.post("/remove/{graph_num}")
+def remove_graph(
+    client: Annotated[User, Depends(get_current_active_user)],
+    graph_num : int
+):
+    if (sessions[client.uuid]["evaluation"][graph_num] is not None):
+        for num in range(5): 
+            if (num > graph_num):
+                sessions[client.uuid]["evaluation"][num-1] = sessions[client.uuid]["evaluation"][num]

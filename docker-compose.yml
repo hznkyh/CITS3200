@@ -15,5 +15,5 @@ services:
       - './frontend:/app'
       - '/app/Vite/node_modules'
     ports:
-      - 8080:80
-    # command: npm run dev
+      - 8080:8080
+    command: npm run dev

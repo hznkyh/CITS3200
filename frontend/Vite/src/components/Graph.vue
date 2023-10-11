@@ -166,6 +166,7 @@
                     for (var i = 1; i <= number_of_sims; i ++) {
                         number_of_graphs.push(storedGraph[`graph${i}`].length)
                     }
+                    this.drawAll();
                     //console.log (number_of_graphs)
                     // this.msg = "Got graph";
                 } catch (error) {
@@ -192,7 +193,15 @@
                 this.msg = "Stopped"
 
             },
-
+            drawAll(){ 
+                for (let i = 0; i < number_of_sims;i++){ 
+                    if (graphIndex[i] == -1){ 
+                        graphIndex[i] = 0; 
+                    }
+                    console.log("STEPPING " + i);
+                    this.step(i);
+                }
+            },
             manualStep(id, direction) {
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
@@ -383,6 +392,33 @@
                     }
                 }
                 this.revealLabel(number_of_sims)
+            },
+            remove(sim_num){ 
+                var graph_n = "graph" + sim_num; 
+                var new_dict = {};
+                var graph_indexes = [-1,-1,-1,-1,-1]
+                for (const key of Object.keys(storedGraph)){ 
+                    console.log("KEY" + key);
+                    var n = parseInt(key.slice(-1));
+                    console.log("KEYS" + n); 
+                    if (n < sim_num){ 
+                        new_dict[key]=storedGraph[key]; 
+                    } else if (n > sim_num) { 
+                        n--;
+                        let newKey =  "graph" + n.toString(); 
+                        graph_indexes[n] = graphIndex[n+1];
+                        new_dict[newKey] = storedGraph[key];
+                    }
+
+                }
+                // POST ROUTE TO REMOVE GRAPH
+                console.log(Object.keys(storedGraph));
+                console.log(storedGraph);
+                console.log(new_dict);
+                graphIndex = graph_indexes;
+                storedGraph = new_dict;
+                this.addGraph('remove');
+                this.drawAll();
             }
         },
         data() {
@@ -565,7 +601,10 @@
 <template>
     <button class="addGraph" @click="addGraph('add')">Add Graph</button>
     <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
-    <span id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1">Simulation 1</span>
+    <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
+        <span>Simulation 1</span>
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(1)">
+    </div>
     <div id="graph1" class="graph-container" v-if="showGraph">
         <v-network-graph
         ref="graph"
@@ -614,7 +653,10 @@
         </div>
     </div>
 
-    <span id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2">Simulation 2</span>
+    <div id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2"> 
+        <span>Simulation 2</span>
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(2)">
+    </div>
     <div id="graph2" class="graph-container" v-if="showGraph2">
         <v-network-graph 
         ref="graph2"
@@ -662,7 +704,10 @@
             <Metrics :sim_num=2></Metrics>
         </div>
     </div>
-    <span id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3">Simulation 3</span>
+    <div id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3"> 
+        <span>Simulation 3</span>
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(3)">
+    </div>
     <div id="graph3" class="graph-container" v-if="showGraph3">
         <v-network-graph 
         ref="graph3"
@@ -710,7 +755,10 @@
             <Metrics :sim_num=3></Metrics>
         </div>
     </div>
-    <span id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4">Simulation 4</span>
+    <div id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4"> 
+        <span>Simulation 4</span>
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(4)">
+    </div>
     <div id="graph4" class="graph-container" v-if="showGraph4">
         <v-network-graph 
         ref="graph4"
@@ -758,7 +806,10 @@
             <Metrics :sim_num=4></Metrics>
         </div>
     </div>
-    <span id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5">Simulation 5</span>
+    <div id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5"> 
+        <span>Simulation 5</span>
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(5)">
+    </div>
     <div id="graph5" class="graph-container" v-if="showGraph5">
         <v-network-graph 
         ref="graph5"
