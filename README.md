@@ -44,7 +44,7 @@ Now the simulations should be complete, and a timeline of the simulation and fin
 
 2. Click that box. A graph container should appear. 
 
-3. Click 'Start' to automatically walk through all snapshots, or 'Step' to just view the next snapshot. Compromised nodes appear red, and uninfected nodes appear green. 
+3. Click 'Start' to automatically walk through all snapshots, or 'Step' to just view the next snapshot. Compromised nodes appear red, exposed nodes (neighbour compromised nodes) appear yellow and normal nodes appear green. 
 
 4. To view aggregated results for the simulation, click one of the four buttons at the bottom of the container. These should display statistic graphs obtained at the end of the simulation. 
 
@@ -77,4 +77,10 @@ After creating the model, add it to the ConfigModel class. As they are optional 
 
 ### Frontend requirements 
 
-## Storing previous simulations 
+## Hosting remotely
+
+As the application is already dockerised, the easiest way to host this remotely is to convert it into a [Kubernetes](https://kubernetes.io/docs/home/) cluster. This cluster could then be hosted by Google Cloud or other cloud providers. 
+
+Kubernetes suggests [Kompose](https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/), to convert docker-compose files (such as the one in the base directory of this application) to Kubernetes readable files. 
+
+This could then be deployed to a number of cloud providers, making the application remotely accessible. There should be specific guides about this process depending on the chosen provider, such as this one for [Google Cloud](https://z2jh.jupyter.org/en/latest/kubernetes/google/step-zero-gcp.html).
