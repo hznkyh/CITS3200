@@ -107,7 +107,7 @@
     function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
-        //console.log(nodes[id])
+        ////console.log(nodes[id])
         for (var key in nodes[id]) {
             var node = nodes[id][key]
             var subnet = node.subnet
@@ -155,22 +155,23 @@
         methods: {
             async getGraph() {
                 try {
-                    //console.log(nodes[0])
-                    //console.log("cleardata")
+                    ////console.log(nodes[0])
+                    ////console.log("cleardata")
                     clearData();
-                    //console.log(nodes[0])
+                    ////console.log(nodes[0])
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
-                    //console.log(storedGraph);
+                    ////console.log(storedGraph);
                     for (var i = 1; i <= number_of_sims; i ++) {
                         number_of_graphs.push(storedGraph[`graph${i}`].length)
                     }
+                    console.log("drawall")
                     this.drawAll();
-                    //console.log (number_of_graphs)
+                    ////console.log (number_of_graphs)
                     // this.msg = "Got graph";
                 } catch (error) {
-                    //console.error(error);
+                    ////console.error(error);
                 }
             },
 
@@ -195,14 +196,13 @@
             },
             drawAll(){ 
                 var graphs = [graph,graph2,graph3,graph4,graph5]
-                for (let i = 0; i < number_of_sims;i++){ 
-                    if (graphIndex[i] == -1){ 
-                        graphIndex[i] = 0; 
-                    }
-                    console.log("STEPPING " + i);
-                    this.step(i);
-                    this.graphs[i].fitToContents();
+                console.log("DRAWING ALL");
+                console.log(number_of_sims)
+                for (var i = 0; i < number_of_sims;i++){ 
+                    console.log(i)
+                    this.manualStep(i, "forward")
                 }
+                console.log("finished")
             },
             manualStep(id, direction) {
                 clearInterval(intervalIDs[id])
@@ -224,7 +224,7 @@
                     }
                 }
                 this.step(id)
-                //console.log(graphIndex[id])
+                ////console.log(graphIndex[id])
                 // this.msg = "Stopped"
             },
 
@@ -237,7 +237,7 @@
                 }
                 exposed = [];
                 var graph = storedGraph[`graph${id+1}`][graphIndex[id]]
-                //console.log(id)
+                // console.log(id)
 
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
@@ -248,7 +248,7 @@
                     edges[id][edgeId] = { source, target }
                     nextEdgeIndex++
                 };
-                //console.log(edges)
+                ////console.log(edges)
 
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
@@ -324,7 +324,7 @@
             },
 
             revealLabel(number) {
-                //console.log("clicked")
+                ////console.log("clicked")
                 switch (number) {
                     case 1:
                         this.showLabel1 = true;
@@ -400,28 +400,29 @@
                 var new_dict = {};
                 var graph_indexes = [-1,-1,-1,-1,-1]
                 for (const key of Object.keys(storedGraph)){ 
-                    console.log("KEY" + key);
+                    //console.log("KEY" + key);
                     var n = parseInt(key.slice(-1));
-                    console.log("KEYS" + n); 
+                    //console.log("KEYS" + n); 
                     if (n < sim_num){ 
                         new_dict[key]=storedGraph[key]; 
                         graph_indexes[n] = graphIndex[n];
                     } else if (n > sim_num) { 
                         n--;
-                        console.log("MOVING GRAPH" + (n+1)); 
+                        //console.log("MOVING GRAPH" + (n+1)); 
                         let newKey =  "graph" + n.toString();
-                        console.log("set " + graph_indexes[n - 1] + "to " + graphIndex[n]);
+                        //console.log("set " + graph_indexes[n - 1] + "to " + graphIndex[n]);
                         graph_indexes[n - 1] = graphIndex[n];
                         new_dict[newKey] = storedGraph[key];
                     }
 
                 }
+
                 // POST ROUTE TO REMOVE GRAPH
-                console.log(Object.keys(storedGraph));
-                console.log(storedGraph);
-                console.log(new_dict);
-                console.log(graphIndex); 
-                console.log(graph_indexes);
+                // //console.log(Object.keys(storedGraph));
+                // //console.log(storedGraph);
+                // //console.log(new_dict);
+                // //console.log(graphIndex); 
+                // //console.log(graph_indexes);
                 graphIndex = graph_indexes;
                 storedGraph = new_dict;
                 this.addGraph('remove');
@@ -538,7 +539,7 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    //console.log(nodes[0][newVal[0]].host)
+                    ////console.log(nodes[0][newVal[0]].host)
                     if (nodes[0][newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
                         var propNode = nodes[0][newVal[0]].host
@@ -551,7 +552,7 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    //console.log(nodes[1][newVal[0]].host)
+                    ////console.log(nodes[1][newVal[0]].host)
                     if (nodes[1][newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
                         var propNode = nodes[1][newVal[0]].host
@@ -564,7 +565,7 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    //console.log(nodes[2][newVal[0]].host)
+                    ////console.log(nodes[2][newVal[0]].host)
                     if (nodes[2][newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
                         var propNode = nodes[2][newVal[0]].host
@@ -577,7 +578,7 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    //console.log(nodes[3][newVal[0]].host)
+                    ////console.log(nodes[3][newVal[0]].host)
                     if (nodes[3][newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
                         var propNode = nodes[3][newVal[0]].host
@@ -590,7 +591,7 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    //console.log(nodes[4][newVal[0]].host)
+                    ////console.log(nodes[4][newVal[0]].host)
                     if (nodes[4][newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
                         var propNode = nodes[4][newVal[0]].host
