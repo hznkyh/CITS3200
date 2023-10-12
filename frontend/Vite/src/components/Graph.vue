@@ -374,8 +374,6 @@
                 }
             },
             removeGraph() {
-                console.log("remove")
-                console.log(number_of_sims)
                 if (number_of_sims > 1) {
                     switch (number_of_sims) {
                         case 2:
@@ -393,6 +391,7 @@
                     }
                     number_of_sims--
                 }
+                this.revealLabel(number_of_sims)
             },
             remove(sim_num){ 
                 var new_dict = {};
@@ -422,14 +421,9 @@
                 //     }
 
                 // }
-                console.log(number_of_sims);
                 // graphIndex = graph_indexes;
                 // storedGraph = new_dict;
-                console.log("test2")
-                console.log(graphIndex)
-                console.log(storedGraph)
-                console.log(simNames)
-                this.addGraph('remove');
+                this.removeGraph();
                 // this.drawAll();
             },
             closePopup() {
