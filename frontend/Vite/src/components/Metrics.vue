@@ -25,7 +25,7 @@ export default {
     },
 
     props: {
-        sim_num : Number,
+        simName : String,
     },
 
     methods: {
@@ -38,8 +38,9 @@ export default {
           this.activePng = !this.activePng
         }
         if (this.activePng) {
+          console.log(this.simName)
           try {
-            axios.get(`http://localhost:8000/statistics/graph${this.sim_num}/${type}`, {
+            axios.get(`http://localhost:8000/statistics/${this.simName}/${type}`, {
               responseType: "blob"
             }).then((response) => {
               //console.log(response)
