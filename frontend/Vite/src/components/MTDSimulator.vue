@@ -6,10 +6,12 @@
       <ol class="list">
         <li>Enter you desired values into the fields below.</li>
         <li>Optional: Click on "Advanced", and enter the inputs for the advanced options. Otherwise, leave it empty (this will set them to the default values).</li>
-        <li>One all fields have been entered, click the save button.</li>
+        <li>Once all fields have been entered, click the save button.</li>
         <li>Note: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
         <li>Once you have saved your graph(s), click on submit to submit your data.</li>
       </ol>
+      <h3 class="h1-instructions">Resetting Form</h3>
+      <p class="p-instructions">NOTE: The 'Reset Form' button does not only reset the values in the form but removes all previous submissions.</p>
       <h1 class="h1-instructions">Graph Instructions</h1>
       <ol class="list">
         <li>Click on "Get" to retrieve the graph data</li>
@@ -17,7 +19,7 @@
         <li>Click on "Step" to step through the simulation</li>
         <li>Click on "Stop" to stop the simulation</li>
       </ol>
-      <h1 class="h1-instruction">To view</h1>
+      <h1 class="h1-instructions">To view</h1>
       <p class="p-instructions">To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
       <p class="p-instructions">Click on an empty space to drag the whole network graph. Place the cursor inside the box, and scroll up and down to zoom in and out respectively.</p>
       <p class="p-instructions">Click a node and hold it to drag it to anyplace desriable.</p>
@@ -296,7 +298,7 @@
             <button class="saveButton">Save</button>
           </div>
           <div class="group">
-            <button class="saveButton" @click="resetForm">Reset Form</button>
+            <button class="resetButton" @click="resetForm">Reset Form</button>
           </div>
           <div class="group">
             <input type="submit" value="Submit" @click="submitForm">
@@ -466,6 +468,28 @@ export default {
 
     resetForm(){
       this.savedForms = [];
+
+      this.graphNum = ''
+      this.nodeNumber = ''
+      this.nodeExposed = ''
+      this.layers = ''
+      this.compromisedRatio = ''
+      this.scheme = ''
+      this.interval = ''
+      this.finishTime = ''
+      this.checkpoints = ''
+      this.totalSubnets = ''
+      this.targetLayers = ''
+      this.compTopoShuffle = ''
+      this.hostTopoShuffle = ''
+      this.ipShuffle = ''
+      this.osDiveristy = ''
+      this.portShuffle = ''
+      this.ServDiversity = ''
+      this.userShuffle = ''
+      this.similtaneous = ''
+      this.random = ''
+      this.alternative = ''
     },
   
     submitForm() {
@@ -734,21 +758,23 @@ body, html {
   padding: 0.5em 1em;
   width: 100%;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; 
   cursor: pointer;
-  box-shadow: 
-      inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
-      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-      -2px -2px 5px rgba(255, 255, 255, 0.9), 
-      2px 2px 5px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out; 
+  font-weight: 500; 
 }
 
-.advanced:hover{
+.advanced:hover {
   background-color: #3454a4;
   color: #ffffff;
 }
+
+.advanced:active {
+  background-color: #2c448c;
+}
+
 
 .hidden{
   display: none;
@@ -762,15 +788,16 @@ label, input, select {
 
 .network {
   width: 100%;
-  max-width: 100%;
-  margin-bottom: 20px; 
-  background: #ffffff;
+  margin: 2em;
+  margin-top: 20px;
   padding: 2em;
+  background-color: #ffffff;
   border-radius: 10px;
-  margin:2em;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 2px solid #000; 
-  position: relative;
+  box-shadow: 
+  inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+  inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+  -2px -2px 5px rgba(255, 255, 255, 0.9), 
+  2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 input[type=text] {
@@ -791,16 +818,22 @@ input[type=text]:focus {
 input[type="submit"]{
   background-color: #000;
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease-in-out;
+  margin-bottom: 10px;
+  font-weight: 500;
 }
 
 input[type="submit"]:hover {
   background-color: #333;
+}
+
+input[type="submit"]:active{
+  background-color: #222;
 }
 
 form {
@@ -814,15 +847,16 @@ form {
 }
 
 .tooltip-container .info{
-  cursor: pointer;
+  cursor: help;
   padding: 0 5px;
   display: inline-block;
 }
 
 .tooltip-container .tip {
   position: absolute;
-  top: 0;
-  left: 100%;
+  top: 50%;;
+  left: 110%;
+  transform: translateY(-50%);
   display: none;
   min-width: 200px;
   padding: 8px;
@@ -831,10 +865,29 @@ form {
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  font-size: 14px;
+  color: #000;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.tooltip-container .tip::before{
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translatey(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #fff;
+  z-index: 0;
 }
 
 .tooltip-container:hover .tip{
   display: block;
+  opacity: 1;
+  visibility: visible;
 }
 #tooltip{
     text-align: left;
@@ -872,23 +925,29 @@ form {
     width: 100%;
     background-color: #000;
     color: #fff;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
-    margin-bottom: 5px;
+    transition: background-color 0.3s ease-in-out;
+    margin-bottom: 15px;
+    font-weight: 500;
  }
 
  .instructions:hover{
   background-color: #333;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+ }
+
+ .instructions:active{
+  background-color: #222;
  }
 
  .instruction-box {
     width: 100%;
     margin: 2em;
-    margin-top: 5px;
+    margin-top: 20px;
     padding: 2em;
     background-color: #ffffff;
     border-radius: 10px;
@@ -935,50 +994,47 @@ form {
 
 .addGraph{
   width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  margin: 1em;
+  background-color: #A7C7E7;
+  color: black;
+  padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease-in-out;
+  margin-bottom: 10px;
+  font-weight: 500;
  }
 
  .addGraph:hover{
-  background-color: #333;
+  background-color: #3454a4;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.saveButton{
+.addGraph:active{
+  background-color: #3454a4;
+}
+
+.resetButton, .saveButton{
   width: 100%;
   background-color: #000;
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease-in-out;
+  margin-bottom: 10px;
+  font-weight: 500;
 }
 
-.saveButton:hover{
+.resetButton:hover, .saveButton:hover{
   background-color: #333;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.resetButton{
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.resetButton:hover{
-  background-color: #333;
+.resetButton:active, .saveButton:active{
+  background-color: #222;
 }
 </style>

@@ -612,7 +612,6 @@
         <button class="close-button" @click="closePopup">Submit</button>
       </div>
     </div>
-    <button class="addGraph" @click="removeGraph()">Remove Graph</button>
     <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
         <span>{{simNames[0]}}</span>
         <div class="delete">
@@ -630,33 +629,22 @@
         :configs="configs"
         >
         </v-network-graph>
-        <div class="control-panel">
-            <div class="row">
-                <div class="group">
-                    <button @click="graph?.fitToContents()" ref="myBtn" class="btn">Fit</button>
-                </div>
-                <div class="group">
-                    <button @click="graph?.zoomIn()" class="btn">Zoom In</button>
-                </div>
-                <div class="group">
-                    <button @click="graph?.zoomOut()" class="btn">Zoom Out</button>
-                </div>
-                <div class="group">
-                    <button @click="getGraph()" class="btn">Get</button>
-                </div>
-                <div class="group">
-                    <button @click="start(0)" class="btn">Start/Continue</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(0, 'forward')" class="btn">Step</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(0, 'back')" class="btn">Step Back</button>
-                </div>
-                <div class="group">
-                    <button @click="stop(0)" class="btn">Stop</button>
-                </div>
+        <div class="graph-view">
+            <div class="group">
+                <i class="bi bi-arrows-fullscreen" @click="graph?.fitToContents()"></i>
             </div>
+            <div class="group">
+                <i class="bi bi-zoom-in" @click="graph?.zoomIn()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-out" @click="graph?.zoomOut()" ></i>
+            </div>
+        </div>
+        <div class="control-panel">
+            <i class="bi bi-skip-backward" @click="manualStep(0, 'back')"></i>
+            <i class="bi bi-play" @click="start(0)"></i>
+            <i class="bi bi-stop-circle" @click="stop(0)"></i>
+            <i class="bi bi-skip-forward" @click="manualStep(0, 'forward')" ></i>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
@@ -682,35 +670,23 @@
         :configs="configs"
         >
         </v-network-graph>
-        <div class="control-panel">
-            <div class="row">
-                <div class="group">
-                    <button @click="graph2?.fitToContents()" ref="myBtn" class="btn">Fit</button>
-                </div>
-                <div class="group">
-                    <button @click="graph2?.zoomIn()" class="btn">Zoom In</button>
-                </div>
-                <div class="group">
-                    <button @click="graph2?.zoomOut()" class="btn">Zoom Out</button>
-                </div>
-                <div class="group">
-                    <button @click="getGraph()" class="btn">Get</button>
-                </div>
-                <div class="group">
-                    <button @click="start(1)" class="btn">Start/Continue</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(1, 'forward')" class="btn">Step</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(1, 'back')" class="btn">Step Back</button>
-                </div>
-                <div class="group">
-                    <button @click="stop(1)" class="btn">Stop</button>
-                </div>
+        <div class="graph-view">
+            <div class="group">
+                <i class="bi bi-arrows-fullscreen" @click="graph2?.fitToContents()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-in" @click="graph2?.zoomIn()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-out" @click="graph2?.zoomOut()" ></i>
             </div>
         </div>
-        <!-- <p class="message"> {{ msg }} </p> -->
+        <div class="control-panel">
+            <i class="bi bi-skip-backward" @click="manualStep(1, 'back')"></i>
+            <i class="bi bi-play" @click="start(1)"></i>
+            <i class="bi bi-stop-circle" @click="stop(1)"></i>
+            <i class="bi bi-skip-forward" @click="manualStep(1, 'forward')" ></i>
+        </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
@@ -733,35 +709,23 @@
         :configs="configs"
         >
         </v-network-graph>
-        <div class="control-panel">
-            <div class="row">
-                <div class="group">
-                    <button @click="graph3?.fitToContents()" ref="myBtn" class="btn">Fit</button>
-                </div>
-                <div class="group">
-                    <button @click="graph3?.zoomIn()" class="btn">Zoom In</button>
-                </div>
-                <div class="group">
-                    <button @click="graph3?.zoomOut()" class="btn">Zoom Out</button>
-                </div>
-                <div class="group">
-                    <button @click="getGraph()" class="btn">Get</button>
-                </div>
-                <div class="group">
-                    <button @click="start(2)" class="btn">Start/Continue</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(2, 'forward')" class="btn">Step</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(2, 'back')" class="btn">Step Back</button>
-                </div>
-                <div class="group">
-                    <button @click="stop(2)" class="btn">Stop</button>
-                </div>
+        <div class="graph-view">
+            <div class="group">
+                <i class="bi bi-arrows-fullscreen" @click="graph3?.fitToContents()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-in" @click="graph3?.zoomIn()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-out" @click="graph3?.zoomOut()" ></i>
             </div>
         </div>
-        <!-- <p class="message"> {{ msg }} </p> -->
+        <div class="control-panel">
+            <i class="bi bi-skip-backward" @click="manualStep(2, 'back')"></i>
+            <i class="bi bi-play" @click="start(2)"></i>
+            <i class="bi bi-stop-circle" @click="stop(2)"></i>
+            <i class="bi bi-skip-forward" @click="manualStep(2, 'forward')" ></i>
+        </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
             <nodeInfo :node="propNode3"></nodeInfo>
         </div>
@@ -784,35 +748,23 @@
         :configs="configs"
         >
         </v-network-graph>
-        <div class="control-panel">
-            <div class="row">
-                <div class="group">
-                    <button @click="graph4?.fitToContents()" ref="myBtn" class="btn">Fit</button>
-                </div>
-                <div class="group">
-                    <button @click="graph4?.zoomIn()" class="btn">Zoom In</button>
-                </div>
-                <div class="group">
-                    <button @click="graph4?.zoomOut()" class="btn">Zoom Out</button>
-                </div>
-                <div class="group">
-                    <button @click="getGraph()" class="btn">Get</button>
-                </div>
-                <div class="group">
-                    <button @click="start(3)" class="btn">Start/Continue</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(3, 'forward')" class="btn">Step</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(3, 'back')" class="btn">Step Back</button>
-                </div>
-                <div class="group">
-                    <button @click="stop(3)" class="btn">Stop</button>
-                </div>
+        <div class="graph-view">
+            <div class="group">
+                <i class="bi bi-arrows-fullscreen" @click="graph4?.fitToContents()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-in" @click="graph4?.zoomIn()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-out" @click="graph4?.zoomOut()" ></i>
             </div>
         </div>
-        <!-- <p class="message"> {{ msg }} </p> -->
+        <div class="control-panel">
+            <i class="bi bi-skip-backward" @click="manualStep(3, 'back')"></i>
+            <i class="bi bi-play" @click="start(3)"></i>
+            <i class="bi bi-stop-circle" @click="stop(3)"></i>
+            <i class="bi bi-skip-forward" @click="manualStep(3, 'forward')" ></i>
+        </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
@@ -835,35 +787,23 @@
         :configs="configs"
         >
         </v-network-graph>
-        <div class="control-panel">
-            <div class="row">
-                <div class="group">
-                    <button @click="graph5?.fitToContents()" ref="myBtn" class="btn">Fit</button>
-                </div>
-                <div class="group">
-                    <button @click="graph5?.zoomIn()" class="btn">Zoom In</button>
-                </div>
-                <div class="group">
-                    <button @click="graph5?.zoomOut()" class="btn">Zoom Out</button>
-                </div>
-                <div class="group">
-                    <button @click="getGraph()" class="btn">Get</button>
-                </div>
-                <div class="group">
-                    <button @click="start(4)" class="btn">Start/Continue</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(4, 'forward')" class="btn">Step</button>
-                </div>
-                <div class="group">
-                    <button @click="manualStep(4, 'back')" class="btn">Step Back</button>
-                </div>
-                <div class="group">
-                    <button @click="stop(4)" class="btn">Stop</button>
-                </div>
+        <div class="graph-view">
+            <div class="group">
+                <i class="bi bi-arrows-fullscreen" @click="graph5?.fitToContents()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-in" @click="graph5?.zoomIn()"></i>
+            </div>
+            <div class="group">
+                <i class="bi bi-zoom-out" @click="graph5?.zoomOut()" ></i>
             </div>
         </div>
-        <!-- <p class="message"> {{ msg }} </p> -->
+        <div class="control-panel">
+            <i class="bi bi-skip-backward" @click="manualStep(4, 'back')"></i>
+            <i class="bi bi-play" @click="start(4)"></i>
+            <i class="bi bi-stop-circle" @click="stop(4)"></i>
+            <i class="bi bi-skip-forward" @click="manualStep(4, 'forward')" ></i>
+        </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
             <nodeInfo :node="propNode5"></nodeInfo>
         </div>
@@ -880,13 +820,18 @@
 
     .graph {
         width: 100%;
-        height: 40em;
-        border: 1px solid #ccc;
+        margin: 5px auto;
+        height: 800px;
+        margin-top: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 
+        inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+        inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+        -2px -2px 5px rgba(255, 255, 255, 0.9), 
+        2px 2px 5px rgba(0, 0, 0, 0.2);
     }
-    .control-panel {
-        gap: 10px;
-        padding: 10px;
-    }
+
     .message {
         margin:0;
         width: 20%;
@@ -899,6 +844,12 @@
 
     .active {
         display: block;
+    }
+
+    .graph-view {
+        position: absolute;
+        top: 0.7em;
+        left: 1em;
     }
 
     .node-info {
@@ -925,33 +876,36 @@
         display: flex;
         justify-content: space-between;
         background-color: #3454a4;
-        color: white;
-        padding: 1em;
-        border: 1px solid black;
-        margin-bottom: 1em;
+        padding: 0.5em 1em;
+        width: 100%;
+        text-align: center;
         border-radius: 10px;
+        margin-bottom: 1em; 
+        font-weight: 500;
+        color: white;
     }
 
-    .btn{
+    .btncp{
         background-color: #ffffff;
-        padding: 0.5em 1em;
-        margin:10px 0 1em 0;
         width: 100%;
         text-align: center;
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         cursor: pointer;
-        box-shadow: 
-            inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
-            inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-            -2px -2px 5px rgba(255, 255, 255, 0.9), 
-            2px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        font-weight: 500;
+        margin-top: 10px;
+    }
+
+    .btncp:hover{
+        background-color: #3454a4;
+        color: #ffffff;
     }
 
     .row{
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
+        justify-content: center;
+        margin-bottom: 0px;
     }
 
     .group{
@@ -992,6 +946,15 @@
 
     .close-button:hover {
         background-color: #27ab02;
+    }
+
+    .control-panel {
+        justify-content: center;
+        display: flex;
+    }
+
+    .control-panel i {
+        margin: 1em;
     }
 </style>
 
