@@ -61,7 +61,6 @@
               </span>
             </div>
             <select id="param" type="text" placeholder="Graph Number" v-model="graphNum" name="Graph Number" required>
-              <option value="graph1">Graph 1</option>
             </select>
           </div>
 
