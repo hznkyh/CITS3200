@@ -5,7 +5,6 @@ It also includes controllers for setting up logger and process pool.
 The app has endpoints for authentication, token generation, and testing.
 """
 import logging
-import pathlib
 from datetime import timedelta
 from typing import Annotated
 from uuid import uuid4
@@ -13,30 +12,28 @@ from uuid import uuid4
 import uvicorn
 from auth import create_access_token, get_current_active_user, verify_session
 from config import settings
-from controllers import setup_logger, ProcessPoo
+from controllers import ProcessPoo
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
+from logging.handlers import RotatingFileHandler
 from models import Token, User
 from routers import network, multiSim, statistics
 from sessions import sessions
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-# Initialize the pool when the app starts
-pool = ProcessPoo().get_pool()
+
+
+# logger = logging.getLogger('mtdgui.main')  # Convention: <app_name>.<module_name>
+# logger.debug("Debug message from main.py")
+
+logger = logging.getLogger(__name__)
+logger.info("init main")
 
 app = FastAPI(debug=True)
-
 app.include_router(network.router)
 app.include_router(statistics.router)
 app.include_router(multiSim.router)
-
-
-# app.include_router(set_configs.router)
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins="http://localhost:8080/",
@@ -94,9 +91,6 @@ async def root():
     """,
         status_code=status.HTTP_200_OK,
     )
-
-
-# {"message": "Hello Bigger Applications!"}
 
 
 @app.get("/uuid")
@@ -174,14 +168,6 @@ async def test_token(client: Annotated[User, Depends(get_current_active_user)]):
 #     # Shutdown the pool when the app stops
 #     ProcessPoo.shutdown()
 
-
+#   ! DO NOT RUN THIS IN PRODUCTION
 if __name__ == "__main__":
-    log_file = pathlib.Path("Logs/debug.log")
-
-    if not log_file.exists():
-        log_file.parent.mkdir(parents=True, exist_ok=True)
-
-    logger = logging.getLogger()
-    setup_logger(logger)
-
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
