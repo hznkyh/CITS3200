@@ -372,6 +372,7 @@
                 if (action == "add") {
                     if (number_of_sims < 5) {
                         number_of_sims++;
+                        this.isPopupOpen = true;
                     }
                 }
                 else if (action == "remove") {
@@ -427,13 +428,25 @@
                 storedGraph = new_dict;
                 this.addGraph('remove');
                 this.drawAll();
-            }
+            },
+            closePopup() {
+            // Check if userInput is longer than 10 characters
+                if (this.userInput.length > 10) {
+                    alert('Input should be a maximum of 10 characters.');
+                } else {
+                    this.isPopupOpen = false;
+                    this.$emit('user-input', this.userInput);
+                    this.userInput = '';
+                }
+            },
         },
         data() {
             return {
                 nodes,
                 edges,
                 layouts,
+                isPopupOpen: false,
+                userInput: '',
 
                 graph,
                 selectedNodes,
@@ -608,6 +621,12 @@
 
 <template>
     <button class="addGraph" @click="addGraph('add')">Add Graph</button>
+    <div v-if="isPopupOpen" class="popup">
+      <div class="popup-content">
+        <input v-model="userInput" type="text" placeholder="Name of simulation">
+        <button class="close-button" @click="closePopup">Close</button>
+      </div>
+    </div>
     <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
     <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
         <span>Simulation 1</span>
@@ -949,6 +968,42 @@
 
     .group{
         flex: 1;
+    }
+
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .close-button {
+        background-color: #ff5733;
+        color: white;
+        border: none;
+        margin-left: 1em;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .close-button:hover {
+        background-color: #d43322;
     }
 </style>
 
