@@ -36,7 +36,7 @@
     var nodes = [reactive({ ...data.nodes }), reactive({ ...data2.nodes }), reactive({ ...data3.nodes }), reactive({ ...data4.nodes }), reactive({ ...data5.nodes })]
     var edges = [reactive({ ...data.edges }), reactive({ ...data2.edges }), reactive({ ...data3.edges }), reactive({ ...data4.edges }), reactive({ ...data5.edges })]
     var layouts = [reactive({ ...data.layouts }), reactive({ ...data2.layouts }), reactive({ ...data3.layouts }), reactive({ ...data4.layouts }), reactive({ ...data5.layouts })]
-    var number_of_sims = 1;
+    var number_of_sims = 0;
     var simNames: string [] = [];
 
     var graphIndex: number[] = [-1, -1, -1, -1, -1];
@@ -395,7 +395,6 @@
                         number_of_sims--
                     }
                 }
-                this.revealLabel(number_of_sims)
             },
             remove(sim_num){ 
                 var graph_n = "graph" + sim_num; 
@@ -418,13 +417,7 @@
                     }
 
                 }
-
-                // POST ROUTE TO REMOVE GRAPH
-                // //console.log(Object.keys(storedGraph));
-                // //console.log(storedGraph);
-                // //console.log(new_dict);
-                // //console.log(graphIndex); 
-                // //console.log(graph_indexes);
+                number_of_sims -= 1;
                 graphIndex = graph_indexes;
                 storedGraph = new_dict;
                 this.addGraph('remove');
@@ -443,6 +436,7 @@
                     this.$emit('addGraph', this.userInput);
                     this.userInput = '';
                     console.log(simNames)
+                    this.revealLabel(number_of_sims)
                 }
             },
         },
@@ -458,7 +452,7 @@
                 graph,
                 selectedNodes,
                 showNodeInfo: false,
-                showLabel1: true,
+                showLabel1: false,
                 showGraph:false,
                 propNode:null,
 
@@ -636,7 +630,7 @@
     </div>
     <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
     <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
-        <span>Simulation 1</span>
+        <span>{{simNames[0]}}</span>
         <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(1)">
     </div>
     <div id="graph1" class="graph-container" v-if="showGraph">
@@ -688,7 +682,7 @@
     </div>
 
     <div id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2"> 
-        <span>Simulation 2</span>
+        <span>{{simNames[1]}}</span>
         <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(2)">
     </div>
     <div id="graph2" class="graph-container" v-if="showGraph2">
@@ -739,7 +733,7 @@
         </div>
     </div>
     <div id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3"> 
-        <span>Simulation 3</span>
+        <span>{{simNames[2]}}</span>
         <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(3)">
     </div>
     <div id="graph3" class="graph-container" v-if="showGraph3">
@@ -790,7 +784,7 @@
         </div>
     </div>
     <div id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4"> 
-        <span>Simulation 4</span>
+        <span>{{simNames[3]}}</span>
         <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(4)">
     </div>
     <div id="graph4" class="graph-container" v-if="showGraph4">
@@ -841,7 +835,7 @@
         </div>
     </div>
     <div id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5"> 
-        <span>Simulation 5</span>
+        <span>{{simNames[4]}}</span>
         <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(5)">
     </div>
     <div id="graph5" class="graph-container" v-if="showGraph5">
