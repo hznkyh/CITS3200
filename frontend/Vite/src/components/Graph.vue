@@ -367,61 +367,70 @@
                         break;
                 }
             },
-
-            addGraph(action) {
-                this.$emit('childData', action);
-                if (action == "add") {
-                    if (number_of_sims < 5) {
-                        number_of_sims++;
-                        this.isPopupOpen = true;
-                    }
+            addGraph() {
+                if (number_of_sims < 5) {
+                    number_of_sims++;
+                    this.isPopupOpen = true;
                 }
-                else if (action == "remove") {
-                    if (number_of_sims > 1) {
-                        switch (number_of_sims) {
-                            case 2:
-                                this.showGraph2 = false;
-                                break;
-                            case 3:
-                                this.showGraph3 = false;
-                                break;
-                            case 4:
-                                this.showGraph4 = false;
-                                break;
-                            case 5:
-                                this.showGraph5 = false;
-                                break;
-                        }
-                        number_of_sims--
+            },
+            removeGraph() {
+                console.log("remove")
+                console.log(number_of_sims)
+                if (number_of_sims > 1) {
+                    switch (number_of_sims) {
+                        case 2:
+                            this.showGraph2 = false;
+                            break;
+                        case 3:
+                            this.showGraph3 = false;
+                            break;
+                        case 4:
+                            this.showGraph4 = false;
+                            break;
+                        case 5:
+                            this.showGraph5 = false;
+                            break;
                     }
+                    number_of_sims--
                 }
             },
             remove(sim_num){ 
-                var graph_n = "graph" + sim_num; 
                 var new_dict = {};
                 var graph_indexes = [-1,-1,-1,-1,-1]
-                for (const key of Object.keys(storedGraph)){ 
-                    //console.log("KEY" + key);
-                    var n = parseInt(key.slice(-1));
-                    //console.log("KEYS" + n); 
-                    if (n < sim_num){ 
-                        new_dict[key]=storedGraph[key]; 
-                        graph_indexes[n] = graphIndex[n];
-                    } else if (n > sim_num) { 
-                        n--;
-                        //console.log("MOVING GRAPH" + (n+1)); 
-                        let newKey =  "graph" + n.toString();
-                        //console.log("set " + graph_indexes[n - 1] + "to " + graphIndex[n]);
-                        graph_indexes[n - 1] = graphIndex[n];
-                        new_dict[newKey] = storedGraph[key];
-                    }
+                var newSimNames: string [] = []
+                console.log("test")
+                console.log(graphIndex)
+                console.log(storedGraph)
+                console.log(simNames)
+                console.log
+                simNames.splice(sim_num, 1);
+                // for (const key of Object.keys(storedGraph)){ 
+                //     //console.log("KEY" + key);
+                //     var n = parseInt(key.slice(-1)) - 1;
+                //     //console.log("KEYS" + n); 
+                //     if (n < sim_num){ 
+                //         new_dict[key]=storedGraph[key]; 
+                //         graph_indexes[n] = graphIndex[n];
+                //         newSimNames[n] = simNames[n]
+                //     } else if (n > sim_num) { 
+                //         //console.log("MOVING GRAPH" + (n+1)); 
+                //         let newKey =  "graph" + (n - 1).toString();
+                //         //console.log("set " + graph_indexes[n - 1] + "to " + graphIndex[n]);
+                //         graph_indexes[n - 1] = graphIndex[n];
+                //         new_dict[newKey] = storedGraph[key];
+                //         newSimNames[n - 1] = simNames[n]
+                //     }
 
-                }
-                number_of_sims -= 1;
-                graphIndex = graph_indexes;
-                storedGraph = new_dict;
+                // }
+                console.log(number_of_sims);
+                // graphIndex = graph_indexes;
+                // storedGraph = new_dict;
+                console.log("test2")
+                console.log(graphIndex)
+                console.log(storedGraph)
+                console.log(simNames)
                 this.addGraph('remove');
-                this.drawAll();
+                // this.drawAll();
             },
             closePopup() {
             // Check if userInput is longer than 10 characters
@@ -621,17 +630,17 @@
 </script>
 
 <template>
-    <button class="addGraph" @click="addGraph('add')">Add Graph</button>
+    <button class="addGraph" @click="addGraph()">Add Graph</button>
     <div v-if="isPopupOpen" class="popup">
       <div class="popup-content">
         <input v-model="userInput" type="text" placeholder="Name of simulation">
         <button class="close-button" @click="closePopup">Submit</button>
       </div>
     </div>
-    <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
+    <button class="addGraph" @click="removeGraph()">Remove Graph</button>
     <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
         <span>{{simNames[0]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(1)">
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(0)">
     </div>
     <div id="graph1" class="graph-container" v-if="showGraph">
         <v-network-graph
@@ -683,7 +692,7 @@
 
     <div id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2"> 
         <span>{{simNames[1]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(2)">
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(1)">
     </div>
     <div id="graph2" class="graph-container" v-if="showGraph2">
         <v-network-graph 
@@ -734,7 +743,7 @@
     </div>
     <div id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3"> 
         <span>{{simNames[2]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(3)">
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(2)">
     </div>
     <div id="graph3" class="graph-container" v-if="showGraph3">
         <v-network-graph 
@@ -785,7 +794,7 @@
     </div>
     <div id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4"> 
         <span>{{simNames[3]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(4)">
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(3)">
     </div>
     <div id="graph4" class="graph-container" v-if="showGraph4">
         <v-network-graph 
@@ -836,7 +845,7 @@
     </div>
     <div id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5"> 
         <span>{{simNames[4]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(5)">
+        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(4)">
     </div>
     <div id="graph5" class="graph-container" v-if="showGraph5">
         <v-network-graph 
