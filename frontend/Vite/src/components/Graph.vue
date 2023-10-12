@@ -1010,7 +1010,7 @@
     }
 
     .close-button:hover {
-        background-color: #d43322;
+        background-color: #27ab02;
     }
 </style>
 
