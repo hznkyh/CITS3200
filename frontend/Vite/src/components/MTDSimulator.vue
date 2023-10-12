@@ -309,7 +309,7 @@
         <p class="message"> {{ msg }} </p>
     </div>
     <div class="network">
-      <Graph @childData="handleChildData" :key="componentKey"></Graph>
+      <Graph @addGraph="handleAddGraph" @removeGraph="handleRemoveGraph" :key="componentKey"></Graph>
     </div>
     <!-- <button class="addGraph" @click="addGraph">Add Graph</button> -->
       <!-- <Graph></Graph>
@@ -362,11 +362,27 @@ export default {
     forceRerender() {
       this.componentKey += 1;
     },
-    handleChildData(data) {
-      // Handle the data received from the child component
-      // //console.log(data);
-      this.addGraph(data);
+    handleAddGraph(name){
+      console.log(name)
+      const paramSelect = document.getElementById('param');
+
+      if (paramSelect.options.length >=5){
+        alert("You can only add up to 5 graphs.");
+        return;
+      }
+      const newOption = document.createElement('option');
+      newOption.text = name;
+      newOption.value = name;
+      newOption.id = name
+
+      paramSelect.appendChild(newOption);
     },
+
+    handleRemoveGraph(name) {
+      const option = document.getElementById(name);
+      option.remove()
+    },
+
     test() {
       Graph.methods.revealLabel(2);
     },
@@ -653,32 +669,6 @@ export default {
     toggleInstructions(){
       this.showInstructions = !this.showInstructions;
     },
-    addGraph(action){
-      const paramSelect = document.getElementById('param');
-
-      if(action === 'add') {
-        if (paramSelect.options.length >=5){
-          alert("You can only add up to 5 graphs.");
-          return;
-        }
-        const newOption = document.createElement('option');
-        newOption.text = `Graph ${paramSelect.options.length + 1}`;
-        newOption.value = `graph${paramSelect.options.length + 1}`;
-
-        paramSelect.appendChild(newOption);
-      }
-
-      else if (action === 'remove') {
-        if (paramSelect.options.length === 1) {
-          alert("You can't remove the last graph.");
-          return;
-        }
-        paramSelect.removeChild(paramSelect.lastChild);
-        return;
-      }
-
-      // this.schemeGraph = newOption.value;
-   },
   },
 };
 </script>

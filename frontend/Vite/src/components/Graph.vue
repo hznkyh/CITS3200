@@ -440,8 +440,8 @@
                 else {
                     this.isPopupOpen = false;
                     simNames.push(this.userInput);
-                    this.userInput = '';
                     this.$emit('addGraph', this.userInput);
+                    this.userInput = '';
                     console.log(simNames)
                 }
             },
