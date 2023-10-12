@@ -434,10 +434,14 @@
             // Check if userInput is longer than 10 characters
                 if (this.userInput.length > 10) {
                     alert('Input should be a maximum of 10 characters.');
-                } else {
+                } else if (simNames.includes(this.userInput)) {
+                    alert('Names already used.');
+                }   
+                else {
                     this.isPopupOpen = false;
                     simNames.push(this.userInput);
                     this.userInput = '';
+                    this.$emit('addGraph', this.userInput);
                     console.log(simNames)
                 }
             },
@@ -627,7 +631,7 @@
     <div v-if="isPopupOpen" class="popup">
       <div class="popup-content">
         <input v-model="userInput" type="text" placeholder="Name of simulation">
-        <button class="close-button" @click="closePopup">Close</button>
+        <button class="close-button" @click="closePopup">Submit</button>
       </div>
     </div>
     <button class="addGraph" @click="addGraph('remove')">Remove Graph</button>
@@ -996,7 +1000,7 @@
     }
 
     .close-button {
-        background-color: #ff5733;
+        background-color: #2ccd00;
         color: white;
         border: none;
         margin-left: 1em;
