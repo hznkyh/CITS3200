@@ -402,6 +402,12 @@
                 graphIndex.splice(sim_num, 1);
                 graphIndex.push(-1)
                 delete storedGraph[graphName] 
+
+                startSim = [false, false, false, false, false];
+
+                for (var i = 0; i < intervalIDs.length; i++) {
+                    clearInterval(intervalIDs[i])
+                }
                 
                 this.removeGraph();
                 this.drawAll();
