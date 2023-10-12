@@ -156,23 +156,16 @@
         methods: {
             async getGraph() {
                 try {
-                    ////console.log(nodes[0])
-                    ////console.log("cleardata")
                     clearData();
-                    ////console.log(nodes[0])
                     this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
-                    ////console.log(storedGraph);
-                    for (var i = 1; i <= number_of_sims; i ++) {
-                        number_of_graphs.push(storedGraph[`graph${i}`].length)
+                    for (let key in storedGraph) {
+                        number_of_graphs.push(storedGraph[key].length)
                     }
-                    console.log("drawall")
                     this.drawAll();
-                    ////console.log (number_of_graphs)
-                    // this.msg = "Got graph";
                 } catch (error) {
-                    ////console.error(error);
+                    console.error(error);
                 }
             },
 
@@ -237,8 +230,7 @@
                     return
                 }
                 exposed = [];
-                var graph = storedGraph[`graph${id+1}`][graphIndex[id]]
-                // console.log(id)
+                var graph = storedGraph[simNames[id]][graphIndex[id]]
 
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
@@ -249,7 +241,6 @@
                     edges[id][edgeId] = { source, target }
                     nextEdgeIndex++
                 };
-                ////console.log(edges)
 
                 var nextNodeIndex = 1
                 for (var j = 0; j < graph.nodes.length; j++) {
@@ -381,8 +372,6 @@
                 }
             },
             removeGraph() {
-                console.log("testttt")
-                console.log(number_of_sims)
                 if (number_of_sims >= 0) {
                     switch (number_of_sims) {
                         case 1:
@@ -406,42 +395,19 @@
                 this.revealLabel(number_of_sims)
             },
             remove(sim_num){ 
-                var new_dict = {};
-                var graph_indexes = [-1,-1,-1,-1,-1]
-                var newSimNames: string [] = []
-                console.log("test")
-                console.log(graphIndex)
-                console.log(storedGraph)
-                console.log(simNames)
-                console.log
+                var graphName = simNames[sim_num]
                 simNames.splice(sim_num, 1);
-                // for (const key of Object.keys(storedGraph)){ 
-                //     //console.log("KEY" + key);
-                //     var n = parseInt(key.slice(-1)) - 1;
-                //     //console.log("KEYS" + n); 
-                //     if (n < sim_num){ 
-                //         new_dict[key]=storedGraph[key]; 
-                //         graph_indexes[n] = graphIndex[n];
-                //         newSimNames[n] = simNames[n]
-                //     } else if (n > sim_num) { 
-                //         //console.log("MOVING GRAPH" + (n+1)); 
-                //         let newKey =  "graph" + (n - 1).toString();
-                //         //console.log("set " + graph_indexes[n - 1] + "to " + graphIndex[n]);
-                //         graph_indexes[n - 1] = graphIndex[n];
-                //         new_dict[newKey] = storedGraph[key];
-                //         newSimNames[n - 1] = simNames[n]
-                //     }
-
-                // }
-                // graphIndex = graph_indexes;
-                // storedGraph = new_dict;
+                graphIndex.splice(sim_num, 1);
+                graphIndex.push(-1)
+                delete storedGraph[graphName] 
+                
                 this.removeGraph();
-                // this.drawAll();
             },
             closePopup() {
             // Check if userInput is longer than 10 characters
                 if (this.userInput.length > 10) {
                     alert('Input should be a maximum of 10 characters.');
+            // Check if name is already used
                 } else if (simNames.includes(this.userInput)) {
                     alert('Names already used.');
                 }   
