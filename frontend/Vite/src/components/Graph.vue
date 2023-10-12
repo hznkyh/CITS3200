@@ -194,12 +194,14 @@
 
             },
             drawAll(){ 
+                var graphs = [graph,graph2,graph3,graph4,graph5]
                 for (let i = 0; i < number_of_sims;i++){ 
                     if (graphIndex[i] == -1){ 
                         graphIndex[i] = 0; 
                     }
                     console.log("STEPPING " + i);
                     this.step(i);
+                    this.graphs[i].fitToContents();
                 }
             },
             manualStep(id, direction) {
@@ -403,10 +405,13 @@
                     console.log("KEYS" + n); 
                     if (n < sim_num){ 
                         new_dict[key]=storedGraph[key]; 
+                        graph_indexes[n] = graphIndex[n];
                     } else if (n > sim_num) { 
                         n--;
-                        let newKey =  "graph" + n.toString(); 
-                        graph_indexes[n] = graphIndex[n+1];
+                        console.log("MOVING GRAPH" + (n+1)); 
+                        let newKey =  "graph" + n.toString();
+                        console.log("set " + graph_indexes[n - 1] + "to " + graphIndex[n]);
+                        graph_indexes[n - 1] = graphIndex[n];
                         new_dict[newKey] = storedGraph[key];
                     }
 
@@ -415,6 +420,8 @@
                 console.log(Object.keys(storedGraph));
                 console.log(storedGraph);
                 console.log(new_dict);
+                console.log(graphIndex); 
+                console.log(graph_indexes);
                 graphIndex = graph_indexes;
                 storedGraph = new_dict;
                 this.addGraph('remove');

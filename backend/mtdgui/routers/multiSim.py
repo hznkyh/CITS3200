@@ -183,6 +183,7 @@ def remove_graph(
     graph_num : int
 ):
     if (sessions[client.uuid]["evaluation"][graph_num] is not None):
-        for num in range(5): 
+        for num in range(1,5): 
             if (num > graph_num):
-                sessions[client.uuid]["evaluation"][num-1] = sessions[client.uuid]["evaluation"][num]
+                sessions[client.uuid]["evaluation"][num-1] = copy.deepcopy(sessions[client.uuid]["evaluation"][num])
+                sessions[client.uuid]["snapshots"][num-1] = copy.deepcopy(sessions[client.uuid]["snapshots"][num])
