@@ -327,6 +327,13 @@
             revealLabel(number) {
                 ////console.log("clicked")
                 switch (number) {
+                    case 0:
+                        this.showLabel1 = false;
+                        this.showLabel2 = false;
+                        this.showLabel3 = false;
+                        this.showLabel4 = false;
+                        this.showLabel5 = false;
+                        break;
                     case 1:
                         this.showLabel1 = true;
                         this.showLabel2 = false;
@@ -374,8 +381,13 @@
                 }
             },
             removeGraph() {
-                if (number_of_sims > 1) {
+                console.log("testttt")
+                console.log(number_of_sims)
+                if (number_of_sims >= 0) {
                     switch (number_of_sims) {
+                        case 1:
+                            this.showGraph = false;
+                            break;
                         case 2:
                             this.showGraph2 = false;
                             break;
@@ -634,7 +646,9 @@
     <button class="addGraph" @click="removeGraph()">Remove Graph</button>
     <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
         <span>{{simNames[0]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(0)">
+        <div class="delete">
+            <i class="bi bi-trash3" @click.stop="remove(0)"></i>
+        </div>
     </div>
     <div id="graph1" class="graph-container" v-if="showGraph">
         <v-network-graph
@@ -686,7 +700,7 @@
 
     <div id="sim2" class="sim-label" @click="handleLabel('graph2')" v-if="showLabel2"> 
         <span>{{simNames[1]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(1)">
+        <i class="bi bi-trash3" @click.stop="remove(1)"></i>
     </div>
     <div id="graph2" class="graph-container" v-if="showGraph2">
         <v-network-graph 
@@ -737,7 +751,7 @@
     </div>
     <div id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3"> 
         <span>{{simNames[2]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(2)">
+        <i class="bi bi-trash3" @click.stop="remove(2)"></i>
     </div>
     <div id="graph3" class="graph-container" v-if="showGraph3">
         <v-network-graph 
@@ -788,7 +802,7 @@
     </div>
     <div id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4"> 
         <span>{{simNames[3]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(3)">
+        <i class="bi bi-trash3" @click.stop="remove(3)"></i>
     </div>
     <div id="graph4" class="graph-container" v-if="showGraph4">
         <v-network-graph 
@@ -839,7 +853,7 @@
     </div>
     <div id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5"> 
         <span>{{simNames[4]}}</span>
-        <img src="@/assets/cross.png" style="float: right;" height="30" width="30" @click="remove(4)">
+        <i class="bi bi-trash3" @click.stop="remove(4)"></i>
     </div>
     <div id="graph5" class="graph-container" v-if="showGraph5">
         <v-network-graph 
@@ -939,7 +953,8 @@
     }
 
     .sim-label {
-        display: block;
+        display: flex;
+        justify-content: space-between;
         background-color: #3454a4;
         color: white;
         padding: 1em;
