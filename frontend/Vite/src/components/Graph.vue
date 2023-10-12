@@ -193,8 +193,10 @@
                 console.log("DRAWING ALL");
                 console.log(number_of_sims)
                 for (var i = 0; i < number_of_sims;i++){ 
-                    console.log(i)
-                    this.manualStep(i, "forward")
+                    if(graphIndex[i] == -1) {
+                        graphIndex[i] = 0
+                    }
+                    this.step(i, "forward")
                 }
                 console.log("finished")
             },
@@ -402,6 +404,7 @@
                 delete storedGraph[graphName] 
                 
                 this.removeGraph();
+                this.drawAll();
             },
             closePopup() {
             // Check if userInput is longer than 10 characters
@@ -660,7 +663,7 @@
             <nodeInfo :node="propNode"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=1></Metrics>
+            <Metrics :simName=simNames[0]></Metrics>
         </div>
     </div>
 
@@ -712,7 +715,7 @@
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=2></Metrics>
+            <Metrics :simName=simNames[1]></Metrics>
         </div>
     </div>
     <div id="sim3" class="sim-label" @click="handleLabel('graph3')" v-if="showLabel3"> 
@@ -763,7 +766,7 @@
             <nodeInfo :node="propNode3"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=3></Metrics>
+            <Metrics :simName=simNames[2]></Metrics>
         </div>
     </div>
     <div id="sim4" class="sim-label" @click="handleLabel('graph4')" v-if="showLabel4"> 
@@ -814,7 +817,7 @@
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=4></Metrics>
+            <Metrics :simName=simNames[3]></Metrics>
         </div>
     </div>
     <div id="sim5" class="sim-label" @click="handleLabel('graph5')" v-if="showLabel5"> 
@@ -865,7 +868,7 @@
             <nodeInfo :node="propNode5"></nodeInfo>
         </div>
         <div>
-            <Metrics :sim_num=5></Metrics>
+            <Metrics :simName=simNames[4]></Metrics>
         </div>
     </div>
   </template>
