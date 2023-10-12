@@ -37,7 +37,7 @@
     var edges = [reactive({ ...data.edges }), reactive({ ...data2.edges }), reactive({ ...data3.edges }), reactive({ ...data4.edges }), reactive({ ...data5.edges })]
     var layouts = [reactive({ ...data.layouts }), reactive({ ...data2.layouts }), reactive({ ...data3.layouts }), reactive({ ...data4.layouts }), reactive({ ...data5.layouts })]
     var number_of_sims = 1;
-    var simNames: string []
+    var simNames: string [] = [];
 
     var graphIndex: number[] = [-1, -1, -1, -1, -1];
     var startSim: boolean[] = [false, false, false, false, false];
