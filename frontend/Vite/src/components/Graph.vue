@@ -159,7 +159,6 @@
             async getGraph() {
                 try {
                     clearData();
-                    this.msg = "Getting graph...";
                     const response = await axios.get("/network/multi-graph");
                     storedGraph = response.data;
                     for (let key in storedGraph) {
@@ -203,6 +202,7 @@
                 var graphs = [graph,graph2,graph3,graph4,graph5]
                 for (var i = 0; i < number_of_sims;i++){ 
                     if(graphIndex[i] == -1) {
+                        graphIndex[i] = 0;
                         this.step(i);
                     }
                 }
