@@ -14,7 +14,6 @@
       <p class="p-instructions">NOTE: The 'Reset Form' button does not only reset the values in the form but removes all previous submissions.</p>
       <h1 class="h1-instructions">Graph Instructions</h1>
       <ol class="list">
-        <li>Click on "Get" to retrieve the graph data</li>
         <li>Click on "Start" to start the simulation</li>
         <li>Click on "Step" to step through the simulation</li>
         <li>Click on "Stop" to stop the simulation</li>
@@ -316,6 +315,7 @@
       <!-- <Graph></Graph>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button> -->
+    <div id="notification-container"></div>
   </div>
 </template>
 
@@ -368,7 +368,7 @@ export default {
       const paramSelect = document.getElementById('param');
 
       if (paramSelect.options.length >=5){
-        alert("You can only add up to 5 graphs.");
+        this.showNotification("You can only add up to 5 graphs.");
         return;
       }
       const newOption = document.createElement('option');
@@ -448,7 +448,7 @@ export default {
           },
           "config": this.checkAdvancedDataEntered()
         };
-        this.msg = 'Saved parameters';
+        this.msg = 'Saved parameters for ' + this.graphNum;
         // var data = JSON.stringify(mainData);
         // this.savedForms.push(mainData);
         var cur_graph = parseInt(this.graphNum.charAt(this.graphNum.length - 1)) - 1;
@@ -458,11 +458,11 @@ export default {
       }
 
       else{
-        alert(`Validation Errors:\n${errorMessages.join('\n')}`);
+        this.showNotification(`Validation Errors:\n${errorMessages.join('\n')}`);
       }
       }
       else{
-        alert('Can only save up to five Graphs at a time')
+        this.showNotification('Can only save up to five Graphs at a time');
       }
     },
 
@@ -604,12 +604,12 @@ export default {
         if(!isNaN(numericValues)){
           if(numericValues >= 1 && numericValues <=7){
             if (uniqueValues.has(numericValues)){
-              alert("Values 1 to 7 can only input once.");
+              this.showNotification("Host Topology: Duplicate values");
               return null;
           }
           uniqueValues.add(numericValues);
         } else {
-          alert("Input values must be between 1 and 7");
+          this.showNotification("Input values must be between 1 and 7");
           return null;
           }
         }
@@ -631,7 +631,7 @@ export default {
           this.ServDiversity === '' ||
           this.userShuffle === '')
       ) {
-        alert("Please fill all the required form boxes in MTD_PRIORITY.");
+        this.showNotification("Please fill all the required form boxes in MTD_PRIORITY.");
 
       } else if (
         this.compTopoShuffle !== '' ||
@@ -664,7 +664,7 @@ export default {
           this.random === '' ||
           this.alternative === '')
       ) {
-        alert("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
+        this.showNotification("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
         json_string.MTD_TRIGGER_INTERVAL = null;
         
       } else if (
@@ -691,6 +691,21 @@ export default {
     },
     toggleInstructions(){
       this.showInstructions = !this.showInstructions;
+    },
+    showNotification(title, message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.innerHTML = `<strong>${title}</strong><br>${message}`;
+
+      const container = document.getElementById('notification-container');
+      container.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('fadeOut');
+        setTimeout(() => {
+          container.removeChild(notification);
+        }, 300);
+      }, 3000);
     },
   },
 };
@@ -923,8 +938,8 @@ form {
 
  .instructions{
     width: 100%;
-    background-color: #000;
-    color: #fff;
+    background-color: #e2b600;
+    color: black;
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
@@ -936,12 +951,12 @@ form {
  }
 
  .instructions:hover{
-  background-color: #333;
+  background-color: #D8AC00;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
  }
 
  .instructions:active{
-  background-color: #222;
+  background-color: #D8AC00;
  }
 
  .instruction-box {
@@ -1037,4 +1052,27 @@ form {
 .resetButton:active, .saveButton:active{
   background-color: #222;
 }
+
+#notification-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.notification {
+    background-color: lightgrey;
+    color: red;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.notification.fadeOut {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
 </style>
