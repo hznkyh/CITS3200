@@ -9,6 +9,7 @@
   <div class="pngs" v-if="activePng">
     <img class="png" :src=imageURL alt="Network">
   </div>
+  <p class="message" v-if="activeError"> Simulation not ready. </p>
 </template>
 
 <script>
@@ -20,6 +21,7 @@ export default {
         return{
             oldPng: null,
             activePng: false,
+            activeError: false,
             imageURL: null
         };
     },
@@ -38,7 +40,6 @@ export default {
           this.activePng = !this.activePng
         }
         if (this.activePng) {
-          console.log(this.simName)
           try {
             axios.get(`http://localhost:8000/statistics/${this.simName}/${type}`, {
               responseType: "blob"
@@ -46,9 +47,13 @@ export default {
               //console.log(response)
               this.imageURL = URL.createObjectURL(
                 new Blob([response.data], { type: "image/png" })
-              )
+              );
+            }).catch((error) => {
+            console.error(error);
+            this.activePng = false
+            this.activeError = true
             });
-          }
+          } 
           catch (error) {
             //console.log(error);
           }
