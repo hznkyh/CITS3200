@@ -175,7 +175,7 @@
                 if (!startSim[id]) {
                     startSim[id] = true
                     this.togglePlay(id, true)
-                    this.msgs[id] = "Simulation started"
+                    msgs[id] = "Simulation started"
                     intervalIDs[id] = setInterval(() => {
                         if (startSim[id]) {
                             // this.msg = "Running"
@@ -183,7 +183,7 @@
                             if (graphIndex[id] >= number_of_graphs[id]) {
                                 startSim[id] = false
                                 this.togglePlay(id, false)
-                                this.msgs[id] = "Simulation finished."
+                                msgs[id] = "Simulation finished."
                                 clearInterval(intervalIDs[id])
                                 return
                             }
@@ -196,7 +196,7 @@
             stop(id) {
                 startSim[id] = false
                 this.togglePlay(id, false)
-                this.msgs[id] = "Simulation stopped."
+                msgs[id] = "Simulation stopped."
 
             },
             drawAll(){ 
@@ -205,20 +205,22 @@
                     if(graphIndex[i] == -1) {
                         graphIndex[i] = 0
                     }
-                    this.step(i, "forward")
+                    this.manualStep(i, "forward")
                 }
             },
             manualStep(id, direction) {
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
                 this.togglePlay(id, false)
-                this.msgs[id] = "Simulation stopped."
+                console.log(this.msgs);
+                console.log(id);
+                msgs[id] = "Simulation stopped."
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
                         graphIndex[id] = 0
                         console.log("testtttt")
-                        this.msgs[id] = "This is the first state."
+                        msgs[id] = "This is the first state."
                         console.log(msgs[id])
                     }
                 }
@@ -226,7 +228,7 @@
                     graphIndex[id] = graphIndex[id] + 1
                     if (graphIndex[id] >= number_of_graphs[id]) {
                         graphIndex[id] = number_of_graphs[id] - 1
-                        this.msgs[id] = "This is the last state."
+                        msgs[id] = "This is the last state."
                     }
                 }
                 this.step(id)
@@ -415,7 +417,7 @@
                 graphIndex.splice(sim_num, 1);
                 graphIndex.push(-1)
                 delete storedGraph[graphName] 
-
+                delete simNames[graphName]
                 startSim = [false, false, false, false, false];
 
                 for (var i = 0; i < intervalIDs.length; i++) {
@@ -426,10 +428,12 @@
                 this.drawAll();
             },
             closePopup() {
-            // Check if userInput is longer than 10 characters
-                if (this.userInput.length > 10) {
-                    alert('Input should be a maximum of 10 characters.');
+            // Check if userInput is longer than 20 characters
+                if (this.userInput.length > 20) {
+                    alert('Input should be a maximum of 20 characters.');
             // Check if name is already used
+                } else if (this.userInput.length == 0){
+                    alert('Input should be at least one character.');
                 } else if (simNames.includes(this.userInput)) {
                     alert('Names already used.');
                 }   

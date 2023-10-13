@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Annotated, List
+from typing import Annotated, List, Dict
 from auth import get_current_active_user
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -74,9 +74,10 @@ def checkFuturesCompletion(futures: dict[Future, int], uuid):
 
 @router.post("/multi-graph-params")
 async def get_prams(
-    params: List[ParameterRequest],
+    params: Dict[str,ParameterRequest],
 ):
     global set_params
+    print("Got params",params)
     set_params = params
     return JSONResponse(content="prams set" , status_code=status.HTTP_202_ACCEPTED)
 
@@ -87,7 +88,7 @@ async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
     params = set_params
 
     with ProcessPoolExecutor() as executor:
-        futures = [executor.submit(handleRequest, req) for req in params]
+        futures = [executor.submit(handleRequest, name, request) for name, request in params.items()]
         results = [future.result() for future in as_completed(futures)]
         
         # print(results)
@@ -106,8 +107,8 @@ async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
     try:
         
         response = {
-            graphNumber: [serialize_graph(graph_item) for graph_item in graph]
-            for graphNumber,graph in sessions[client.uuid]["snapshots"].items()
+            graphName: [serialize_graph(graph_item) for graph_item in graph]
+            for graphName,graph in sessions[client.uuid]["snapshots"].items()
             
         }
         
@@ -170,20 +171,12 @@ async def get_config(
         for pram in run_params
     ]
 
-    # #Handle config_variables
-    # config_params = prams.config
-    # if (item.config is not None):
-    #     config_params = config_params.model_dump()
-    # configs.config = configs.set_config(config_params)
     return JSONResponse(content=stored_params, status_code=status.HTTP_202_ACCEPTED)
 
-@router.post("/remove/{graph_num}")
+@router.post("/remove/{title}")
 def remove_graph(
     client: Annotated[User, Depends(get_current_active_user)],
-    graph_num : int
+    graph_name : str
 ):
-    if (sessions[client.uuid]["evaluation"][graph_num] is not None):
-        for num in range(1,5): 
-            if (num > graph_num):
-                sessions[client.uuid]["evaluation"][num-1] = copy.deepcopy(sessions[client.uuid]["evaluation"][num])
-                sessions[client.uuid]["snapshots"][num-1] = copy.deepcopy(sessions[client.uuid]["snapshots"][num])
+    if (sessions[client.uuid]["evaluation"][graph_name] is not None):
+        sessions[client.uuid]["evaluation"][graph_name] = None

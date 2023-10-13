@@ -36,15 +36,17 @@ def displayAttackAction():
 def delete_temp(path:str) -> None: 
     os.unlink(path)
 
-@router.get("/{graph_num}/{graph_type}")
+@router.get("/{graph_name}/{graph_type}")
 def getGraphType(    
-    graph_num: str,
+    graph_name: str,
     graph_type: str,
     client: Annotated[User, Depends(get_current_active_user)],
     background_tasks: BackgroundTasks
 ): 
+    print("Getting ", graph_name)
     fd, path = tempfile.mkstemp(suffix=".png") 
-    usr_eval = sessions[client.uuid]["evaluation"][graph_num]
+    print(sessions)
+    usr_eval = sessions[client.uuid]["evaluation"][graph_name]
     usr_eval.save_to_temp(path,graph_type)
     background_tasks.add_task(delete_temp, path)
     return FileResponse(path)

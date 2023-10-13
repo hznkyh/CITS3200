@@ -354,7 +354,7 @@ export default {
       alternative:'',
       showInstructions: false,
       schemeGraph:'random',
-      savedForms: [],
+      savedForms: {},
       componentKey: 0,
     };
   },
@@ -396,7 +396,7 @@ export default {
       }
     },
     saveForm(){
-      if(this.savedForms.length <= 5){
+      if(Object.keys(this.savedForms).length <= 5){
         const validationRules = [
           {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
           {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
@@ -432,7 +432,7 @@ export default {
         //console.log('Correct inputs have been detected');
         var mainData = {
           "graph": {
-            "graph_number": this.graphNum,
+            "graph_name": this.graphNum,
           },
           "run": {
             "total_nodes": this.nodeNumber,
@@ -451,8 +451,8 @@ export default {
         this.msg = 'Saved parameters';
         // var data = JSON.stringify(mainData);
         // this.savedForms.push(mainData);
-        var cur_graph = parseInt(this.graphNum.charAt(this.graphNum.length - 1)) - 1;
-        //console.log("NUM" ,cur_graph)
+        var cur_graph = this.graphNum;
+        console.log("NAME" ,cur_graph)
         this.savedForms[cur_graph] = mainData; 
         //console.log(this.savedForms);
       }
@@ -467,7 +467,7 @@ export default {
     },
 
     resetForm(){
-      this.savedForms = [];
+      this.savedForms = {};
 
       this.graphNum = ''
       this.nodeNumber = ''
@@ -498,7 +498,7 @@ export default {
       //console.log(this.savedForms);
 
       // const formData = JSON.parse(savedForm);
-      //console.log("SAVED " , JSON.stringify(this.savedForms));
+      console.log("SAVED " , JSON.stringify(this.savedForms));
       axios
         .post('/network/multi-graph-params', JSON.stringify(this.savedForms), {
           headers: { 'Content-Type': 'application/json' },
@@ -508,7 +508,7 @@ export default {
           this.msg = 'Receiving graph...';
 
           await Graph.methods.getGraph();
-          // this.forceRerender();
+          // this.forceRerender();`
           this.msg = 'Got graph';
         })
         .catch((error) => {

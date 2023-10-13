@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 from typing import Union, List
 
-class graphNumber(BaseModel):
-    graph_number: str
+class graphName(BaseModel):
+    graph_name: str
 
 class MTD_PRIORITY(BaseModel):
     CompleteTopologyShuffle: Union[int, None]
@@ -35,6 +35,6 @@ class RunModel(BaseModel):
     target_layer: Union[int, None]
 
 class ParameterRequest(BaseModel):
-    graph: graphNumber
+    graph: graphName
     run: RunModel
     config: Union[ConfigModel,None]

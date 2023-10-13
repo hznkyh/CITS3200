@@ -37,7 +37,9 @@ parameters = {
     "terminate_compromise_ratio": 0.8
 }
 
-def handleRequest(req : ParameterRequest): 
+def handleRequest(graph_name, req : ParameterRequest): 
+    print("GRAPH ", graph_name)
+    print(req)
     cur_config = req.config
     cur_run = req.run
     run_dict = cur_run.model_dump() 
@@ -54,4 +56,4 @@ def handleRequest(req : ParameterRequest):
     if type(final_params["checkpoints"]) is int: 
         final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
     # print("FINAL PARAMS", final_params)
-    return req.graph.graph_number , create_sim(**final_params)
+    return graph_name , create_sim(**final_params)
