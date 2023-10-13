@@ -722,6 +722,7 @@
             <i class="bi bi-stop-circle" @click="stop(1)" v-if="!isPlaying2"></i>
             <i class="bi bi-skip-forward" @click="manualStep(1, 'forward')" ></i>
         </div>
+        <p class="message"> {{msgs[1]}} </p>
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
             <nodeInfo :node="propNode2"></nodeInfo>
         </div>
@@ -761,6 +762,7 @@
             <i class="bi bi-stop-circle" @click="stop(2)" v-if="!isPlaying3"></i>
             <i class="bi bi-skip-forward" @click="manualStep(2, 'forward')" ></i>
         </div>
+        <p class="message"> {{msgs[2]}} </p>
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
             <nodeInfo :node="propNode3"></nodeInfo>
         </div>
@@ -800,6 +802,7 @@
             <i class="bi bi-stop-circle" @click="stop(3)" v-if="!isPlaying4"></i>
             <i class="bi bi-skip-forward" @click="manualStep(3, 'forward')" ></i>
         </div>
+        <p class="message"> {{msgs[3]}} </p>
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
             <nodeInfo :node="propNode4"></nodeInfo>
         </div>
@@ -839,6 +842,7 @@
             <i class="bi bi-stop-circle" @click="stop(4)" v-if="!isPlaying5"></i>
             <i class="bi bi-skip-forward" @click="manualStep(4, 'forward')" ></i>
         </div>
+        <p class="message"> {{msgs[4]}} </p>
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
             <nodeInfo :node="propNode5"></nodeInfo>
         </div>
@@ -865,12 +869,6 @@
         inset 2px 2px 5px rgba(0, 0, 0, 0.2),
         -2px -2px 5px rgba(255, 255, 255, 0.9), 
         2px 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .message {
-        margin:0;
-        width: 20%;
-        height: 20%;
     }
 
     .hide {
@@ -993,7 +991,11 @@
     }
 
     .message {
-        text-align: center;
+        text-align: center; /* Horizontally center the text */
+        display: flex;
+        align-items: center; /* Vertically center the text */
+        justify-content: center; /* Horizontally center the text in older browsers */
+        height: 100%; /* Set the height to 100% of the parent container */
     }
 </style>
 
