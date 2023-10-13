@@ -172,6 +172,7 @@
             start(id) {
                 if (!startSim[id]) {
                     startSim[id] = true
+                    this.togglePlay(id)
                     this.msg = "Start"
                     intervalIDs[id] = setInterval(() => {
                         if (startSim[id]) {
@@ -185,6 +186,7 @@
 
             stop(id) {
                 startSim[id] = false
+                this.togglePlay(id)
                 this.msg = "Stopped"
 
             },
@@ -203,6 +205,7 @@
             manualStep(id, direction) {
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
+                this.togglePlay(id)
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
@@ -228,6 +231,7 @@
                 if (graphIndex[id] == number_of_graphs[id]) {
                     this.msg = "Simulation finished"
                     startSim[id] = false
+                    this.togglePlay(id)
                     clearInterval(intervalIDs[id])
                     return
                 }
@@ -429,6 +433,25 @@
                     this.revealLabel(number_of_sims)
                 }
             },
+            togglePlay(id) {
+                switch (id) {
+                    case 0:
+                        this.isPlaying = !this.isPlaying
+                        break;
+                    case 1:
+                        this.isPlaying2 = !this.isPlaying2
+                        break;
+                    case 2:
+                        this.isPlaying3 = !this.sPlaying3
+                        break;
+                    case 3:
+                        this.isPlaying4 = !this.isPlaying4
+                        break;
+                    case 4:
+                        this.isPlaying5 = !this.isPlaying5
+                        break;
+                }
+            },
         },
         data() {
             return {
@@ -445,6 +468,7 @@
                 showLabel1: false,
                 showGraph:false,
                 propNode:null,
+                isPlaying: false,
 
                 graph2,
                 selectedNodes2,
@@ -452,6 +476,7 @@
                 showLabel2: false,
                 showGraph2: false,
                 propNode2:null,
+                isPlaying2: false,
 
                 graph3,
                 selectedNodes3,
@@ -459,6 +484,7 @@
                 showLabel3: false,
                 showGraph3: false,
                 propNode3:null,
+                isPlaying3: false,
 
                 graph4,
                 selectedNodes4,
@@ -466,6 +492,7 @@
                 showLabel4: false,
                 showGraph4: false,
                 propNode4:null,
+                isPlaying4: false,
 
                 graph5,
                 selectedNodes5,
@@ -473,6 +500,7 @@
                 showLabel5: false,
                 showGraph5: false,
                 propNode5:null,
+                isPlaying5: false,
             }
         },
         setup() {
@@ -648,8 +676,8 @@
         </div>
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(0, 'back')"></i>
-            <i class="bi bi-play" @click="start(0)"></i>
-            <i class="bi bi-stop-circle" @click="stop(0)"></i>
+            <i class="bi bi-play" @click="start(0)" v-if="!isPlaying"></i>
+            <i class="bi bi-stop-circle" @click="stop(0)" v-if="isPlaying"></i>
             <i class="bi bi-skip-forward" @click="manualStep(0, 'forward')" ></i>
         </div>
         <!-- <p class="message"> {{ msg }} </p> -->
