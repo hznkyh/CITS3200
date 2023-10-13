@@ -296,13 +296,13 @@
 
         <div class="row">
           <div class="group">
-            <button class="saveButton">Save</button>
+            <button class="saveButton">Save Current Graph</button>
           </div>
           <div class="group">
             <button class="resetButton" @click="resetForm">Reset Form</button>
           </div>
           <div class="group">
-            <input type="submit" value="Submit" @click="submitForm">
+            <input type="submit" value="Submit All Graphs" @click="submitForm">
           </div>
         </div>
         
