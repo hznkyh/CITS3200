@@ -180,6 +180,13 @@
                         if (startSim[id]) {
                             // this.msg = "Running"
                             graphIndex[id]++
+                            if (graphIndex[id] >= number_of_graphs[id]) {
+                                startSim[id] = false
+                                this.togglePlay(id, false)
+                                this.msgs[id] = "Simulation finished."
+                                clearInterval(intervalIDs[id])
+                                return
+                            }
                             this.step(id)
                         }
                     }, 1500)
@@ -189,7 +196,7 @@
             stop(id) {
                 startSim[id] = false
                 this.togglePlay(id, false)
-                msgs[id] = "Simulation stopped."
+                this.msgs[id] = "Simulation stopped."
 
             },
             drawAll(){ 
@@ -205,25 +212,21 @@
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
                 this.togglePlay(id, false)
-                msgs[id] = "Simulation stopped."
+                this.msgs[id] = "Simulation stopped."
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
                         graphIndex[id] = 0
-                        return
-                    }
-                    else {
-                        msgs[id] = "This is the first state."
+                        console.log("testtttt")
+                        this.msgs[id] = "This is the first state."
+                        console.log(msgs[id])
                     }
                 }
                 if (direction == "forward") {
                     graphIndex[id] = graphIndex[id] + 1
                     if (graphIndex[id] >= number_of_graphs[id]) {
                         graphIndex[id] = number_of_graphs[id] - 1
-                        return
-                    }
-                    else {
-                        msgs[id] = "This is the last state."
+                        this.msgs[id] = "This is the last state."
                     }
                 }
                 this.step(id)
@@ -232,13 +235,6 @@
             },
 
             step(id) {
-                if (graphIndex[id] == number_of_graphs[id]) {
-                    startSim[id] = false
-                    this.togglePlay(id, false)
-                    msgs[id] = "Simulation finished."
-                    clearInterval(intervalIDs[id])
-                    return
-                }
                 exposed = [];
                 var graph = storedGraph[simNames[id]][graphIndex[id]]
 
@@ -994,6 +990,10 @@
 
     .control-panel i {
         margin: 1em;
+    }
+
+    .message {
+        text-align: center;
     }
 </style>
 
