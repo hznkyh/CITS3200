@@ -717,8 +717,8 @@
         </div>
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(1, 'back')"></i>
-            <i class="bi bi-play" @click="start(1)"></i>
-            <i class="bi bi-stop-circle" @click="stop(1)"></i>
+            <i class="bi bi-play" @click="start(1)" v-if="!isPlaying2"></i>
+            <i class="bi bi-stop-circle" @click="stop(1)" v-if="!isPlaying2"></i>
             <i class="bi bi-skip-forward" @click="manualStep(1, 'forward')" ></i>
         </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo2">
@@ -756,8 +756,8 @@
         </div>
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(2, 'back')"></i>
-            <i class="bi bi-play" @click="start(2)"></i>
-            <i class="bi bi-stop-circle" @click="stop(2)"></i>
+            <i class="bi bi-play" @click="start(2)" v-if="!isPlaying3"></i>
+            <i class="bi bi-stop-circle" @click="stop(2)" v-if="!isPlaying3"></i>
             <i class="bi bi-skip-forward" @click="manualStep(2, 'forward')" ></i>
         </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo3">
@@ -795,8 +795,8 @@
         </div>
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(3, 'back')"></i>
-            <i class="bi bi-play" @click="start(3)"></i>
-            <i class="bi bi-stop-circle" @click="stop(3)"></i>
+            <i class="bi bi-play" @click="start(3)" v-if="!isPlaying4"></i>
+            <i class="bi bi-stop-circle" @click="stop(3)" v-if="!isPlaying4"></i>
             <i class="bi bi-skip-forward" @click="manualStep(3, 'forward')" ></i>
         </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo4">
@@ -834,8 +834,8 @@
         </div>
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(4, 'back')"></i>
-            <i class="bi bi-play" @click="start(4)"></i>
-            <i class="bi bi-stop-circle" @click="stop(4)"></i>
+            <i class="bi bi-play" @click="start(4)" v-if="!isPlaying5"></i>
+            <i class="bi bi-stop-circle" @click="stop(4)" v-if="!isPlaying5"></i>
             <i class="bi bi-skip-forward" @click="manualStep(4, 'forward')" ></i>
         </div>
         <div id="node-info2" class="node-info" v-if="showNodeInfo5">
