@@ -113,6 +113,7 @@ class Evaluation:
         else: 
             plt.savefig(path)
         # plt.show()
+        plt.close()
 
     def draw_hacker_visible(self):
         """
@@ -122,6 +123,7 @@ class Evaluation:
         plt.figure(1, figsize=(15, 12))
         nx.draw(subgraph, pos=self._network.pos, with_labels=True)
         # plt.show()
+        plt.close()
 
     def draw_compromised(self):
         """
@@ -140,6 +142,7 @@ class Evaluation:
         plt.figure(1, figsize=(15, 12))
         nx.draw(subgraph, pos=self._network.pos, node_color=colour_map, with_labels=True)
         # # plt.show()
+        plt.close()
 
     def visualise_attack_operation_group_by_host(self):
         """
@@ -174,6 +177,7 @@ class Evaluation:
         else: 
             plt.savefig(path)
         # # plt.show()
+        plt.close()
 
     def visualise_attack_operation(self):
         """
@@ -209,6 +213,7 @@ class Evaluation:
         else: 
             plt.savefig(path)
         # # plt.show()
+        plt.close()
 
     def visualise_mtd_operation(self):
         """
@@ -237,6 +242,7 @@ class Evaluation:
         else: 
             plt.savefig(path)
         # # plt.show()
+        plt.close()
 
     def get_network(self):
         return self._network
