@@ -47,6 +47,8 @@ def getGraphType(
     fd, path = tempfile.mkstemp(suffix=".png") 
     print(sessions)
     usr_eval = sessions[client.uuid]["evaluation"][graph_name]
+    print("RETURNED")
+    print(usr_eval)
     usr_eval.save_to_temp(path,graph_type)
     background_tasks.add_task(delete_temp, path)
     return FileResponse(path)

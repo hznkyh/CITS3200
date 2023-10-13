@@ -200,12 +200,12 @@
 
             },
             drawAll(){ 
-                var graphs = [graph,graph2,graph3,graph4,graph5]
+                var graphs = [graph?.fitToContents(),graph2?.fitToContents(),graph3?.fitToContents(),graph4?.fitToContents(),graph5?.fitToContents()]
                 for (var i = 0; i < number_of_sims;i++){ 
                     if(graphIndex[i] == -1) {
-                        graphIndex[i] = 0
+                        this.manualStep(i, "forward")
+                        graphs[i]();
                     }
-                    this.manualStep(i, "forward")
                 }
             },
             manualStep(id, direction) {
@@ -423,8 +423,7 @@
                 for (var i = 0; i < intervalIDs.length; i++) {
                     clearInterval(intervalIDs[i])
                 }
-                
-                this.removeGraph();
+                this.removeGraph(graphName);
                 this.drawAll();
             },
             closePopup() {

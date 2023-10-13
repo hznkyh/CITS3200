@@ -381,6 +381,7 @@ export default {
 
     handleRemoveGraph(name) {
       const option = document.getElementById(name);
+      console.log("Picked " + option);
       option.remove()
     },
 

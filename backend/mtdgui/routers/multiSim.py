@@ -173,7 +173,7 @@ async def get_config(
 
     return JSONResponse(content=stored_params, status_code=status.HTTP_202_ACCEPTED)
 
-@router.post("/remove/{title}")
+@router.post("/remove/{graph_name}")
 def remove_graph(
     client: Annotated[User, Depends(get_current_active_user)],
     graph_name : str
