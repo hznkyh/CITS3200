@@ -384,6 +384,7 @@ export default {
       console.log("Picked " + option);
       option.remove()
       axios.post(`/remove/${name}`);
+      delete this.savedForms[name];
     },
 
     test() {
