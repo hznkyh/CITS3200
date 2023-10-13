@@ -18,6 +18,8 @@
         ForceEdgeDatum,
     } from "v-network-graph/lib/force-layout"
 
+    var msgs: string [] = ['', '', '', '', ''];
+
     const graph = ref<vNG.VNetworkGraphInstance>()
     const selectedNodes = ref<string[]>([])
 
@@ -172,8 +174,8 @@
             start(id) {
                 if (!startSim[id]) {
                     startSim[id] = true
-                    this.togglePlay(id)
-                    this.msg = "Start"
+                    this.togglePlay(id, true)
+                    msgs[id] = "Simulation started"
                     intervalIDs[id] = setInterval(() => {
                         if (startSim[id]) {
                             // this.msg = "Running"
@@ -186,40 +188,42 @@
 
             stop(id) {
                 startSim[id] = false
-                this.togglePlay(id)
-                this.msg = "Stopped"
+                this.togglePlay(id, false)
+                msgs[id] = "Simulation stopped."
 
             },
             drawAll(){ 
                 var graphs = [graph,graph2,graph3,graph4,graph5]
-                console.log("DRAWING ALL");
-                console.log(number_of_sims)
                 for (var i = 0; i < number_of_sims;i++){ 
                     if(graphIndex[i] == -1) {
                         graphIndex[i] = 0
                     }
                     this.step(i, "forward")
                 }
-                console.log("finished")
             },
             manualStep(id, direction) {
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
-                this.togglePlay(id)
+                this.togglePlay(id, false)
+                msgs[id] = "Simulation stopped."
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
-                        this.msg = "Simulation finished"
                         graphIndex[id] = 0
                         return
+                    }
+                    else {
+                        msgs[id] = "This is the first state."
                     }
                 }
                 if (direction == "forward") {
                     graphIndex[id] = graphIndex[id] + 1
                     if (graphIndex[id] >= number_of_graphs[id]) {
-                        this.msg = "Simulation finished"
                         graphIndex[id] = number_of_graphs[id] - 1
                         return
+                    }
+                    else {
+                        msgs[id] = "This is the last state."
                     }
                 }
                 this.step(id)
@@ -229,9 +233,9 @@
 
             step(id) {
                 if (graphIndex[id] == number_of_graphs[id]) {
-                    this.msg = "Simulation finished"
                     startSim[id] = false
-                    this.togglePlay(id)
+                    this.togglePlay(id, false)
+                    msgs[id] = "Simulation finished."
                     clearInterval(intervalIDs[id])
                     return
                 }
@@ -433,22 +437,22 @@
                     this.revealLabel(number_of_sims)
                 }
             },
-            togglePlay(id) {
+            togglePlay(id, state) {
                 switch (id) {
                     case 0:
-                        this.isPlaying = !this.isPlaying
+                        this.isPlaying = state
                         break;
                     case 1:
-                        this.isPlaying2 = !this.isPlaying2
+                        this.isPlaying2 = state
                         break;
                     case 2:
-                        this.isPlaying3 = !this.sPlaying3
+                        this.isPlaying3 = state
                         break;
                     case 3:
-                        this.isPlaying4 = !this.isPlaying4
+                        this.isPlaying4 = state
                         break;
                     case 4:
-                        this.isPlaying5 = !this.isPlaying5
+                        this.isPlaying5 = state
                         break;
                 }
             },
@@ -461,6 +465,7 @@
                 isPopupOpen: false,
                 userInput: '',
                 simNames,
+                msgs,
 
                 graph,
                 selectedNodes,
@@ -680,7 +685,7 @@
             <i class="bi bi-stop-circle" @click="stop(0)" v-if="isPlaying"></i>
             <i class="bi bi-skip-forward" @click="manualStep(0, 'forward')" ></i>
         </div>
-        <!-- <p class="message"> {{ msg }} </p> -->
+        <p class="message"> {{msgs[0]}} </p>
         <div id="node-info" class="node-info" v-if="showNodeInfo" ref="nodeInfo">
             <nodeInfo :node="propNode"></nodeInfo>
         </div>
