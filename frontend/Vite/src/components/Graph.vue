@@ -175,7 +175,7 @@
                 if (!startSim[id]) {
                     startSim[id] = true
                     this.togglePlay(id, true)
-                    msgs[id] = "Simulation started"
+                    this.msgs[id] = "Simulation started"
                     intervalIDs[id] = setInterval(() => {
                         if (startSim[id]) {
                             // this.msg = "Running"
@@ -236,7 +236,16 @@
 
             step(id) {
                 exposed = [];
-                var graph = storedGraph[simNames[id]][graphIndex[id]]
+                var graph
+                try {
+                    graph = storedGraph[simNames[id]][graphIndex[id]]
+                }
+                catch (error) {
+                    this.msgs[id] = "Simulation not ready"
+                    startSim[id] = false
+                    this.togglePlay(id, false)
+                    return
+                }
 
                 var number_of_edges = graph.links.length;
                 var nextEdgeIndex = 1
