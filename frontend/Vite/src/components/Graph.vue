@@ -428,10 +428,10 @@
             closePopup() {
             // Check if userInput is longer than 10 characters
                 if (this.userInput.length > 10) {
-                    this.showNotification('Input should be a maximum of 10 characters.');
+                    alert('Input should be a maximum of 10 characters.');
             // Check if name is already used
                 } else if (simNames.includes(this.userInput)) {
-                    this.showNotification('Names already used.');
+                    alert('Names already used.');
                 }   
                 else {
                     this.isPopupOpen = false;
@@ -645,36 +645,10 @@
                 }
             },
         },
-
-        showNotification(title, errorMessages = []) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            
-            let errorMessageHTML = "";
-            if (errorMessages.length > 0) {
-                errorMessageHTML = "<ul>";
-                for (const errorMsg of errorMessages) {
-                    errorMessageHTML += `<li>${errorMsg}</li>`;
-                }
-                errorMessageHTML += "</ul>";
-            }
-
-            notification.innerHTML = `<strong>${title}</strong>${errorMessageHTML}`;
-            const container = document.getElementById('notification-container');
-            container.appendChild(notification);
-
-            setTimeout(() => {
-                notification.classList.add('fadeOut');
-                setTimeout(() => {
-                container.removeChild(notification);
-                }, 500);
-            }, 5000);
-        },
     }
 </script>
 
 <template>
-    <div id="notification-container"></div>
     <button class="addGraph" @click="addGraph()">Add Simulation</button>
     <div v-if="isPopupOpen" class="popup">
       <div class="popup-content">
@@ -1031,31 +1005,6 @@
         align-items: center; /* Vertically center the text */
         justify-content: center; /* Horizontally center the text in older browsers */
         height: 100%; /* Set the height to 100% of the parent container */
-    }
-
-    #notification-container {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        z-index: 1000;
-        }
-
-    .notification {
-        display: inline-block;
-        max-width: 80vh;
-        background-color: white;
-        color: red;
-        padding: 10px 20px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        transition: opacity 0.5s, transform 0.5s;
-        white-space: per-line;
-     }
-
-    .notification.fadeOut {
-        opacity: 0;
-        transform: translateX(100%);
     }
 </style>
 
