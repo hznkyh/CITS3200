@@ -175,7 +175,7 @@
                 if (!startSim[id]) {
                     startSim[id] = true
                     this.togglePlay(id, true)
-                    msgs[id] = "Simulation started"
+                    this.msgs[id] = "Simulation started"
                     intervalIDs[id] = setInterval(() => {
                         if (startSim[id]) {
                             // this.msg = "Running"
@@ -183,7 +183,7 @@
                             if (graphIndex[id] >= number_of_graphs[id]) {
                                 startSim[id] = false
                                 this.togglePlay(id, false)
-                                msgs[id] = "Simulation finished."
+                                this.msgs[id] = "Simulation finished."
                                 clearInterval(intervalIDs[id])
                                 return
                             }
@@ -196,15 +196,14 @@
             stop(id) {
                 startSim[id] = false
                 this.togglePlay(id, false)
-                msgs[id] = "Simulation stopped."
+                this.msgs[id] = "Simulation stopped."
 
             },
             drawAll(){ 
-                var graphs = [graph?.fitToContents(),graph2?.fitToContents(),graph3?.fitToContents(),graph4?.fitToContents(),graph5?.fitToContents()]
+                var graphs = [graph,graph2,graph3,graph4,graph5]
                 for (var i = 0; i < number_of_sims;i++){ 
                     if(graphIndex[i] == -1) {
-                        this.manualStep(i, "forward")
-                        graphs[i]();
+                        this.step(i);
                     }
                 }
             },
@@ -214,13 +213,13 @@
                 this.togglePlay(id, false)
                 console.log(this.msgs);
                 console.log(id);
-                msgs[id] = "Simulation stopped."
+                this.msgs[id] = "Simulation stopped."
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
                         graphIndex[id] = 0
                         console.log("testtttt")
-                        msgs[id] = "This is the first state."
+                        this.msgs[id] = "This is the first state."
                         console.log(msgs[id])
                     }
                 }
@@ -228,7 +227,7 @@
                     graphIndex[id] = graphIndex[id] + 1
                     if (graphIndex[id] >= number_of_graphs[id]) {
                         graphIndex[id] = number_of_graphs[id] - 1
-                        msgs[id] = "This is the last state."
+                        this.msgs[id] = "This is the last state."
                     }
                 }
                 this.step(id)
