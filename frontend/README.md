@@ -28,6 +28,7 @@ NodeInfo.vue
 - Node information display
 
 ## Running the application
+Backend should be running before running frontend
 ### Running docker env 
 ```
 docker build -t frontend
