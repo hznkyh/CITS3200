@@ -649,7 +649,7 @@
 </script>
 
 <template>
-    <button class="addGraph" @click="addGraph()">Add Graph</button>
+    <button class="addGraph" @click="addGraph()">Add Simulation</button>
     <div v-if="isPopupOpen" class="popup">
       <div class="popup-content">
         <input v-model="userInput" type="text" placeholder="Name of simulation">
