@@ -7,16 +7,17 @@
         <li>Enter you desired values into the fields below.</li>
         <li>Optional: Click on "Advanced", and enter the inputs for the advanced options. Otherwise, leave it empty (this will set them to the default values).</li>
         <li>Once all fields have been entered, click the save button.</li>
-        <li>Note: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
+        <li>Optional: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
         <li>Once you have saved your graph(s), click on submit to submit your data.</li>
+        <li>Note: If an error occurs, refer the the popup box on the right side of the page.</li>
       </ol>
       <h3 class="h1-instructions">Resetting Form</h3>
       <p class="p-instructions">NOTE: The 'Reset Form' button does not only reset the values in the form but removes all previous submissions.</p>
       <h1 class="h1-instructions">Graph Instructions</h1>
       <ol class="list">
-        <li>Click on "Start" to start the simulation</li>
-        <li>Click on "Step" to step through the simulation</li>
-        <li>Click on "Stop" to stop the simulation</li>
+        <li>Click on "Play/Pause" button to start the simulation</li>
+        <li>Click on "Skip Foward" button to step through the simulation</li>
+        <li>Click on "Skip Backward" button to step back through the simulation</li>
       </ol>
       <h1 class="h1-instructions">To view</h1>
       <p class="p-instructions">To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
@@ -45,6 +46,7 @@
         <li>Compromised Services</li>
       </ul>
     </div>
+    <div id="notification-container"></div>
     <div class="panel">
       <form id="paramForm" v-on:submit.prevent="saveForm" >
         <!-- Row 1 -->
@@ -315,7 +317,6 @@
       <!-- <Graph></Graph>
     </div>
     <button class="addGraph" @click="addGraph">Add Graph</button> -->
-    <div id="notification-container"></div>
   </div>
 </template>
 
@@ -458,7 +459,7 @@ export default {
       }
 
       else{
-        this.showNotification(`Validation Errors:\n${errorMessages.join('\n')}`);
+        this.showNotification(`Validation Errors:`, errorMessages);
       }
       }
       else{
@@ -692,11 +693,20 @@ export default {
     toggleInstructions(){
       this.showInstructions = !this.showInstructions;
     },
-    showNotification(title, message) {
+    showNotification(title, errorMessages = []) {
       const notification = document.createElement('div');
       notification.className = 'notification';
-      notification.innerHTML = `<strong>${title}</strong><br>${message}`;
+      
+      let errorMessageHTML = "";
+      if (errorMessages.length > 0) {
+          errorMessageHTML = "<ul>";
+          for (const errorMsg of errorMessages) {
+              errorMessageHTML += `<li>${errorMsg}</li>`;
+          }
+          errorMessageHTML += "</ul>";
+      }
 
+      notification.innerHTML = `<strong>${title}</strong>${errorMessageHTML}`;
       const container = document.getElementById('notification-container');
       container.appendChild(notification);
 
@@ -704,8 +714,8 @@ export default {
         notification.classList.add('fadeOut');
         setTimeout(() => {
           container.removeChild(notification);
-        }, 300);
-      }, 3000);
+        }, 500);
+      }, 5000);
     },
   },
 };
@@ -1022,12 +1032,12 @@ form {
  }
 
  .addGraph:hover{
-  background-color: #3454a4;
+  background-color: #95B5D7;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .addGraph:active{
-  background-color: #3454a4;
+  background-color: #95B5D7;
 }
 
 .resetButton, .saveButton{
@@ -1054,25 +1064,28 @@ form {
 }
 
 #notification-container {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 
 .notification {
-    background-color: lightgrey;
-    color: red;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: opacity 0.3s, transform 0.3s;
+  display: inline-block;
+  max-width: 80vh;
+  background-color: white;
+  color: red;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.5s, transform 0.5s;
+  white-space: per-line;
 }
 
 .notification.fadeOut {
-    opacity: 0;
-    transform: translateX(100%);
+  opacity: 0;
+  transform: translateX(100%);
 }
 
 </style>
