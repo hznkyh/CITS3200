@@ -25,51 +25,51 @@ messageQueueLock = Lock()
 messageQueue = []
 set_params = None
 
+#   !Removed this function because it was causing the server to crash
+# def checkFuturesCompletion(futures: dict[Future, int], uuid):
+#     """
+#     The function `checkFuturesCompletion` checks the completion status of a list of futures and adds
+#     their results to a message queue.
 
-def checkFuturesCompletion(futures: dict[Future, int], uuid):
-    """
-    The function `checkFuturesCompletion` checks the completion status of a list of futures and adds
-    their results to a message queue.
+#     Parameters
+#     ----------
+#     futures
+#         The `futures` parameter is a list of `concurrent.futures.Future` objects. These objects represent
+#     asynchronous tasks that are being executed concurrently.
 
-    Parameters
-    ----------
-    futures
-        The `futures` parameter is a list of `concurrent.futures.Future` objects. These objects represent
-    asynchronous tasks that are being executed concurrently.
+#     """
+#     global futuresComplete
+#     doneFutures = set()
+#     messages = []
+#     logger.debug("Started checking futures' completion")
 
-    """
-    global futuresComplete
-    doneFutures = set()
-    messages = []
-    logger.debug("Started checking futures' completion")
+#     # responsible for checking the completion status of a list of futures and adding their results to
+#     # a message queue.
+#     while not futuresComplete:
+#         for future, id in futures.items():
+#             if future.done() and future not in doneFutures:
+#                 doneFutures.add(future)
+#                 result = future.result()  # Get the result of the future
+#                 # print(result, id)
+#                 logger.debug(
+#                     f"Future {futures[future]} completed with result: {result}."
+#                 )
+#                 messages.append(result)
+#                 with messageQueueLock:  # Safely add the result to the message queue
+#                     messageQueue.append(result)
 
-    # responsible for checking the completion status of a list of futures and adding their results to
-    # a message queue.
-    while not futuresComplete:
-        for future, id in futures.items():
-            if future.done() and future not in doneFutures:
-                doneFutures.add(future)
-                result = future.result()  # Get the result of the future
-                # print(result, id)
-                logger.debug(
-                    f"Future {futures[future]} completed with result: {result}."
-                )
-                messages.append(result)
-                with messageQueueLock:  # Safely add the result to the message queue
-                    messageQueue.append(result)
+#         if len(doneFutures) == len(futures):
+#             futuresComplete = True
+#             logger.debug("All futures are completed.")
+#         time.sleep(1)
 
-        if len(doneFutures) == len(futures):
-            futuresComplete = True
-            logger.debug("All futures are completed.")
-        time.sleep(1)
-
-    logger.debug("Stopped checking futures' completion.")
-    sessions[uuid]["evaluation"] = [
-        copy.deepcopy(message["evaluation"]) for message in messages
-    ]
-    sessions[uuid]["snapshots"] = [
-        copy.deepcopy(message["snapshots"]) for message in messages
-    ]
+#     logger.debug("Stopped checking futures' completion.")
+#     sessions[uuid]["evaluation"] = [
+#         copy.deepcopy(message["evaluation"]) for message in messages
+#     ]
+#     sessions[uuid]["snapshots"] = [
+#         copy.deepcopy(message["snapshots"]) for message in messages
+#     ]
 
 
 @router.post("/multi-graph-params")

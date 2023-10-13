@@ -37,16 +37,15 @@ parameters = {
     "terminate_compromise_ratio": 0.8
 }
 
-def handleRequest(graph_name, req : ParameterRequest): 
-    print("GRAPH ", graph_name)
-    print(req)
-    cur_config = req.config
-    cur_run = req.run
-    run_dict = cur_run.model_dump() 
-    stored_params = {key: value for key, value in run_dict.items() if value is not None}
+def handleRequest(graph_name, request : ParameterRequest): 
+    # print("GRAPH ", graph_name)
+    # print(req)
+    req = request.model_dump()
+    stored_params = {key: value for key, value in req['run'].items() if value is not None}
     #Handle config_variables
-    if (cur_config is not None): 
-        config_params = config_params.model_dump()
+    if (req.get('config') is not None): 
+        config_params =  {key: value for key, value in req['config'].items() if value is not None}
+        print(config_params)
         configs.config = configs.set_config(config_params) 
     final_params = parameters 
     # print("INITIAL PARAMS", final_params)
