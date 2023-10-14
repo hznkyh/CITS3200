@@ -106,7 +106,6 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    max-width: fit-content;
     align-items: center;
   }
 
