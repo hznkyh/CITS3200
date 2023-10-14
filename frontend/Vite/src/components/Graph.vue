@@ -110,7 +110,7 @@
     function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
-        ////console.log(nodes[id])
+        //////console.log(nodes[id])
         for (var key in nodes[id]) {
             var node = nodes[id][key]
             var subnet = node.subnet
@@ -166,7 +166,7 @@
                     }
                     this.drawAll();
                 } catch (error) {
-                    console.error(error);
+                    //console.error(error);
                 }
             },
 
@@ -211,16 +211,16 @@
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
                 this.togglePlay(id, false)
-                console.log(this.msgs);
-                console.log(id);
+                //console.log(this.msgs);
+                //console.log(id);
                 this.msgs[id] = "Simulation stopped."
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
                         graphIndex[id] = 0
-                        console.log("testtttt")
+                        //console.log("testtttt")
                         this.msgs[id] = "This is the first state."
-                        console.log(msgs[id])
+                        //console.log(msgs[id])
                     }
                 }
                 if (direction == "forward") {
@@ -231,7 +231,7 @@
                     }
                 }
                 this.step(id)
-                ////console.log(graphIndex[id])
+                //////console.log(graphIndex[id])
                 // this.msg = "Stopped"
             },
 
@@ -332,7 +332,7 @@
             },
 
             revealLabel(number) {
-                ////console.log("clicked")
+                //////console.log("clicked")
                 switch (number) {
                     case 0:
                         this.showLabel1 = false;
@@ -446,7 +446,7 @@
                     simNames.push(this.userInput);
                     this.$emit('addGraph', this.userInput);
                     this.userInput = '';
-                    console.log(simNames);
+                    //console.log(simNames);
                     this.revealLabel(number_of_sims);
                 }
             },
@@ -591,7 +591,7 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[0][newVal[0]].host)
+                    //////console.log(nodes[0][newVal[0]].host)
                     if (nodes[0][newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
                         var propNode = nodes[0][newVal[0]].host
@@ -604,7 +604,7 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[1][newVal[0]].host)
+                    //////console.log(nodes[1][newVal[0]].host)
                     if (nodes[1][newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
                         var propNode = nodes[1][newVal[0]].host
@@ -617,7 +617,7 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[2][newVal[0]].host)
+                    //////console.log(nodes[2][newVal[0]].host)
                     if (nodes[2][newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
                         var propNode = nodes[2][newVal[0]].host
@@ -630,7 +630,7 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[3][newVal[0]].host)
+                    //////console.log(nodes[3][newVal[0]].host)
                     if (nodes[3][newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
                         var propNode = nodes[3][newVal[0]].host
@@ -643,7 +643,7 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[4][newVal[0]].host)
+                    //////console.log(nodes[4][newVal[0]].host)
                     if (nodes[4][newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
                         var propNode = nodes[4][newVal[0]].host

@@ -358,7 +358,7 @@ export default {
       this.componentKey += 1;
     },
     handleAddGraph(name){
-      console.log(name)
+      //console.log(name)
       const paramSelect = document.getElementById('param');
 
       if (paramSelect.options.length >=5){
@@ -375,7 +375,7 @@ export default {
 
     handleRemoveGraph(name) {
       const option = document.getElementById(name);
-      console.log("Picked " + option);
+      //console.log("Picked " + option);
       option.remove()
       axios.post(`/remove/${name}`);
       delete this.savedForms[name];
@@ -426,7 +426,7 @@ export default {
       });
 
       if (errorMessages.length === 0) {
-        //console.log('Correct inputs have been detected');
+        ////console.log('Correct inputs have been detected');
         var mainData = {
           "graph": {
             "graph_name": this.graphNum,
@@ -449,9 +449,9 @@ export default {
         // var data = JSON.stringify(mainData);
         // this.savedForms.push(mainData);
         var cur_graph = this.graphNum;
-        console.log("NAME" ,cur_graph)
+        //console.log("NAME" ,cur_graph)
         this.savedForms[cur_graph] = mainData; 
-        //console.log(this.savedForms);
+        ////console.log(this.savedForms);
       }
 
       else{
@@ -492,21 +492,21 @@ export default {
     submitForm() {
       this.msg = 'Saved parameters';
 
-      //console.log(this.savedForms);
+      ////console.log(this.savedForms);
 
       // const formData = JSON.parse(savedForm);
       var cur_sims = document.querySelectorAll(".sim-label");
-      console.log(document.querySelectorAll(".sim-label"));
-      console.log(this.savedForms);
+      //console.log(document.querySelectorAll(".sim-label"));
+      //console.log(this.savedForms);
       var matches = 0;
       var num_forms = Object.keys(this.savedForms).length; 
       var keys = Object.keys(this.savedForms);
       if (num_forms == cur_sims.length){ 
         for (let i = 0; i<cur_sims.length;i++){ 
           var selected_name = cur_sims[i].textContent; 
-          console.log("element exists at " + selected_name);
+          //console.log("element exists at " + selected_name);
           if (selected_name in this.savedForms){ 
-            console.log("Matched " + selected_name);
+            //console.log("Matched " + selected_name);
             matches++; 
           } 
         }
@@ -515,19 +515,19 @@ export default {
         //THROW ERROR 
         this.showNotification("Names do not match, resetting forms.");
         // print error message - tell resetting forms 
-        // console.log("matched a total of " + matches)
-        // console.log("THROWING ERROR :(())")
+        // //console.log("matched a total of " + matches)
+        // //console.log("THROWING ERROR :(())")
         this.resetForm();
         return ; 
       }
 
-      console.log("SAVED " , JSON.stringify(this.savedForms));
+      //console.log("SAVED " , JSON.stringify(this.savedForms));
       axios
         .post('/network/multi-graph-params', JSON.stringify(this.savedForms), {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(async (response) => {
-          //console.log(response);
+          ////console.log(response);
           this.msg = 'Receiving graph...';
 
           await Graph.methods.getGraph();
@@ -535,7 +535,7 @@ export default {
           this.msg = 'Got graph';
         })
         .catch((error) => {
-          //console.error(error);
+          ////console.error(error);
         });
       
     },
@@ -580,7 +580,7 @@ export default {
         return true;
       }
       const parsedNum = parseFloat(num);
-      //console.log((this.nodeNumber - this.nodeExposed) / (parsedNum - 1))
+      ////console.log((this.nodeNumber - this.nodeExposed) / (parsedNum - 1))
       if (!isNaN(parsedNum) && (this.nodeNumber - this.nodeExposed) / (parsedNum - 1) > 2) {
         return true;
       }
@@ -592,10 +592,10 @@ export default {
       }
       const intPattern = /^\d+$/;
       const floatPattern = /^\d+(\.\d+)?$/;
-      //console.log(values)
+      ////console.log(values)
 
       const separate = values.split(',').map(part => part.trim());
-      //console.log(separate)
+      ////console.log(separate)
       if (separate.length != 2){
         return false;
       }
@@ -705,7 +705,7 @@ export default {
         json_string.MTD_TRIGGER_INTERVAL = null
       }
 
-      //console.log(json_string);
+      ////console.log(json_string);
       return added > 0 ? json_string : null;
     },
     triggerConversion(floatStr){
