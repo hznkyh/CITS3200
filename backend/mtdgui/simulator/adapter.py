@@ -1,10 +1,8 @@
 import logging
 import simpy
-import json
 from simulator.mtdnetwork.statistic.evaluation import Evaluation
 from simulator.mtdnetwork.snapshot.snapshot_checkpoint import SnapshotCheckpoint
 from simulator.mtdnetwork.operation.attack_operation import AttackOperation
-from simulator.mtdnetwork.component.host import Host
 from simulator.mtdnetwork.component.adversary import Adversary
 from simulator.mtdnetwork import configs
 from simulator.mtdnetwork.operation.mtd_operation import MTDOperation
@@ -16,30 +14,20 @@ import sys
 
 
 logger = logging.getLogger()
-print("__name__", __name__)
+print(logger)
 logger.info("init adapter")
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the "s" directory
 target_directory = os.path.join(current_script_dir, "..")
-print("target_directory", target_directory)
+
 if not os.path.exists(target_directory + "/experimental_data"):
     os.makedirs(target_directory + "/experimental_data")
     os.makedirs(target_directory + "/experimental_data/plots")
     os.makedirs(target_directory + "/experimental_data/results")
 sys.path.append(target_directory.replace("experiments", ""))
-# print(current_directory)
-print(target_directory)
 warnings.filterwarnings("ignore")
 plt.set_loglevel("WARNING")
-
-
-class GraphEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Host):
-            return obj.toJson()
-        return json.JSONEncoder.default(self, obj)
-
 
 def create_sim(
     start_time=0,
@@ -58,67 +46,46 @@ def create_sim(
     terminate_compromise_ratio=0.8,
     callback=None,
 ):
-    """The `create_sim` function creates a simulation environment for a network attack and defense
-    scenario, with options for different attack and defense strategies, network parameters, and
-    checkpointing.
+    """
+    Create a simulation of a network with an adversary and MTD strategies.
 
     Parameters
     ----------
-    env : simpy.Environment
-        The simpy environment in which the simulation will run.
-    start_time, optional
-        The start time at which the simulation should begin. If set to a value greater than 0, the
-    simulation will load snapshots of the network and adversary at that time. If set to 0, the
-    simulation will start with a new network.
-    finish_time
-        The time at which the simulation will finish. If not specified, the simulation will run
-    indefinitely.
-    scheme, optional
-        The `scheme` parameter determines the MTD (Moving Target Defense) scheme to be used. It can take
-    the following values:
-    mtd_interval
-        The `mtd_interval` parameter is the interval at which the MTD (Moving Target Defense) operation is
-    triggered. It determines how often the MTD strategies are applied to the network to mitigate
-    attacks.
-    custom_strategies
-        The `custom_strategies` parameter is a list that allows you to specify custom MTD strategies to be
-    used in the simulation. These strategies can be defined as functions and will be executed during the
-    MTD operation. Each strategy function should take the following parameters:
-    checkpoints
-        A list of time points at which to save snapshots of the network and adversary state.
-    total_nodes, optional
-        The total number of nodes in the network.
-    total_endpoints, optional
-        The parameter "total_endpoints" represents the total number of endpoints in the simulated network.
-    Endpoints are devices or systems that are connected to the network and can be potential targets for
-    attacks.
-    total_subnets, optional
-        The parameter "total_subnets" represents the total number of subnets in the network. A subnet is a
-    portion of a network that shares a common network address. It is used to divide a large network into
-    smaller, more manageable parts.
-    total_layers, optional
-        The parameter "total_layers" represents the total number of layers in the network. Each layer
-    represents a level of hierarchy in the network topology. For example, in a hierarchical network
-    architecture, there may be multiple layers of switches or routers, with each layer providing
-    connectivity to a subset of nodes in the network
-    target_layer, optional
-        The parameter "target_layer" specifies the layer in the network where the attack is targeted.
-    total_database, optional
-        The parameter "total_database" represents the total number of databases in the simulation.
-    terminate_compromise_ratio
-        The `terminate_compromise_ratio` parameter is used to determine the threshold at which the attack
-    is considered successful. It represents the ratio of compromised nodes in the network that will
-    trigger the termination of the attack. For example, if `terminate_compromise_ratio` is set to 0.8,
-    the
-    new_network, optional
-        A boolean value indicating whether to create a new network or load an existing one. If set to True,
-    a new network will be created. If set to False, an existing network will be loaded if available,
-    otherwise an error message will be printed.
+    start_time : int, optional
+        The time at which to start the simulation, by default 0.
+    finish_time : int, optional
+        The time at which to end the simulation, by default None.
+    checkpoints : list, optional
+        A list of times at which to save a snapshot of the simulation, by default None.
+    new_network : bool, optional
+        Whether to create a new network for the simulation, by default False.
+    scheme : str, optional
+        The MTD scheme to use, by default "random".
+    mtd_interval : int, optional
+        The interval at which to trigger MTD strategies, by default None.
+    custom_strategies : list, optional
+        A list of custom MTD strategies to use, by default None.
+    total_nodes : int, optional
+        The total number of nodes in the network, by default 50.
+    total_endpoints : int, optional
+        The total number of endpoints in the network, by default 5.
+    total_subnets : int, optional
+        The total number of subnets in the network, by default 8.
+    total_layers : int, optional
+        The total number of layers in the network, by default 4.
+    target_layer : int, optional
+        The target layer for the adversary to attack, by default 4.
+    total_database : int, optional
+        The total number of databases in the network, by default 2.
+    terminate_compromise_ratio : float, optional
+        The ratio of compromised nodes at which to terminate the simulation, by default 0.8.
+    callback : function, optional
+        A function to call at the end of the simulation, by default None.
 
     Returns
     -------
-        The function `create_sim` returns two values: `evaluation` and `res`.
-
+    dict
+        A dictionary containing the evaluation and snapshot data from the simulation.
     """
     logger.info("init simulation")
     env: simpy.Environment = simpy.Environment()
@@ -134,7 +101,7 @@ def create_sim(
                 start_time
             )
         except FileNotFoundError:
-            print("No timestamp-based snapshots available! Set start_time = 0 !")
+            logger.debug("No timestamp-based snapshots available! Set start_time = 0 !")
             return
     elif not new_network:
         try:
@@ -143,7 +110,7 @@ def create_sim(
                 adversary,
             ) = snapshot_checkpoint.load_snapshots_by_network_size(total_nodes)
         except FileNotFoundError:
-            print("set new_network=True")
+            logger.debug("set new_network=True")
     else:
         time_network = TimeNetwork(
             total_nodes=total_nodes,
@@ -199,7 +166,5 @@ def create_sim(
         env.run(until=end_event)
 
     evaluation = Evaluation(network=time_network, adversary=adversary)
-    # evaluation.save_all()
-    # print("RES:",res)
-    print("get_compromised_hosts ", evaluation._adversary.get_compromised_hosts())
+
     return {"evaluation": evaluation, "snapshots": snapshot_list}

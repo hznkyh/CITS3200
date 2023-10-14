@@ -40,7 +40,7 @@ The simulation should have an instructions tab at the top detailing how the simu
 
 Now the simulations should be complete, and a timeline of the simulation and final results can be observed. 
 
-1. Scroll down until you see a box 'Simulation X', where X is the graph you want to examine. 
+1. Scroll down until you see a box with the name of the graph you created. 
 
 2. Click that box. A graph container should appear. 
 

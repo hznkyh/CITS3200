@@ -13,9 +13,10 @@
       </ol>
       <h1 class="h1-instructions">Graph Instructions</h1>
       <ol class="list">
-        <li>Click on "Play/Pause" button to start/pause the simulation</li>
-        <li>Click on "Skip Foward" button to step through the simulation</li>
-        <li>Click on "Skip Backward" button to step back through the simulation</li>
+        <li>Click on <i class="bi bi-play"></i> to start the simulation</li>
+        <li>Click on <i class="bi bi-pause"></i> to stop the simulation</li>
+        <li>Click on <i class="bi bi-skip-forward"></i> to step through the simulation</li>
+        <li>Click on <i class="bi bi-skip-backward"></i> to step back through the simulation</li>
       </ol>
       <h1 class="h1-instructions">To view</h1>
       <p class="p-instructions">To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
@@ -375,7 +376,7 @@ export default {
       const option = document.getElementById(name);
       //console.log("Picked " + option);
       option.remove()
-      axios.post(`/remove/${name}`);
+      axios.post(`/network/remove/${name}`);
       delete this.savedForms[name];
     },
 
