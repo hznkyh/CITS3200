@@ -58,6 +58,19 @@ detailed information about MTD techniques, please check out the following links.
 
 # Scope for future work
 
+## Expanding the main page
+
+By default the information presented on this page include the title, a welcome to the page, and a small description of the project outline.
+
+### Backend requirements 
+
+No changes in the backend are required.
+
+### Frontend requirements 
+
+The main page information is in frontend/Vite/src/components/Home.vue.
+To edit this page, simply insert the 'p' tag to add more information and to change the style edit within '.p' in the style tag.
+
 ## Expanding advanced configuration options 
 
 The advanced configuration is set using backend/mtdgui/simulator/mtdnetwork/configs.py. 
@@ -75,7 +88,13 @@ The models will have to be updated to receive the updated configurations. In mod
 After creating the model, add it to the ConfigModel class. As they are optional use Union\[Class_Name,None] so that None is used by default, as None values from input parameters are ignored when creating the final configuration. 
 
 
-### Frontend requirements 
+### Frontend requirements
+
+The advanced layout options is set in frontend/Vite/src/components/MTDSimulator.vue. 
+To add more options in the advanced options tab look for the p tag with the class 'advanced'. Below this are where the advanced options are displayed.
+Refer to the code above and below to include another input box or selector. Doing this will extend the advanced section of the panel parameter.
+
+To link the new parameter to the backend, first validate it in the checkAdvancedDataEntered() function but adding the variable to the code. Then go to the saveForm() function and add it to the validation list, following a similar structure to the ones already incorporated.
 
 ## Hosting remotely
 
