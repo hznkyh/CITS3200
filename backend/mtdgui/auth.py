@@ -53,7 +53,6 @@ def get_user(db, client_uuid: str):
         user_dict = db[client_uuid]
         return User(uuid=client_uuid)
 
-
 def verify_session(sessions, client_uuid):
     """
     Verify if a session is valid for a given client UUID.
@@ -68,10 +67,8 @@ def verify_session(sessions, client_uuid):
     """
     return get_user(sessions, client_uuid)
 
-
 def verify_session(sessions, client_uuid):
     return get_user(sessions, client_uuid)
-
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     """
@@ -101,7 +98,6 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
         algorithm=settings.ALGORITHM
     )
     return encoded_jwt
-
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     """
@@ -143,7 +139,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if user is None:
         raise credentials_exception
     return user
-
 
 async def get_current_active_user(
     current_user: Annotated[User, Depends(get_current_user)]

@@ -154,3 +154,4 @@ node_modules/
 Logs/
 backend/mtdgui/Logs/debug.log.2
 backend/mtdgui/Logs/debug.log.3
+logs/debug.log.2

@@ -73,9 +73,26 @@ def serialize_graph(G:nx.Graph, attrs=None):
             for u, v, d in G.edges(data=True)
         ]
     return data
-    # return data
 
-def serialize_class(G,n,name):
+def serialize_class(G, n, name):
+    """
+    Serialize a class node in the graph.
+
+    Parameters
+    ----------
+    G : networkx.Graph
+        The graph containing the node to be serialized.
+    n : int
+        The ID of the node to be serialized.
+    name : str
+        The name of the node to be serialized.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the serialized node data.
+    """
     node = dict(chain(G.nodes[n].items(), [(name, n)]))
-    node['host'] = node['host'].toJson()
+    if 'host' in node:
+        node['host'] = node['host'].toJson()
     return node

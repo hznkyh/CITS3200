@@ -14,7 +14,7 @@ import copy
 from controllers.pools import handleRequest
 
 logger = logging.getLogger(__name__)
-
+print(logger)
 router = APIRouter(
     prefix="/network", tags=["network"], responses={404: {"description": "Not found"}}
 )
@@ -24,52 +24,6 @@ futuresComplete = False
 messageQueueLock = Lock()
 messageQueue = []
 set_params = None
-
-#   !Removed this function because it was causing the server to crash
-# def checkFuturesCompletion(futures: dict[Future, int], uuid):
-#     """
-#     The function `checkFuturesCompletion` checks the completion status of a list of futures and adds
-#     their results to a message queue.
-
-#     Parameters
-#     ----------
-#     futures
-#         The `futures` parameter is a list of `concurrent.futures.Future` objects. These objects represent
-#     asynchronous tasks that are being executed concurrently.
-
-#     """
-#     global futuresComplete
-#     doneFutures = set()
-#     messages = []
-#     logger.debug("Started checking futures' completion")
-
-#     # responsible for checking the completion status of a list of futures and adding their results to
-#     # a message queue.
-#     while not futuresComplete:
-#         for future, id in futures.items():
-#             if future.done() and future not in doneFutures:
-#                 doneFutures.add(future)
-#                 result = future.result()  # Get the result of the future
-#                 # print(result, id)
-#                 logger.debug(
-#                     f"Future {futures[future]} completed with result: {result}."
-#                 )
-#                 messages.append(result)
-#                 with messageQueueLock:  # Safely add the result to the message queue
-#                     messageQueue.append(result)
-
-#         if len(doneFutures) == len(futures):
-#             futuresComplete = True
-#             logger.debug("All futures are completed.")
-#         time.sleep(1)
-
-#     logger.debug("Stopped checking futures' completion.")
-#     sessions[uuid]["evaluation"] = [
-#         copy.deepcopy(message["evaluation"]) for message in messages
-#     ]
-#     sessions[uuid]["snapshots"] = [
-#         copy.deepcopy(message["snapshots"]) for message in messages
-#     ]
 
 
 @router.post("/multi-graph-params")
@@ -125,12 +79,32 @@ async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
 async def get_result(
     index: int, client: Annotated[User, Depends(get_current_active_user)]
 ):
+    """
+    Get the result of a simulation snapshot.
+
+    Parameters
+    ----------
+    index : int
+        The index of the snapshot to retrieve.
+    client : User
+        The authenticated user making the request.
+
+    Returns
+    -------
+    JSONResponse
+        A JSON response containing the serialized graph data.
+
+    Raises
+    ------
+    HTTPException
+        If the specified snapshot index is out of range.
+    """
     try:
         response = [
             serialize_graph(graph)
             for graph in sessions[client.uuid]["snapshots"][index]
         ]
-        logger.debug(f"Returning result: {response}")
+        # logger.debug(f"Returning result: {response}")
         return JSONResponse(content=response, status_code=status.HTTP_202_ACCEPTED)
     except IndexError:
         logger.error("Result not found")
@@ -143,6 +117,26 @@ async def get_result(
 async def get_result(
     index: int, client: Annotated[User, Depends(get_current_active_user)]
 ):
+    """
+    Get the result of a simulation evaluation.
+
+    Parameters
+    ----------
+    index : int
+        The index of the evaluation to retrieve.
+    client : User
+        The authenticated user making the request.
+
+    Returns
+    -------
+    JSONResponse
+        A JSON response containing the result of the evaluation.
+
+    Raises
+    ------
+    HTTPException
+        If the specified evaluation index is out of range.
+    """
     try:
         evaluation = sessions[client.uuid]["evaluation"][index]
         response = evaluation.compromised_num()
@@ -160,7 +154,22 @@ async def get_result(
 async def get_config(
     prams: List[ParameterRequest],
     client: Annotated[User, Depends(get_current_active_user)],
-):
+) -> JSONResponse:
+    """
+    Handle POST request to get configuration parameters for a simulation.
+
+    Parameters:
+    -----------
+    prams : List[ParameterRequest]
+        A list of ParameterRequest objects containing the parameters for the simulation.
+    client : Annotated[User, Depends(get_current_active_user)]
+        The authenticated user making the request.
+
+    Returns:
+    --------
+    JSONResponse
+        A JSON response containing the stored parameters and a status code of 202 (Accepted).
+    """
     print(prams)
 
     # Handle run parameters
