@@ -699,7 +699,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(0, 'back')"></i>
             <i class="bi bi-play" @click="start(0)" v-if="!isPlaying"></i>
-            <i class="bi bi-stop-circle" @click="stop(0)" v-if="isPlaying"></i>
+            <i class="bi bi-pause" @click="stop(0)" v-if="isPlaying"></i>
             <i class="bi bi-skip-forward" @click="manualStep(0, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[0]}} </p>
@@ -740,7 +740,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(1, 'back')"></i>
             <i class="bi bi-play" @click="start(1)" v-if="!isPlaying2"></i>
-            <i class="bi bi-stop-circle" @click="stop(1)" v-if="isPlaying2"></i>
+            <i class="bi bi-pause" @click="stop(1)" v-if="isPlaying2"></i>
             <i class="bi bi-skip-forward" @click="manualStep(1, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[1]}} </p>
@@ -780,7 +780,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(2, 'back')"></i>
             <i class="bi bi-play" @click="start(2)" v-if="!isPlaying3"></i>
-            <i class="bi bi-stop-circle" @click="stop(2)" v-if="isPlaying3"></i>
+            <i class="bi bi-pause" @click="stop(2)" v-if="isPlaying3"></i>
             <i class="bi bi-skip-forward" @click="manualStep(2, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[2]}} </p>
@@ -820,7 +820,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(3, 'back')"></i>
             <i class="bi bi-play" @click="start(3)" v-if="!isPlaying4"></i>
-            <i class="bi bi-stop-circle" @click="stop(3)" v-if="isPlaying4"></i>
+            <i class="bi bi-pause" @click="stop(3)" v-if="isPlaying4"></i>
             <i class="bi bi-skip-forward" @click="manualStep(3, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[3]}} </p>
@@ -860,7 +860,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(4, 'back')"></i>
             <i class="bi bi-play" @click="start(4)" v-if="!isPlaying5"></i>
-            <i class="bi bi-stop-circle" @click="stop(4)" v-if="isPlaying5"></i>
+            <i class="bi bi-pause" @click="stop(4)" v-if="isPlaying5"></i>
             <i class="bi bi-skip-forward" @click="manualStep(4, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[4]}} </p>
