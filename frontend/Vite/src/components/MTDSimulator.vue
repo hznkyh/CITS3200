@@ -501,6 +501,30 @@ export default {
       //console.log(this.savedForms);
 
       // const formData = JSON.parse(savedForm);
+      var cur_sims = document.querySelectorAll(".sim-label");
+      console.log(document.querySelectorAll(".sim-label"));
+      console.log(this.savedForms);
+      var matches = 0;
+      var num_forms = Object.keys(this.savedForms).length; 
+      if (num_forms == cur_sims.length){ 
+        for (let i = 0; i<cur_sims.length;i++){ 
+          var selected_name = cur_sims[i].innerText; 
+          console.log("element exists at " + selected_name);
+          if (selected_name in this.savedForms){ 
+            console.log("Matched " + selected_name);
+            matches++; 
+          } 
+        }
+      }
+      if (matches != cur_sims.length || cur_sims.length == 0){ 
+        //THROW ERROR 
+        // print error message - tell resetting forms 
+        console.log("matched a total of " + matches)
+        console.log("THROWING ERROR :(())")
+        this.resetForm();
+        return ; 
+      }
+
       console.log("SAVED " , JSON.stringify(this.savedForms));
       axios
         .post('/network/multi-graph-params', JSON.stringify(this.savedForms), {
