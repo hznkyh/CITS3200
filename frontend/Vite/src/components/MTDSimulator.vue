@@ -299,9 +299,6 @@
             <button class="saveButton">Save Current Graph</button>
           </div>
           <div class="group">
-            <button class="resetButton" @click="resetForm">Reset Form</button>
-          </div>
-          <div class="group">
             <input type="submit" value="Submit All Graphs" @click="submitForm">
           </div>
         </div>
@@ -313,10 +310,6 @@
     <div class="network">
       <Graph @addGraph="handleAddGraph" @removeGraph="handleRemoveGraph" :key="componentKey"></Graph>
     </div>
-    <!-- <button class="addGraph" @click="addGraph">Add Graph</button> -->
-      <!-- <Graph></Graph>
-    </div>
-    <button class="addGraph" @click="addGraph">Add Graph</button> -->
   </div>
 </template>
 
