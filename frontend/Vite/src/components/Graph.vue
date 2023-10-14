@@ -205,6 +205,7 @@
                         graphIndex[i] = 0;
                         this.step(i);
                     }
+                    this.step(i);
                 }
             },
             manualStep(id, direction) {
