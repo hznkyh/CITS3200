@@ -427,24 +427,30 @@
                 this.drawAll();
             },
             closePopup() {
-            // Check if userInput is longer than 20 characters
+                this.userInput = '';             
+                this.isPopupOpen = false;         
+            },
+            submitPopup() {
+                // Check if userInput is longer than 20 characters
                 if (this.userInput.length > 20) {
-                    alert('Input should be a maximum of 20 characters.');
-            // Check if name is already used
+                    this.errorMessage = 'Input should be a maximum of 20 characters.';
+                // Check if name is already used
                 } else if (this.userInput.length == 0){
-                    alert('Input should be at least one character.');
+                    this.errorMessage = 'Input should be at least one character.';
                 } else if (simNames.includes(this.userInput)) {
-                    alert('Names already used.');
+                    this.errorMessage = 'Names already used.';
                 }   
                 else {
+                    this.errorMessage = '';  // Clear any previous error messages
                     this.isPopupOpen = false;
                     simNames.push(this.userInput);
                     this.$emit('addGraph', this.userInput);
                     this.userInput = '';
-                    console.log(simNames)
-                    this.revealLabel(number_of_sims)
+                    console.log(simNames);
+                    this.revealLabel(number_of_sims);
                 }
             },
+
             togglePlay(id, state) {
                 switch (id) {
                     case 0:
@@ -472,6 +478,7 @@
                 layouts,
                 isPopupOpen: false,
                 userInput: '',
+                errorMessage: '',
                 simNames,
                 msgs,
 
@@ -652,12 +659,14 @@
 </script>
 
 <template>
-    <button class="addGraph" @click="addGraph()">Add Graph</button>
+    <button class="addGraph" @click="addGraph()">Add Simulation</button>
     <div v-if="isPopupOpen" class="popup">
-      <div class="popup-content">
+    <div class="popup-content">
+        <span class="close-icon" @click="closePopup">×</span>
         <input v-model="userInput" type="text" placeholder="Name of simulation">
-        <button class="close-button" @click="closePopup">Submit</button>
-      </div>
+        <p class="error-message">{{ errorMessage }}</p> 
+        <button class="close-button" @click="submitPopup">Submit</button>
+    </div>
     </div>
     <div id="sim1" class="sim-label" @click="handleLabel('graph1')" v-if="showLabel1"> 
         <span>{{simNames[0]}}</span>
@@ -971,6 +980,7 @@
     }
 
     .popup-content {
+        position: relative;
         background-color: white;
         padding: 20px;
         border-radius: 5px;
@@ -1004,11 +1014,40 @@
     }
 
     .message {
-        text-align: center; /* Horizontally center the text */
+        text-align: center;
         display: flex;
-        align-items: center; /* Vertically center the text */
-        justify-content: center; /* Horizontally center the text in older browsers */
-        height: 100%; /* Set the height to 100% of the parent container */
+        align-items: center; 
+        justify-content: center; 
+        height: 100%; 
+    }
+
+    .close-icon{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        background-color: #f5f5f5;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.2s;
+
+        &:hover{
+            background-color: #e0e0e0;
+        }
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 10px;
     }
 </style>
 

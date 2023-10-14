@@ -7,17 +7,17 @@
         <li>Enter you desired values into the fields below.</li>
         <li>Optional: Click on "Advanced", and enter the inputs for the advanced options. Otherwise, leave it empty (this will set them to the default values).</li>
         <li>Once all fields have been entered, click the save button.</li>
-        <li>Note: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
+        <li>Optional: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
         <li>Once you have saved your graph(s), click on submit to submit your data.</li>
+        <li>Note: If an error occurs, refer the the popup box on the right side of the page.</li>
       </ol>
       <h3 class="h1-instructions">Resetting Form</h3>
       <p class="p-instructions">NOTE: The 'Reset Form' button does not only reset the values in the form but removes all previous submissions.</p>
       <h1 class="h1-instructions">Graph Instructions</h1>
       <ol class="list">
-        <li>Click on "Get" to retrieve the graph data</li>
-        <li>Click on "Start" to start the simulation</li>
-        <li>Click on "Step" to step through the simulation</li>
-        <li>Click on "Stop" to stop the simulation</li>
+        <li>Click on "Play/Pause" button to start the simulation</li>
+        <li>Click on "Skip Foward" button to step through the simulation</li>
+        <li>Click on "Skip Backward" button to step back through the simulation</li>
       </ol>
       <h1 class="h1-instructions">To view</h1>
       <p class="p-instructions">To adjust the view port of the network, click on the buttons "Fit", "Zoom In" and "Zoom Out".</p>
@@ -46,6 +46,7 @@
         <li>Compromised Services</li>
       </ul>
     </div>
+    <div id="notification-container"></div>
     <div class="panel">
       <form id="paramForm" v-on:submit.prevent="saveForm" >
         <!-- Row 1 -->
@@ -295,13 +296,13 @@
 
         <div class="row">
           <div class="group">
-            <button class="saveButton">Save</button>
+            <button class="saveButton">Save Current Graph</button>
           </div>
           <div class="group">
             <button class="resetButton" @click="resetForm">Reset Form</button>
           </div>
           <div class="group">
-            <input type="submit" value="Submit" @click="submitForm">
+            <input type="submit" value="Submit All Graphs" @click="submitForm">
           </div>
         </div>
         
@@ -368,7 +369,7 @@ export default {
       const paramSelect = document.getElementById('param');
 
       if (paramSelect.options.length >=5){
-        alert("You can only add up to 5 graphs.");
+        this.showNotification("You can only add up to 5 graphs.");
         return;
       }
       const newOption = document.createElement('option');
@@ -451,7 +452,7 @@ export default {
           },
           "config": this.checkAdvancedDataEntered()
         };
-        this.msg = 'Saved parameters';
+        this.msg = 'Saved parameters for ' + this.graphNum;
         // var data = JSON.stringify(mainData);
         // this.savedForms.push(mainData);
         var cur_graph = this.graphNum;
@@ -461,11 +462,11 @@ export default {
       }
 
       else{
-        alert(`Validation Errors:\n${errorMessages.join('\n')}`);
+        this.showNotification(`Validation Errors:`, errorMessages);
       }
       }
       else{
-        alert('Can only save up to five Graphs at a time')
+        this.showNotification('Can only save up to five Graphs at a time');
       }
     },
 
@@ -631,12 +632,12 @@ export default {
         if(!isNaN(numericValues)){
           if(numericValues >= 1 && numericValues <=7){
             if (uniqueValues.has(numericValues)){
-              alert("Values 1 to 7 can only input once.");
+              this.showNotification("Host Topology: Duplicate values");
               return null;
           }
           uniqueValues.add(numericValues);
         } else {
-          alert("Input values must be between 1 and 7");
+          this.showNotification("Input values must be between 1 and 7");
           return null;
           }
         }
@@ -658,7 +659,7 @@ export default {
           this.ServDiversity === '' ||
           this.userShuffle === '')
       ) {
-        alert("Please fill all the required form boxes in MTD_PRIORITY.");
+        this.showNotification("Please fill all the required form boxes in MTD_PRIORITY.");
 
       } else if (
         this.compTopoShuffle !== '' ||
@@ -691,7 +692,7 @@ export default {
           this.random === '' ||
           this.alternative === '')
       ) {
-        alert("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
+        this.showNotification("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
         json_string.MTD_TRIGGER_INTERVAL = null;
         
       } else if (
@@ -718,6 +719,30 @@ export default {
     },
     toggleInstructions(){
       this.showInstructions = !this.showInstructions;
+    },
+    showNotification(title, errorMessages = []) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      
+      let errorMessageHTML = "";
+      if (errorMessages.length > 0) {
+          errorMessageHTML = "<ul>";
+          for (const errorMsg of errorMessages) {
+              errorMessageHTML += `<li>${errorMsg}</li>`;
+          }
+          errorMessageHTML += "</ul>";
+      }
+
+      notification.innerHTML = `<strong>${title}</strong>${errorMessageHTML}`;
+      const container = document.getElementById('notification-container');
+      container.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('fadeOut');
+        setTimeout(() => {
+          container.removeChild(notification);
+        }, 500);
+      }, 5000);
     },
   },
 };
@@ -950,8 +975,8 @@ form {
 
  .instructions{
     width: 100%;
-    background-color: #000;
-    color: #fff;
+    background-color: #e2b600;
+    color: black;
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
@@ -963,12 +988,12 @@ form {
  }
 
  .instructions:hover{
-  background-color: #333;
+  background-color: #D8AC00;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
  }
 
  .instructions:active{
-  background-color: #222;
+  background-color: #D8AC00;
  }
 
  .instruction-box {
@@ -1034,12 +1059,12 @@ form {
  }
 
  .addGraph:hover{
-  background-color: #3454a4;
+  background-color: #95B5D7;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .addGraph:active{
-  background-color: #3454a4;
+  background-color: #95B5D7;
 }
 
 .resetButton, .saveButton{
@@ -1063,5 +1088,30 @@ form {
 
 .resetButton:active, .saveButton:active{
   background-color: #222;
+}
+
+#notification-container {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.notification {
+  display: inline-block;
+  max-width: 80vh;
+  background-color: white;
+  color: red;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.5s, transform 0.5s;
+  white-space: per-line;
+}
+
+.notification.fadeOut {
+  opacity: 0;
+  transform: translateX(100%);
 }
 </style>
