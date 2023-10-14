@@ -377,7 +377,7 @@ export default {
       const option = document.getElementById(name);
       console.log("Picked " + option);
       option.remove()
-      axios.post(`/remove/${name}`);
+      axios.post(`/network/remove/${name}`);
       delete this.savedForms[name];
     },
 
