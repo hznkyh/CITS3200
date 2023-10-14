@@ -11,11 +11,9 @@
         <li>Once you have saved your graph(s), click on submit to submit your data.</li>
         <li>Note: If an error occurs, refer the the popup box on the right side of the page.</li>
       </ol>
-      <h3 class="h1-instructions">Resetting Form</h3>
-      <p class="p-instructions">NOTE: The 'Reset Form' button does not only reset the values in the form but removes all previous submissions.</p>
       <h1 class="h1-instructions">Graph Instructions</h1>
       <ol class="list">
-        <li>Click on "Play/Pause" button to start the simulation</li>
+        <li>Click on "Play/Pause" button to start/pause the simulation</li>
         <li>Click on "Skip Foward" button to step through the simulation</li>
         <li>Click on "Skip Backward" button to step back through the simulation</li>
       </ol>
