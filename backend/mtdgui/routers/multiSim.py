@@ -1,12 +1,9 @@
 import logging
-import time
 from typing import Annotated, List, Dict
 from auth import get_current_active_user
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
-from concurrent.futures import Future
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from threading import Lock
 from controllers import serialize_graph
 from models import User, ParameterRequest
 from sessions import sessions
@@ -20,9 +17,6 @@ router = APIRouter(
 )
 
 # initializing variables
-futuresComplete = False
-messageQueueLock = Lock()
-messageQueue = []
 set_params = None
 
 
