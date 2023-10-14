@@ -110,7 +110,7 @@
     function layout(id) {
         // layout the nodes based on their subnet
         var new_subnets = {}
-        ////console.log(nodes[id])
+        //////console.log(nodes[id])
         for (var key in nodes[id]) {
             var node = nodes[id][key]
             var subnet = node.subnet
@@ -166,7 +166,7 @@
                     }
                     this.drawAll();
                 } catch (error) {
-                    console.error(error);
+                    //console.error(error);
                 }
             },
 
@@ -205,22 +205,23 @@
                         graphIndex[i] = 0;
                         this.step(i);
                     }
+                    this.step(i);
                 }
             },
             manualStep(id, direction) {
                 clearInterval(intervalIDs[id])
                 startSim[id] = false
                 this.togglePlay(id, false)
-                console.log(this.msgs);
-                console.log(id);
+                //console.log(this.msgs);
+                //console.log(id);
                 this.msgs[id] = "Simulation stopped."
                 if (direction == "back") {
                     graphIndex[id] = graphIndex[id] - 1
                     if (graphIndex[id] < 0) {
                         graphIndex[id] = 0
-                        console.log("testtttt")
+                        //console.log("testtttt")
                         this.msgs[id] = "This is the first state."
-                        console.log(msgs[id])
+                        //console.log(msgs[id])
                     }
                 }
                 if (direction == "forward") {
@@ -231,7 +232,7 @@
                     }
                 }
                 this.step(id)
-                ////console.log(graphIndex[id])
+                //////console.log(graphIndex[id])
                 // this.msg = "Stopped"
             },
 
@@ -332,7 +333,7 @@
             },
 
             revealLabel(number) {
-                ////console.log("clicked")
+                //////console.log("clicked")
                 switch (number) {
                     case 0:
                         this.showLabel1 = false;
@@ -383,7 +384,6 @@
             },
             addGraph() {
                 if (number_of_sims < 5) {
-                    number_of_sims++;
                     this.isPopupOpen = true;
                 }
             },
@@ -441,12 +441,13 @@
                     this.errorMessage = 'Names already used.';
                 }   
                 else {
+                    number_of_sims++;
                     this.errorMessage = '';  // Clear any previous error messages
                     this.isPopupOpen = false;
                     simNames.push(this.userInput);
                     this.$emit('addGraph', this.userInput);
                     this.userInput = '';
-                    console.log(simNames);
+                    //console.log(simNames);
                     this.revealLabel(number_of_sims);
                 }
             },
@@ -591,7 +592,7 @@
         watch: {
             selectedNodes(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[0][newVal[0]].host)
+                    //////console.log(nodes[0][newVal[0]].host)
                     if (nodes[0][newVal[0]].host) {
                         this.toggleNodeInfo(1, true)
                         var propNode = nodes[0][newVal[0]].host
@@ -604,7 +605,7 @@
             },
             selectedNodes2(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[1][newVal[0]].host)
+                    //////console.log(nodes[1][newVal[0]].host)
                     if (nodes[1][newVal[0]].host) {
                         this.toggleNodeInfo(2, true)
                         var propNode = nodes[1][newVal[0]].host
@@ -617,7 +618,7 @@
             },
             selectedNodes3(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[2][newVal[0]].host)
+                    //////console.log(nodes[2][newVal[0]].host)
                     if (nodes[2][newVal[0]].host) {
                         this.toggleNodeInfo(3, true)
                         var propNode = nodes[2][newVal[0]].host
@@ -630,7 +631,7 @@
             },
             selectedNodes4(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[3][newVal[0]].host)
+                    //////console.log(nodes[3][newVal[0]].host)
                     if (nodes[3][newVal[0]].host) {
                         this.toggleNodeInfo(4, true)
                         var propNode = nodes[3][newVal[0]].host
@@ -643,7 +644,7 @@
             },
             selectedNodes5(newVal, oldVal) {
                 if (newVal[0]) {
-                    ////console.log(nodes[4][newVal[0]].host)
+                    //////console.log(nodes[4][newVal[0]].host)
                     if (nodes[4][newVal[0]].host) {
                         this.toggleNodeInfo(5, true)
                         var propNode = nodes[4][newVal[0]].host
@@ -699,7 +700,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(0, 'back')"></i>
             <i class="bi bi-play" @click="start(0)" v-if="!isPlaying"></i>
-            <i class="bi bi-stop-circle" @click="stop(0)" v-if="isPlaying"></i>
+            <i class="bi bi-pause" @click="stop(0)" v-if="isPlaying"></i>
             <i class="bi bi-skip-forward" @click="manualStep(0, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[0]}} </p>
@@ -740,7 +741,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(1, 'back')"></i>
             <i class="bi bi-play" @click="start(1)" v-if="!isPlaying2"></i>
-            <i class="bi bi-stop-circle" @click="stop(1)" v-if="isPlaying2"></i>
+            <i class="bi bi-pause" @click="stop(1)" v-if="isPlaying2"></i>
             <i class="bi bi-skip-forward" @click="manualStep(1, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[1]}} </p>
@@ -780,7 +781,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(2, 'back')"></i>
             <i class="bi bi-play" @click="start(2)" v-if="!isPlaying3"></i>
-            <i class="bi bi-stop-circle" @click="stop(2)" v-if="isPlaying3"></i>
+            <i class="bi bi-pause" @click="stop(2)" v-if="isPlaying3"></i>
             <i class="bi bi-skip-forward" @click="manualStep(2, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[2]}} </p>
@@ -820,7 +821,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(3, 'back')"></i>
             <i class="bi bi-play" @click="start(3)" v-if="!isPlaying4"></i>
-            <i class="bi bi-stop-circle" @click="stop(3)" v-if="isPlaying4"></i>
+            <i class="bi bi-pause" @click="stop(3)" v-if="isPlaying4"></i>
             <i class="bi bi-skip-forward" @click="manualStep(3, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[3]}} </p>
@@ -860,7 +861,7 @@
         <div class="control-panel">
             <i class="bi bi-skip-backward" @click="manualStep(4, 'back')"></i>
             <i class="bi bi-play" @click="start(4)" v-if="!isPlaying5"></i>
-            <i class="bi bi-stop-circle" @click="stop(4)" v-if="isPlaying5"></i>
+            <i class="bi bi-pause" @click="stop(4)" v-if="isPlaying5"></i>
             <i class="bi bi-skip-forward" @click="manualStep(4, 'forward')" ></i>
         </div>
         <p class="message"> {{msgs[4]}} </p>
