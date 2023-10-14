@@ -383,7 +383,6 @@
             },
             addGraph() {
                 if (number_of_sims < 5) {
-                    number_of_sims++;
                     this.isPopupOpen = true;
                 }
             },
@@ -441,6 +440,7 @@
                     this.errorMessage = 'Names already used.';
                 }   
                 else {
+                    number_of_sims++;
                     this.errorMessage = '';  // Clear any previous error messages
                     this.isPopupOpen = false;
                     simNames.push(this.userInput);
