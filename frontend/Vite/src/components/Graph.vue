@@ -910,12 +910,19 @@
         position: absolute;
         top: 1em;
         right: 1em;
-        background-color: white;
         border-radius: 15px;
-        box-shadow: 0 0 20px rgba(206, 206, 206, 0.5);
-        border: 1px solid black;
         width: 20em;
         z-index: 1;
+        margin: 2em;
+        margin-top: 20px;
+        padding: 2em;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 
+        inset -2px -2px 5px rgba(255, 255, 255, 0.9), 
+        inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+        -2px -2px 5px rgba(255, 255, 255, 0.9), 
+        2px 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .node-info p {
