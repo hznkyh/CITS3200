@@ -500,9 +500,10 @@ export default {
       console.log(this.savedForms);
       var matches = 0;
       var num_forms = Object.keys(this.savedForms).length; 
+      var keys = Object.keys(this.savedForms);
       if (num_forms == cur_sims.length){ 
         for (let i = 0; i<cur_sims.length;i++){ 
-          var selected_name = cur_sims[i].innerText; 
+          var selected_name = cur_sims[i].textContent; 
           console.log("element exists at " + selected_name);
           if (selected_name in this.savedForms){ 
             console.log("Matched " + selected_name);
@@ -512,9 +513,10 @@ export default {
       }
       if (matches != cur_sims.length || cur_sims.length == 0){ 
         //THROW ERROR 
+        this.showNotification("Names do not match, resetting forms.");
         // print error message - tell resetting forms 
-        console.log("matched a total of " + matches)
-        console.log("THROWING ERROR :(())")
+        // console.log("matched a total of " + matches)
+        // console.log("THROWING ERROR :(())")
         this.resetForm();
         return ; 
       }
