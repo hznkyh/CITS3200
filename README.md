@@ -30,14 +30,14 @@ Open the application on localhost:8080, and use the navigation bar to click the 
 
 The simulation should have an instructions tab at the top detailing how the simulation operates. The parameters panel specifies what configuration variables you want to simulate. 
 ![Parameter display panel](./imgs/sim_panel.png)
-1. After inputting some parameters, you have to save them using the 'Save Current Graphs' button. For more detailed instructions about each option, either see the tooltips or the 'Show Instructions' tab.
+1. After inputting some parameters, you have to save them using the 'Save Current Simulation' button. For more detailed instructions about each option, either see the tooltips or the 'Show Instructions' tab.
     * Click on the Advanced tab for more configuration options. 
 
-2. After creating the desired number of graphs using the 'Add Simulation' button and saving their individual configurations, press the 'Submit All Graphs' button to generate the graphs. 
+2. After creating the desired number of graphs using the 'Add Simulation' button and saving their individual configurations, press the 'Submit All Simulations' button to generate the graphs. 
 
 3. If the above steps have been performed correctly, you should see a message saying 'Receiving graph...'. The generation of the graphs may take some time so please be patient. 
 
-4. After all graphs have been completed, you should see a message saying 'Successfully recieved graphs'. You are now free to examine the results of the graphs. 
+4. After all graphs have been completed, you should see a message saying 'Successfully received graph(s)'. You are now free to examine the results of the graphs. 
 
 ## Evaluating the simulation results
 
