@@ -1,21 +1,9 @@
-import itertools
-import logging
-import time
-from typing import Annotated, List
-from auth import get_current_active_user
-from fastapi.responses import JSONResponse
-from fastapi import APIRouter, Depends, HTTPException, status
-from concurrent.futures import Future
-from concurrent.futures import ProcessPoolExecutor,as_completed
-from threading import Lock, Thread
-from controllers import serialize_graph, ProcessPoo
+
 from simulator.adapter import create_sim
 from simulator import create_sim, configs
 import simpy
-from models import User, ParameterRequest, Parameters
-from sessions import sessions
+from models import ParameterRequest
 from config import parameters
-import copy
 env = simpy.Environment()
 simulation_thread = None
 simulation_speed = 1.0
@@ -38,8 +26,30 @@ parameters = {
 }
 
 def handleRequest(graph_name, request : ParameterRequest): 
-    # print("GRAPH ", graph_name)
-    # print(req)
+    """
+    Handles the execution of a single simulation. Sets the parameters, 
+    runs the simulation and returns the necessary results
+
+    Parameters
+    ----------
+    graph_name : str
+       String representing the name of the graph
+
+    
+    request : ParameterRequest
+       The request containing the parameters and configuration
+    
+    Returns
+    -------
+    graph_name : str
+       String representing the name of the graph
+
+    create_sim(**final_params): dict
+        Returns an dictionary containing the keys snapshots and evaluation.
+        Includes all information necessary to render the information on the 
+        frontend.  
+
+    """
     req = request.model_dump()
     stored_params = {key: value for key, value in req['run'].items() if value is not None}
     #Handle config_variables
@@ -48,11 +58,8 @@ def handleRequest(graph_name, request : ParameterRequest):
         print(config_params)
         configs.config = configs.set_config(config_params) 
     final_params = parameters 
-    # print("INITIAL PARAMS", final_params)
-    # print("STORED PARAMS",stored_params)
     if stored_params is not None:
         final_params = final_params | stored_params 
     if type(final_params["checkpoints"]) is int: 
         final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
-    # print("FINAL PARAMS", final_params)
     return graph_name , create_sim(**final_params)
