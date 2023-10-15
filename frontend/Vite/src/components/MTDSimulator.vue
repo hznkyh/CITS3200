@@ -73,7 +73,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The number of nodes in the network (network size). E.g., 100</span>
+                <span class="tip">The number of nodes in the network (network size). This value needs to be greater than or equal to 20. E.g., 100</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Number of Nodes..." v-model="nodeNumber" name="total_nodes" required>
@@ -394,7 +394,7 @@ export default {
     saveForm(){
       if(Object.keys(this.savedForms).length <= 5){
         const validationRules = [
-          {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Node Number'},
+          {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Number of Nodes'},
           {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
           {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
           {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
@@ -450,7 +450,7 @@ export default {
         var cur_graph = this.graphNum;
         //console.log("NAME" ,cur_graph)
         this.savedForms[cur_graph] = mainData; 
-        ////console.log(this.savedForms);
+        console.log(this.savedForms);
       }
 
       else{
@@ -560,7 +560,7 @@ export default {
     },
     validateRatio(value){
       const parsedValue = parseFloat(value)
-      return !isNaN(parsedValue) && parsedValue <= 1.0;
+      return !isNaN(parsedValue) && parsedValue >= 0.0 && parsedValue <= 1.0;
     },
     validatePrioityInput(num){
       const parsedValue = parseFloat(num);
@@ -686,7 +686,7 @@ export default {
           this.random === '' ||
           this.alternative === '')
       ) {
-        this.showNotification("Please fill all the required form boxes in MTD_TRIGGER_INTERVAL.");
+        this.showNotification("Please fill all the required form boxes in MTD TRIGGER INTERVAL.");
         json_string.MTD_TRIGGER_INTERVAL = null;
         
       } else if (
