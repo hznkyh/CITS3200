@@ -397,7 +397,7 @@ export default {
         const validationRules = [
           {field: this.nodeNumber, validator: this.validateNodes, fieldName: 'Number of Nodes'},
           {field: this.nodeExposed, validator: this.validateIntInputs, fieldName: 'Nodes Exposed'},
-          {field: this.layers, validator: this.validateIntInputs, fieldName: 'Number of Layers'},
+          {field: this.layers, validator: this.validateLayers, fieldName: 'Number of Layers'},
           {field: this.compromisedRatio, validator: this.validateRatio, fieldName: 'Compromise Ratio'},
           {field: this.scheme, validator: this.validateWord, fieldName: 'Scheme'},
           {field: this.interval, validator: this.validateFloatInputs, fieldName: 'MTD Interval'},
@@ -539,7 +539,6 @@ export default {
         .catch((error) => {
           ////console.error(error);
         });
-      
     },
 
     validateIntInputs(value){
@@ -556,6 +555,13 @@ export default {
     validateFloatInputs(value){
       const parsedValue = parseFloat(value);
       return !isNaN(parsedValue) && parsedValue >= 0.0;
+    },
+    validateLayers(value){
+      if (value === '') {
+        return true;
+      }
+      const parsedValue = parseInt(value);
+      return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 6;
     },
     validateCheckpoints(value){
       const parsedValue = parseFloat(value);
