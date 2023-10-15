@@ -125,7 +125,6 @@ def update_item_OLD(response: ParameterRequest):
             for key, value in response.run.model_dump().items()
             if value is not None
         }
-    print()
 
     # Handle config_variables
     if "config" in response and response.config is not None:
@@ -148,7 +147,6 @@ async def update_item(
 @router.get("/graph")
 async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
     global stored_params
-    print(stored_params)
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(handleRequest, name, request) for name, request in stored_params.items()]
         results = [future.result() for future in as_completed(futures)][0]        
