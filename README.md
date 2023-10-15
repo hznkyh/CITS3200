@@ -20,6 +20,8 @@ command to activate the web-app using docker:
 
 The application should then launch on localhost:8080
 
+![Docker outputs](./imgs/docker.png)
+
 ## Navigating to the simulation
 
 Open the application on localhost:8080, and use the navigation bar to click the 'Simulation' tab.
@@ -27,26 +29,31 @@ Open the application on localhost:8080, and use the navigation bar to click the 
 ## Producing simulated networks 
 
 The simulation should have an instructions tab at the top detailing how the simulation operates. The parameters panel specifies what configuration variables you want to simulate. 
-1. After inputting some parameters, you have to save them using the 'Save' button. 
+![Parameter display panel](./imgs/sim_panel.png)
+1. After inputting some parameters, you have to save them using the 'Save Current Graphs' button. For more detailed instructions about each option, either see the tooltips or the 'Show Instructions' tab.
     * Click on the Advanced tab for more configuration options. 
 
-2. After creating the desired number of graphs using the 'Add Graph' button and saving their individual configurations, press the 'Submit' button to generate the graphs. 
+2. After creating the desired number of graphs using the 'Add Simulation' button and saving their individual configurations, press the 'Submit All Graphs' button to generate the graphs. 
 
 3. If the above steps have been performed correctly, you should see a message saying 'Receiving graph...'. The generation of the graphs may take some time so please be patient. 
 
-4. After all graphs have been completed, you should see a message saying 'Got graph'. You are now free to examine the results of the graphs. 
+4. After all graphs have been completed, you should see a message saying 'Successfully recieved graphs'. You are now free to examine the results of the graphs. 
 
 ## Evaluating the simulation results
 
 Now the simulations should be complete, and a timeline of the simulation and final results can be observed. 
 
 1. Scroll down until you see a box with the name of the graph you created. 
+![Graph image](./imgs/selection.png)
+
 
 2. Click that box. A graph container should appear. 
+![Graph image](./imgs/graph_image.png)
 
-3. Click 'Start' to automatically walk through all snapshots, or 'Step' to just view the next snapshot. Compromised nodes appear red, exposed nodes (neighbour compromised nodes) appear yellow and normal nodes appear green. 
+3. Click the start button to automatically walk through all snapshots, or the step forward and backward buttons to just view the relevant snapshot. Compromised nodes appear red, exposed nodes (neighbours of compromised nodes) appear yellow and normal nodes appear green. 
 
 4. To view aggregated results for the simulation, click one of the four buttons at the bottom of the container. These should display statistic graphs obtained at the end of the simulation. 
+![Statistics display](./imgs/stats.png)
 
 
 ## Simulation details
@@ -58,7 +65,7 @@ detailed information about MTD techniques, please check out the following links.
 
 # Scope for future work
 
-## Expanding the main page
+## Expanding the introductory page
 
 By default the information presented on this page include the title, a welcome to the page, and a small description of the project outline.
 
