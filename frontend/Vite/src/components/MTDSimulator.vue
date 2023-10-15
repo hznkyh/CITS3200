@@ -280,15 +280,15 @@
           <div class="row">
             <div class="group">
               <label>Simultaneous: </label>
-              <input id="param" type="text" placeholder="(value, value)" name="simultaneous" v-model="similtaneous">
+              <input id="param" type="text" placeholder="value,value" name="simultaneous" v-model="similtaneous">
             </div>
             <div class="group">
               <label>Random: </label>
-              <input id="param" type="text" placeholder="(value, value)" name="random" v-model="random">
+              <input id="param" type="text" placeholder="value,value" name="random" v-model="random">
             </div>
             <div class="group">
               <label>Alternative: </label>
-              <input id="param" type="text" placeholder="(value, value)" name="alternative" v-model="alternative">
+              <input id="param" type="text" placeholder="value,value" name="alternative" v-model="alternative">
             </div>
           </div>
         </div>
@@ -527,11 +527,11 @@ export default {
         })
         .then(async (response) => {
           ////console.log(response);
-          this.msg = 'Receiving graph...';
+          this.msg = 'Receiving graph(s)...';
 
           await Graph.methods.getGraph();
           // this.forceRerender();`
-          this.msg = 'Got graph';
+          this.msg = 'Received graph(s)';
         })
         .catch((error) => {
           ////console.error(error);
@@ -1107,5 +1107,10 @@ form {
 .notification.fadeOut {
   opacity: 0;
   transform: translateX(100%);
+}
+
+.message {
+  font-size: 25px;
+  font-weight: 500;
 }
 </style>
