@@ -14,7 +14,6 @@ import sys
 
 
 logger = logging.getLogger()
-print(logger)
 logger.info("init adapter")
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 
