@@ -424,7 +424,7 @@ export default {
           errorMessages.push(`Invalid input for ${rule.fieldName}`);
         }
       });
-
+      console.log(errorMessages);
       if (errorMessages.length === 0) {
         ////console.log('Correct inputs have been detected');
         var mainData = {
@@ -443,15 +443,17 @@ export default {
             "total_subnets": this.totalSubnets !== '' ? parseInt(this.totalSubnets) : null,
             "target_layer": this.targetLayers !== '' ? parseInt(this.targetLayers) : null,
           },
-          "config": this.checkAdvancedDataEntered()
+          "config": this.checkAdvancedDataEntered(errorMessages)
         };
-        this.msg = 'Saved parameters for ' + this.graphNum;
-        // var data = JSON.stringify(mainData);
-        // this.savedForms.push(mainData);
-        var cur_graph = this.graphNum;
-        //console.log("NAME" ,cur_graph)
-        this.savedForms[cur_graph] = mainData; 
-        //console.log(this.savedForms);
+        if (errorMessages.length === 0) {
+          this.msg = 'Saved parameters for ' + this.graphNum;
+          // var data = JSON.stringify(mainData);
+          // this.savedForms.push(mainData);
+          var cur_graph = this.graphNum;
+          //console.log("NAME" ,cur_graph)
+          this.savedForms[cur_graph] = mainData; 
+          console.log(this.savedForms);
+        }
       }
 
       else{
@@ -618,7 +620,7 @@ export default {
 
       return valueOne && valueTwo
     },
-    checkAdvancedDataEntered() {
+    checkAdvancedDataEntered(errorMessages) {
       var json_string = new Object();
       var added = 0;
       var uniqueValues = new Set();
@@ -640,11 +642,13 @@ export default {
         if(!isNaN(numericValues)){
           if(numericValues >= 1 && numericValues <=7){
             if (uniqueValues.has(numericValues)){
+              errorMessages.push("Host Topology: Duplicate values");
               this.showNotification("Host Topology: Duplicate values");
               return null;
           }
           uniqueValues.add(numericValues);
         } else {
+          errorMessages.push("Input values must be between 1 and 7");
           this.showNotification("Input values must be between 1 and 7");
           return null;
           }
@@ -667,6 +671,7 @@ export default {
           this.ServDiversity === '' ||
           this.userShuffle === '')
       ) {
+        errorMessages.push("Please fill all the required form boxes in MTD_PRIORITY.");
         this.showNotification("Please fill all the required form boxes in MTD_PRIORITY.");
 
       } else if (
@@ -700,6 +705,7 @@ export default {
           this.random === '' ||
           this.alternative === '')
       ) {
+        errorMessages.push("Please fill all the required form boxes in MTD TRIGGER INTERVAL.");
         this.showNotification("Please fill all the required form boxes in MTD TRIGGER INTERVAL.");
         json_string.MTD_TRIGGER_INTERVAL = null;
         
@@ -731,7 +737,8 @@ export default {
     showNotification(title, errorMessages = []) {
       const notification = document.createElement('div');
       notification.className = 'notification';
-      
+      errorMessages.push(title);
+      console.log(errorMessages); 
       let errorMessageHTML = "";
       if (errorMessages.length > 0) {
           errorMessageHTML = "<ul>";
