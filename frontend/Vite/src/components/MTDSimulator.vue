@@ -461,11 +461,11 @@ export default {
       }
 
       else{
-        this.showNotification(`Validation Errors:`, errorMessages);
+        this.showNotification(`Validation Errors:`,errorMessages);
       }
       }
       else{
-        this.showNotification('Can only save up to five Graphs at a time');
+        this.showNotification('Can only save up to five Graphs at a time',errorMessages);
       }
     },
 
@@ -741,7 +741,9 @@ export default {
     showNotification(title, errorMessages = []) {
       const notification = document.createElement('div');
       notification.className = 'notification';
-      errorMessages.push(title);
+      if (errorMessages.length == 0) {
+        errorMessages.push(title);
+      }
       console.log(errorMessages); 
       let errorMessageHTML = "";
       if (errorMessages.length > 0) {
