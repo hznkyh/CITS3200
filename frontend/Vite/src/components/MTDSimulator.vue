@@ -754,7 +754,7 @@ export default {
           errorMessageHTML += "</ul>";
       }
 
-      notification.innerHTML = `<strong>${title}</strong>${errorMessageHTML}`;
+      notification.innerHTML = `<strong>Validation Error</strong>${errorMessageHTML}`;
       const container = document.getElementById('notification-container');
       container.appendChild(notification);
 
