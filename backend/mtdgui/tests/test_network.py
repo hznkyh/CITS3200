@@ -1,64 +1,134 @@
+from typing import List
 from fastapi.testclient import TestClient
 from ..main import app
-from routers.network import parameters,reset
+from ..routers.network import reset, stored_params
+import networkx as nx
+from ..models import NetworkGraph, NetworkGraphs
 import json
-client = TestClient(app) 
 
-def test_make_new_default_graph(): 
-    default_params = parameters
-    reset()
-    response = client.get('/network/graph')
-    assert response.status_code == 200 
-    data = response.json()
-    # Should be 10 checkpoints in the default response 
-    assert len(data) == len(parameters["checkpoints"])
-    # Each checkpoint should return directed, multipgraph, graph, nodes and links
-    for i in range(0,len(data)): 
-        assert len(data[str(i)]) == 5
-        # Check that each checkpoint has the right number of nodes
-        assert len(data[str(i)]["nodes"]) == parameters["total_nodes"]
-
-def test_update_run_parameters(): 
-    # Define test data
-    form_data = {
-        "run": {
-            "total_nodes": 100,
-            "total_endpoints": 10,
-            "total_layers": 4,
-            "terminate_compromise_ratio": 0.7,
-            "scheme": "random",
-            "mtd_interval": 2.0,
-            "finish_time": 9000,
-            "checkpoints": 1000,
-            "total_subnets": 6,
-            "target_layer": 4
-        },
-        "config": None
-    }
-    response = client.post("network/update_all_params", json=form_data)
-
-    assert response.status_code == 200
-
-    response_json = response.json()["item"]
-    from routers.network import stored_params
-    assert "run" in response_json
-    assert "config" in response_json
-
-    for key in form_data["run"]:
-        assert form_data["run"][key] == stored_params[key]
+client = TestClient(app)
+# Define test data
+headers: str = None
+form_data = {
+    "graph": {"graph_name": "1"},
+    "run": {
+        "total_nodes": 30,
+        "total_endpoints": 5,
+        "total_layers": 4,
+        "terminate_compromise_ratio": 0.2,
+        "scheme": "random",
+        "mtd_interval": 2.0,
+        "finish_time": 3000,
+        "checkpoints": 1000,
+        "total_subnets": 6,
+        "target_layer": 4,
+    },
+    "config": None,
+}
+credentials = {
+    "username": "da017b12-8470-47f4-a4e9-58182b6f3ee3",
+    "password": "da017b12-8470-47f4-a4e9-58182b6f3ee3",
+}
 
 
-    graph_response = client.get("network/graph")
 
-    graph_json = graph_response.json()
-    final_params = parameters | stored_params
-    if type(final_params["checkpoints"]) is int: 
-        final_params["checkpoints"] =  range(final_params["start_time"], int(final_params["finish_time"]), final_params["checkpoints"])
-    print(graph_json)
-    assert len(graph_json) == len(final_params["checkpoints"])
-    for i in range(0,len(graph_json)): 
-        # Each checkpoint should return directed, multipgraph, graph, nodes and links
-        assert len(graph_json[str(i)]) == 5
-        # Check that each checkpoint has the right number of nodes
-        assert len(graph_json[str(i)]["nodes"]) == final_params["total_nodes"]
+
+def test_update_run_parameters():
+    # Step 1: Get the token
+
+    token_response = client.post("/token/", data=credentials)
+
+    assert token_response.status_code == 200
+    token = token_response.json().get("access_token")
+
+    global headers, form_data
+    # Set up headers for authenticated request
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Step 2:  Send the request
+    response = client.post("network/graph-params", json=form_data, headers=headers)
+
+    assert response.status_code == 202
+    assert response.json() == "prams set"
+
+
+def test_make_new_default_graph():
+    global headers, form_data
+    graph_response = client.get("network/graph", headers=headers)
     
+    name: str = list(graph_response.json().keys())[0]
+    response_graph = NetworkGraphs(graphs=graph_response.json()[name])
+    # graph_json
+    assert name == form_data["graph"]["graph_name"]
+    graph_list: List[nx.Graph] = [
+        nx.node_link_graph(g) for g in graph_response.json()[name]
+    ]
+
+    assert response_graph.graphs.__len__() == (
+        form_data["run"]["finish_time"] / form_data["run"]["checkpoints"]
+    )
+
+    for graph in graph_list:
+        # Each checkpoint should return directed, multipgraph, graph, nodes and links
+        # assert graph == 5
+        # Check that each checkpoint has the right number of nodes
+        assert len(graph.nodes) == form_data["run"]["total_nodes"]
+        
+
+
+def test_update_run_parameters_multi_graph():
+    # Step 1: Get the token
+    credentials = {
+        "username": "da017b12-8470-47f4-a4e9-58182b6f3ee3",
+        "password": "da017b12-8470-47f4-a4e9-58182b6f3ee3",
+    }
+    token_response = client.post("/token/", data=credentials)
+
+    assert token_response.status_code == 200
+    token = token_response.json().get("access_token")
+
+    global headers, form_data
+    # Set up headers for authenticated request
+    headers = {"Authorization": f"Bearer {token}"}
+    dict_form_data = {}
+    
+    for i in range(2):
+        d = {
+            "graph": {
+                "graph_name" : str(i)
+            }
+        }
+        dict_form_data[i] = form_data | d
+
+    # # Step 2:  Send the request
+    response = client.post("network/multi-graph-params", json=dict_form_data, headers=headers)
+
+    assert response.status_code == 202
+    assert response.json() == "prams set"
+
+
+def test_make_new_default_multi_graph():
+    global headers, form_data
+    graph_response = client.get("network/multi-graph", headers=headers)
+    
+    assert graph_response.status_code == 200
+    
+    for name in graph_response.json().keys():
+        response_graph = NetworkGraphs(graphs=graph_response.json()[name])
+        # graph_json
+        print(name)
+        assert name in ['0', '1']
+        graph_list: List[nx.Graph] = [
+            nx.node_link_graph(g) for g in graph_response.json()[name]
+        ]
+
+        assert response_graph.graphs.__len__() == (
+            form_data["run"]["finish_time"] / form_data["run"]["checkpoints"]
+        )
+
+        for graph in graph_list:
+            # Each checkpoint should return directed, multipgraph, graph, nodes and links
+            # Check that each checkpoint has the right number of nodes
+            assert len(graph.nodes) == form_data["run"]["total_nodes"]
+    
+
