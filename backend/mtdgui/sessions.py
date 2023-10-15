@@ -12,8 +12,6 @@ class SessionManager(dict):
         self.purge_interval = purge_interval
         self.session_timeout = session_timeout
         self.lock = threading.Lock()
-        # TODO: Uncomment this line to start the purge thread
-        # self._start_purge_thread()
 
     def __setitem__(self, key, value):
         with self.lock:
