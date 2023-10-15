@@ -9,6 +9,7 @@
         <li>Once all fields have been entered, click the save button.</li>
         <li>Optional: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
         <li>Once you have saved your graph(s), click on submit to submit your data.</li>
+        <li>IMPORTANT: PLEASE FILL OUT PARAMETERS FOR ALL THE GRAPH(S) YOU HAVE ADDED OTHERWISE YOU WILL GET AN ERROR.</li>
         <li>Note: If an error occurs, refer the the popup box on the right side of the page.</li>
       </ol>
       <h1 class="h1-instructions">Graph Instructions</h1>
@@ -203,13 +204,13 @@
             </div>
 
             <div class="group">
-              <label>Target Layers: </label>
+              <label>Target Layer: </label>
               <div class="tooltip-container">
                 <span id="tooltip">
                   <span class='info'>
                     <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                   </span>
-                  <span class="tip">How often snapshots are taken of the simulation. E.g., 4</span>
+                  <span class="tip">Target a specfic layer. Must be within the range of input of total layers. E.g., 4</span>
                 </span>
               </div>
               <input id="param" type="text" placeholder="Target Layers..." v-model="targetLayers" name="target_layers">
@@ -403,7 +404,7 @@ export default {
           {field: this.finishTime, validator: this.validateFinishTime, fieldName: 'Finish Time'},
           {field: this.checkpoints, validator: this.validateCheckpoints, fieldName: 'Checkpoints'},
           {field: this.totalSubnets, validator: this.validateTotalSubnets, fieldName: 'Total Subsets'},
-          {field: this.targetLayers, validator: this.validateIntInputs, fieldName: 'Target Layers'},
+          {field: this.targetLayers, validator: this.validateTargetLayer, fieldName: 'Target Layers'},
           {field: this.compTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Complete Topology Shuffle'},
           {field: this.hostTopoShuffle, validator: this.validatePrioityInput, fieldName: 'Host Topology Shuffle'},
           {field: this.ipShuffle, validator: this.validatePrioityInput, fieldName: 'IP Shuffle'},
@@ -450,7 +451,7 @@ export default {
         var cur_graph = this.graphNum;
         //console.log("NAME" ,cur_graph)
         this.savedForms[cur_graph] = mainData; 
-        console.log(this.savedForms);
+        //console.log(this.savedForms);
       }
 
       else{
@@ -584,6 +585,13 @@ export default {
         return true;
       }
       return false;
+    },
+    validateTargetLayer(num){
+      if (num === '') {
+        return true;
+      }
+      const parsedValue = parseInt(num);
+      return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= this.layers;
     },
     validateTrigger(values) {
       if(!values){
