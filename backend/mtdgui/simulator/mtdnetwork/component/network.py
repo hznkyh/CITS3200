@@ -220,7 +220,7 @@ class Network:
                 # Selects Target Host
                 if i == self.target_layer and j == 1 and self.network_type == 0 and self.target_node != -1:
                     self.target_node = node_id - random.randrange(0, s_nodes)
-                    print("Target Node is: ", self.target_node)
+
 
                 # Assigns Colour of nodes based on constant key
                 for k in range(s_nodes):
@@ -295,10 +295,10 @@ class Network:
         self.node_per_layer = nodes_per_layer.copy()
         self.node_per_layer[0] = self.total_endpoints
 
-        # print("Endpoint list:", self.total_endpoints)
-        # print("Node list:", self.nodes)
-        # print("Exposed Endpoint list: ", self.exposed_endpoints)
-        # print("nodes per layer: ", self.node_per_layer)
+
+
+
+
 
     # def gen_graph(self, min_nodes_per_subnet=3, max_subnets_per_layer=5, subnet_m_ratio=0.2,
     #               prob_inter_layer_edge=0.4):
@@ -414,7 +414,7 @@ class Network:
     #             # Selects Target Host
     #             if self.network_type == 0 and i == self.target_layer and j == 1:
     #                 self.target_node = node_id - random.randrange(0, s_nodes)
-    #                 print("Target Node is: ", self.target_node)
+
     #
     #             # Assigns Colour of nodes based on constant key
     #             for k in range(s_nodes):
@@ -451,7 +451,7 @@ class Network:
     #
     #             n_a1 = random.choices(node_a, weights=degree_node_a, k=1)[0]
     #             if not nx.is_connected(self.graph.subgraph(node_a + node_b)):
-    #                 print(node_b)
+
     #                 n_b = random.choices(node_b, weights=degree_node_b, k=1)[0]
     #                 self.graph.add_edge(n_a1, n_b)
     #             if random.random() < prob_inter_layer_edge and subnets_per_layer[i] > 1 and not nx.is_connected(
@@ -525,10 +525,10 @@ class Network:
     #     self.node_per_layer[-1] = self.total_database
     #
     #
-    #     # print("Endpoint list:", self.total_endpoints)
-    #     # print("Node list:", self.graph.nodes)
-    #     # print("Exposed Endpoint list: ", self.exposed_endpoints)
-    #     # print("nodes per layer: ", self.node_per_layer)
+
+
+
+
 
     def get_total_endpoints(self):
         return self.total_endpoints

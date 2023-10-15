@@ -29,6 +29,6 @@ for i in range(len(combination_mtds)):
                                  [combination_mtds[i], combination_mtds[j]]))
 
 for combination_name, combination in combination_list:
-    print(combination_name)
+
     results = execute_multithreading(multiple_mtd_simulation, iterations=100, num_threads=20,
                                      file_name=combination_name, combination=combination)

@@ -194,7 +194,7 @@ class Evaluation:
                    zorder=3)
 
         compromise_record = record[record['compromise_host'] != 'None']
-        print("total compromised hosts: ", len(compromise_record))
+
         ax.scatter(compromise_record['finish_time'], compromise_record['name'], color='red', zorder=2)
 
         custom_lines_attack = [Line2D([0], [0], marker='o', color='w', markerfacecolor='green', markersize=10),

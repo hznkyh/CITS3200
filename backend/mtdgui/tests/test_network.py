@@ -116,7 +116,7 @@ def test_make_new_default_multi_graph():
     for name in graph_response.json().keys():
         response_graph = NetworkGraphs(graphs=graph_response.json()[name])
         # graph_json
-        print(name)
+
         assert name in ['0', '1']
         graph_list: List[nx.Graph] = [
             nx.node_link_graph(g) for g in graph_response.json()[name]

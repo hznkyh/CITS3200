@@ -276,7 +276,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">When to trigger the chosen scheme
+                <span class="tip">When to trigger the chosen scheme: int,float
                 </span>
               </div>
             </span>
@@ -362,7 +362,7 @@ export default {
       this.componentKey += 1;
     },
     handleAddGraph(name){
-      //console.log(name)
+
       const paramSelect = document.getElementById('param');
 
       if (paramSelect.options.length >=5){
@@ -379,7 +379,7 @@ export default {
 
     handleRemoveGraph(name) {
       const option = document.getElementById(name);
-      //console.log("Picked " + option);
+
       option.remove()
       axios.post(`/network/remove/${name}`);
       delete this.savedForms[name];
@@ -428,9 +428,9 @@ export default {
           errorMessages.push(`Invalid input for ${rule.fieldName}`);
         }
       });
-      console.log(errorMessages);
+
       if (errorMessages.length === 0) {
-        ////console.log('Correct inputs have been detected');
+
         var mainData = {
           "graph": {
             "graph_name": this.graphNum,
@@ -454,9 +454,9 @@ export default {
           // var data = JSON.stringify(mainData);
           // this.savedForms.push(mainData);
           var cur_graph = this.graphNum;
-          //console.log("NAME" ,cur_graph)
+
           this.savedForms[cur_graph] = mainData; 
-          console.log(this.savedForms);
+
         }
       }
 
@@ -498,21 +498,21 @@ export default {
     submitForm() {
       this.msg = 'Saved parameters';
 
-      ////console.log(this.savedForms);
+
 
       // const formData = JSON.parse(savedForm);
       var cur_sims = document.querySelectorAll(".sim-label");
-      //console.log(document.querySelectorAll(".sim-label"));
-      //console.log(this.savedForms);
+
+
       var matches = 0;
       var num_forms = Object.keys(this.savedForms).length; 
       var keys = Object.keys(this.savedForms);
       if (num_forms == cur_sims.length){ 
         for (let i = 0; i<cur_sims.length;i++){ 
           var selected_name = cur_sims[i].textContent; 
-          //console.log("element exists at " + selected_name);
+
           if (selected_name in this.savedForms){ 
-            //console.log("Matched " + selected_name);
+
             matches++; 
           } 
         }
@@ -520,20 +520,20 @@ export default {
       if (matches != cur_sims.length || cur_sims.length == 0){ 
         //THROW ERROR 
         this.showNotification("Names do not match, resetting forms.");
-        // print error message - tell resetting forms 
-        // //console.log("matched a total of " + matches)
-        // //console.log("THROWING ERROR :(())")
+
+
+
         this.resetForm();
         return ; 
       }
 
-      //console.log("SAVED " , JSON.stringify(this.savedForms));
+
       axios
         .post('/network/multi-graph-params', JSON.stringify(this.savedForms), {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(async (response) => {
-          ////console.log(response);
+
           this.msg = 'Receiving graph(s)...';
 
           await Graph.methods.getGraph();
@@ -592,7 +592,7 @@ export default {
         return true;
       }
       const parsedNum = parseFloat(num);
-      ////console.log((this.nodeNumber - this.nodeExposed) / (parsedNum - 1))
+
       if (!isNaN(parsedNum) && (this.nodeNumber - this.nodeExposed) / (parsedNum - 1) > 2) {
         return true;
       }
@@ -611,10 +611,10 @@ export default {
       }
       const intPattern = /^\d+$/;
       const floatPattern = /^\d+(\.\d+)?$/;
-      ////console.log(values)
+
 
       const separate = values.split(',').map(part => part.trim());
-      ////console.log(separate)
+
       if (separate.length != 2){
         return false;
       }
@@ -728,7 +728,7 @@ export default {
         json_string.MTD_TRIGGER_INTERVAL = null
       }
 
-      ////console.log(json_string);
+
       return added > 0 ? json_string : null;
     },
     triggerConversion(floatStr){
@@ -744,7 +744,7 @@ export default {
       if (errorMessages.length == 0) {
         errorMessages.push(title);
       }
-      console.log(errorMessages); 
+
       let errorMessageHTML = "";
       if (errorMessages.length > 0) {
           errorMessageHTML = "<ul>";

@@ -346,7 +346,7 @@ class AttackOperation:
             adversary._compromised_users = list(set(
                 adversary.get_compromised_users() + adversary.get_curr_host().get_compromised_users()))
             if adversary.get_network().is_compromised(adversary.get_compromised_hosts()):
-                print("Adversary: Target has been compromised!")
+
                 # terminate the whole process
                 if self._callback:
                     self._callback(self.adversary)

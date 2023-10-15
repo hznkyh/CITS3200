@@ -44,7 +44,7 @@ client = TestClient(app)
 #     assert config_response.status_code == 200
 
 #     config_json = response.json()
-#     print(config_response)
+
 
 
 def test_get_defaults():

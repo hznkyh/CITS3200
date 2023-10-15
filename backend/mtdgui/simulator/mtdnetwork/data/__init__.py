@@ -7,4 +7,3 @@
 #     with open(file,"r") as config_file: 
 #         return json.load(config_file)
 # config = load_config()
-# print(config.get("OS_TYPES")[0])

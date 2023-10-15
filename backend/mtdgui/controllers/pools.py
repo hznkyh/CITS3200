@@ -55,7 +55,7 @@ def handleRequest(graph_name, request : ParameterRequest):
     #Handle config_variables
     if (req.get('config') is not None): 
         config_params =  {key: value for key, value in req['config'].items() if value is not None}
-        print(config_params)
+
         configs.config = configs.set_config(config_params) 
     final_params = parameters 
     if stored_params is not None:

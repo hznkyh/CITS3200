@@ -93,7 +93,7 @@ class Host:
             for v in service_vulns:
                 if not v in all_vulns:
                     all_vulns.append(v)
-        # print("Services on this host has average of this many vulns: ", total_vulns/len(all_services))
+
 
         return all_vulns
 
@@ -220,7 +220,7 @@ class Host:
                     if n in self.exposed_endpoints:
                         self.exposed_endpoints.remove(n)
 
-        print("Blank endpoints: ", blank_endpoints, "target node: ", self.target_node)
+
         self.total_nodes = self.total_nodes - len(blank_endpoints)
 
     def get_services(self, just_exploited=False):

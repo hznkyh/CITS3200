@@ -102,7 +102,7 @@ After creating the model, add it to the ConfigModel class. As they are optional 
 ### Frontend requirements
 
 The advanced layout options is set in frontend/Vite/src/components/MTDSimulator.vue. 
-To add more options in the advanced options tab look for the p tag with the class 'advanced'. Below this are where the advanced options are displayed.
+To add more options in the advanced options tab look for the 'p' tag with the class 'advanced'. Below this are where the advanced options are displayed.
 Refer to the code above and below to include another input box or selector. Doing this will extend the advanced section of the panel parameter.
 
 To link the new parameter to the backend, first validate it in the checkAdvancedDataEntered() function but adding the variable to the code. Then go to the saveForm() function and add it to the validation list, following a similar structure to the ones already incorporated.

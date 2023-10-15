@@ -234,10 +234,10 @@ class DiversityAssignment:
         # Solve the problem
         prob.solve()
         # Print the status of the solution
-        # print("Status:", LpStatus[prob.status])
+
 
         # Print the optimal value of the objective function
-        # print("Objective value:", value(prob.objective))
+
 
         # Print the values of the decision variables
         # Define regex patterns

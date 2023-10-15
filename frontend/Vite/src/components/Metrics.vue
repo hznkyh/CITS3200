@@ -44,18 +44,19 @@ export default {
             axios.get(`http://localhost:8000/statistics/${this.simName}/${type}`, {
               responseType: "blob"
             }).then((response) => {
-              //console.log(response)
+
               this.imageURL = URL.createObjectURL(
                 new Blob([response.data], { type: "image/png" })
               );
+              this.activeError = false;
             }).catch((error) => {
-            console.error(error);
+
             this.activePng = false
             this.activeError = true
             });
           } 
           catch (error) {
-            //console.log(error);
+
           }
         }
       }

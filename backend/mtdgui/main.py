@@ -156,12 +156,5 @@ async def test_token(client: Annotated[User, Depends(get_current_active_user)]):
     """
     return JSONResponse(content=client.uuid, status_code=status.HTTP_200_OK)
 
-#   TODO: Implement this for singleton pattern for process pool
-# @app.on_event("shutdown")
-# def shutdown_event():
-#     # Shutdown the pool when the app stops
-#     ProcessPoo.shutdown()
-
-#   ! DO NOT RUN THIS IN PRODUCTION
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -151,7 +151,7 @@ def create_sim(
         mtd_operation.proceed_mtd()
 
     # save snapshot by time
-    # print("proceed save checkpoints",checkpoints)
+
     if checkpoints is not None:
         snapshot_checkpoint.proceed_save(time_network, adversary, snapshot_list)
 

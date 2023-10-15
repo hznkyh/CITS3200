@@ -75,7 +75,7 @@ def savefig(filename, **options):
 
     filename: string
     """
-    print("Saving figure to file", filename)
+
     plt.savefig(filename, **options)
 
 

@@ -4,7 +4,7 @@ import sys
 import os
 from pathlib import Path
 import json
-import pprint
+
 import copy
 from venv import logger
 from mtdgui.controllers.loggerConfig import setup_logger
@@ -13,7 +13,7 @@ current_script_dir = os.path.dirname(os.path.abspath(__file__))
 # Construct the path to the "s" directory
 s_directory = os.path.join(current_script_dir, "..", "simulator")
 sys.path.append(s_directory)
-# print(s_directory)
+
 from adapter import *
 
 import simpy
@@ -50,18 +50,18 @@ def sse_callback(ad,**kwarg):
     before the callback is triggered.
     
     '''
-    print(ad.get_compromised_hosts())
-    print("Inside sse_callback")
+
+
     with message_queue_lock:
         message_queue.append(copy.deepcopy(kwarg.get_compromised_users()))
     
-    # # print("Inside sse_callback")
-    # # print(name,typeof,wait)
+
+
     # if(kwarg["typeof"] != "Wait Finished"):
-    #     # print(f"Notification: {name} reneged after waiting for {wait:.3f} time units.")
+
     #     msg= f"Notification: {name} reneged after waiting for {wait:.3f} time units."
     # else :
-    #     # print(f"Notification: {name} Wait Finished at {wait:.3f} time units.")
+
     #     msg= f"Notification: {name} Wait Finished at {wait:.3f} time units."
 
 
@@ -84,7 +84,7 @@ parameters = {
 }
 
 
-print('init',env)
+
 res= []
 logger.info("Starting the application")
 final_params = {'env':env,'res':res} | parameters 
@@ -95,11 +95,10 @@ try:
     simulation_thread = Thread(target=create_sim_test, kwargs=final_params)
     simulation_thread.start()
     simulation_thread.join()
-    print("res length", len(res))
+
     # graph_data =  {index: serialize_graph(data) for index, data in enumerate(res)}
 except: 
-    print("error")
+
 
     # uvicorn.run(app,host="0.0.0.0", port=8000)
 
-# pprint.pprint(message_queue) 

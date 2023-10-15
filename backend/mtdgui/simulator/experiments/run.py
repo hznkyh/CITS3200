@@ -161,7 +161,7 @@ def single_mtd_simulation(file_name, combination):
                     evaluations.append(result)
                     mtd_evaluation.append(result)
         save_evaluation_result(file_name, mtd_evaluation)
-        print(mtd_name)
+
     return evaluations
 
 
@@ -207,7 +207,7 @@ def multiple_mtd_simulation(file_name, combination):
                     evaluations.append(result)
                     mtd_evaluation.append(result)
         save_evaluation_result(file_name, mtd_evaluation)
-        print(scheme)
+
     return evaluations
 
 
@@ -235,8 +235,8 @@ def execute_simulation(start_time=0, finish_time=None, scheme='random', mtd_inte
     # initialise the simulation
     env = simpy.Environment()
     end_event = env.event()
-    print("env is ")
-    print(env)
+
+
     snapshot_checkpoint = SnapshotCheckpoint(env=env, checkpoints=checkpoints)
     time_network = None
     adversary = None
@@ -245,13 +245,13 @@ def execute_simulation(start_time=0, finish_time=None, scheme='random', mtd_inte
         try:
             time_network, adversary = snapshot_checkpoint.load_snapshots_by_time(start_time)
         except FileNotFoundError:
-            print('No timestamp-based snapshots available! Set start_time = 0 !')
+
             return
     elif not new_network:
         try:
             time_network, adversary = snapshot_checkpoint.load_snapshots_by_network_size(total_nodes)
         except FileNotFoundError:
-            print('set new_network=True')
+
     else:
         time_network = TimeNetwork(total_nodes=total_nodes, total_endpoints=total_endpoints,
                                    total_subnets=total_subnets, total_layers=total_layers,
@@ -279,10 +279,10 @@ def execute_simulation(start_time=0, finish_time=None, scheme='random', mtd_inte
     # start simulation
     if finish_time is not None:
         env.run(until=(finish_time - start_time))
-        print("ENDED1")
+
     else:
         env.run(until=end_event)
-        print("ENDED2")
+
     evaluation = Evaluation(network=time_network, adversary=adversary)
 
     # sim_item = scheme

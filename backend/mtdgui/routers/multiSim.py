@@ -24,7 +24,7 @@ async def get_prams(
     params: Dict[str,ParameterRequest],
 ):
     global set_params
-    print("Got params",params)
+
     set_params = params
     return JSONResponse(content="prams set" , status_code=status.HTTP_202_ACCEPTED)
 
@@ -38,7 +38,7 @@ async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
         futures = [executor.submit(handleRequest, name, request) for name, request in params.items()]
         results = [future.result() for future in as_completed(futures)]
         
-        # print(results)
+
         
         logger.debug("Stopped checking futures' completion.")
 
@@ -133,7 +133,7 @@ async def get_result(
     try:
         evaluation = sessions[client.uuid]["evaluation"][index]
         response = evaluation.compromised_num()
-        print(response)
+
         logger.debug(f"Returning result: {response}")
         return JSONResponse(content=response, status_code=status.HTTP_202_ACCEPTED)
     except IndexError:
@@ -163,7 +163,7 @@ async def get_config(
     JSONResponse
         A JSON response containing the stored parameters and a status code of 202 (Accepted).
     """
-    print(prams)
+
 
     # Handle run parameters
     global stored_params

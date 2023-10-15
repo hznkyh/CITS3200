@@ -365,7 +365,7 @@ class ServicesGenerator:
             for sv_index in range(s_versions_len):
                 service_version = s_versions[sv_index]
                 # version_scale = (s_versions_len - sv_index)/s_versions_len
-                # print("service version: ", service_version, "version scale", version_scale)
+
                 # if random.random() < self.max_vuln_probability*version_scale:
                 #     vuln_patch_dist = self.vuln_patch_mean + random.randint(-self.vuln_patch_range, self.vuln_patch_range)
                 #     vulns[sv_index+vuln_patch_dist] = Vulnerability(
