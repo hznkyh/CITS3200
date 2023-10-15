@@ -1,12 +1,16 @@
+import copy
 import logging
+from auth import get_current_active_user
 from models.forms import ParameterRequest
 from fastapi.responses import JSONResponse
-from fastapi import APIRouter, HTTPException, status
-from controllers import serialize_graph, ProcessPoo
+from fastapi import APIRouter, Depends, HTTPException, status
+from controllers import serialize_graph, handleRequest
+from models import User, ParameterRequest
 from simulator import create_sim, configs
-from typing import Union
+from typing import Annotated, Union, Dict
 from config import parameters
-from concurrent.futures import Future, ProcessPoolExecutor
+from sessions import sessions
+from concurrent.futures import Future, ProcessPoolExecutor, as_completed
 
 logger = logging.getLogger(__name__)
 router = APIRouter(
@@ -17,9 +21,11 @@ stored_params = None
 
 
 
-@router.get("/graph")
-async def get_graph():
-    """The function `get_graph()` starts a simulation thread and returns the results in a serialized graph
+@router.get("/graph-old")
+async def get_graph_old():
+    """
+    !Not in use.
+    The function `get_graph()` starts a simulation thread and returns the results in a serialized graph
     format. Global threads and envs are used to ensure that in error, the threads are easily terminated.
 
     Returns
@@ -64,9 +70,9 @@ async def get_graph():
         #         stored_params = None
     return JSONResponse(content=graph_data, status_code=status.HTTP_200_OK)
 
-
+#   TODO: Remove this endpoint
 @router.get("/graphDevEnd")
-async def stop_graph():
+async def stop_graph_old():
     """
     Stop the simulation if it is running.
 
@@ -89,13 +95,14 @@ async def stop_graph():
         future.cancel()
         logger.debug("Simulation stopped")
         raise HTTPException(status_code=200, detail=f"Simulation stopped")
-    ProcessPoo.shutdown(wait=True)
+    # ProcessPoo.shutdown(wait=True)
     return JSONResponse(content="Simulation stopped", status_code=200)
 
-
-@router.post("/update_all_params")
-def update_item(response: ParameterRequest):
+#   TODO: Remove this endpoint
+@router.post("/graph-params-old")
+def update_item_OLD(response: ParameterRequest):
     """
+    !Not in use.
     Update stored_params and configs based on the given response.
 
     Parameters
@@ -128,6 +135,42 @@ def update_item(response: ParameterRequest):
     )
 
 
+
+@router.post("/graph-params")
+async def update_item(
+    params: ParameterRequest,
+):
+    global stored_params
+    stored_params = {1: params}
+    return JSONResponse(content="prams set" , status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.get("/graph")
+async def get_graph(client: Annotated[User, Depends(get_current_active_user)]):
+    global stored_params
+    print(stored_params)
+    with ProcessPoolExecutor() as executor:
+        futures = [executor.submit(handleRequest, name, request) for name, request in stored_params.items()]
+        results = [future.result() for future in as_completed(futures)][0]        
+        logger.debug("Stopped checking futures' completion.")      
+        sessions[client.uuid]['single'] = {
+            'name' : results[0],
+            'snapshots' : copy.deepcopy(results[1]["snapshots"]),
+            'evaluation' : copy.deepcopy(results[1]["evaluation"])
+        }
+    try:
+        graphName = sessions[client.uuid]['single']['name']
+        response = {
+            graphName: [serialize_graph(graph_item) for graph_item in sessions[client.uuid]['single']["snapshots"]]            
+        }
+        logger.debug(f"Returning result: {response}")
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    except IndexError:
+        logger.error("Result not found")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Result not found"
+        )
+
 def reset():
     """
     Resets the stored parameters to None.
@@ -141,13 +184,3 @@ def reset():
     global stored_params
     if stored_params is not None:
         stored_params = None
-
-
-# {
-#     run.py {
-#         total_nodes
-#     }
-#     constants.py {
-#         optional
-#     }
-# }

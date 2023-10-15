@@ -8,11 +8,15 @@
         <li>Optional: Click on "Advanced", and enter the inputs for the advanced options. Otherwise, leave it empty (this will set them to the default values).</li>
         <li>Once all fields have been entered, click the save button.</li>
         <li>Optional: If you desire more than one simulation, repeat the previous steps (this will max out at 5).</li>
-        <li>Once you have saved your graph(s), click on submit to submit your data.</li>
-        <li>IMPORTANT: PLEASE FILL OUT PARAMETERS FOR ALL THE GRAPH(S) YOU HAVE ADDED OTHERWISE YOU WILL GET AN ERROR.</li>
+        <li>Once you have saved your simulation(s), click on submit to submit your data.</li>
         <li>Note: If an error occurs, refer the the popup box on the right side of the page.</li>
       </ol>
-      <h1 class="h1-instructions">Graph Instructions</h1>
+      <h3><span style="color: red;">IMPORTANT</span></h3>
+      <ol>
+        <li>Please fill out a parameter form for each of the simulations if you add more than one, otherwise you will get an error.</li>
+        <li>Please be patient when the simulation(s) is/are loading.</li>
+      </ol>
+      <h1 class="h1-instructions">Simulation Instructions</h1>
       <ol class="list">
         <li>Click on <i class="bi bi-play"></i> to start the simulation</li>
         <li>Click on <i class="bi bi-pause"></i> to stop the simulation</li>
@@ -54,16 +58,16 @@
           <h2> Parameters Panel</h2>
 
           <div class="group">
-            <label>Graph Number <span style="color: red;">*</span>: </label>
+            <label>Simulation Number <span style="color: red;">*</span>: </label>
             <div class="tooltip-container">
               <span id="tooltip">
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">What graph you would like to set configurations for.</span>
+                <span class="tip">What simulation you would like to set configurations for.</span>
               </span>
             </div>
-            <select id="param" type="text" placeholder="Graph Number" v-model="graphNum" name="Graph Number" required>
+            <select id="param" type="text" placeholder="Simulation Number" v-model="graphNum" name="Graph Number" required>
             </select>
           </div>
 
@@ -104,7 +108,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">The number of layers in the network. E.g., 4</span>
+                <span class="tip">The number of layers in the network. Must be less than or equal to 6. E.g., 4</span>
               </span>
             </div>
             <input id="param" type="text" placeholder="Number of Layers..." v-model="layers" name="total_layers" required>
@@ -174,7 +178,7 @@
                 <span class='info'>
                   <img src='https://s3.lightboxcdn.com/vendors/906a5d64-2cda-407f-a2d5-6cf94c06ddbe/uploads/274a7932-a0fd-4a89-9f58-a83cc44112ca/info.svg' width='15' height='15'>
                 </span>
-                <span class="tip">How the simulator will run. Chose from: random (default), simultaneous, alternative, single and none.</span>
+                <span class="tip">How the simulator will run. Choose from: random (default), simultaneous, alternative, single and none.</span>
               </span>
             </div>
             <select id="param" type="text" placeholder="Scheme..." v-model="scheme" name="scheme" required>
@@ -296,10 +300,10 @@
 
         <div class="row">
           <div class="group">
-            <button class="saveButton">Save Current Graph</button>
+            <button class="saveButton">Save Current Simulation</button>
           </div>
           <div class="group">
-            <input type="submit" value="Submit All Graphs" @click="submitForm">
+            <input type="submit" value="Submit All Simulations" @click="submitForm">
           </div>
         </div>
         
@@ -534,7 +538,7 @@ export default {
 
           await Graph.methods.getGraph();
           // this.forceRerender();`
-          this.msg = 'Received graph(s)';
+          this.msg = 'Successfully received graph(s)';
         })
         .catch((error) => {
           ////console.error(error);

@@ -20,21 +20,19 @@ class Settings(BaseSettings):
 
 parameters = {
     "start_time": 0,
-    "finish_time": 3000,
-    "checkpoints": 1000,
+    "finish_time": 10000,
+    "checkpoints": range(0, 10000, 1000),
     "new_network": True,
-    "scheme": "random",
-    "mtd_interval": 4,
+    "scheme": 'random',
+    "mtd_interval": None,
     "custom_strategies": None,
-    "total_nodes": 20,
+    "total_nodes": 50,
     "total_endpoints": 5,
     "total_subnets": 8,
     "total_layers": 4,
     "target_layer": 4,
     "total_database": 2,
-    "terminate_compromise_ratio": 0.8,
+    "terminate_compromise_ratio": 0.8
 }
 
 settings = Settings()
-
-parameters:Parameters = parameters

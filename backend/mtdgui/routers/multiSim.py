@@ -4,14 +4,13 @@ from auth import get_current_active_user
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from controllers import serialize_graph
+from controllers import serialize_graph, handleRequest
 from models import User, ParameterRequest
 from sessions import sessions
 import copy
 from controllers.pools import handleRequest
 
 logger = logging.getLogger(__name__)
-print(logger)
 router = APIRouter(
     prefix="/network", tags=["network"], responses={404: {"description": "Not found"}}
 )
