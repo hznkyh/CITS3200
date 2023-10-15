@@ -52,7 +52,11 @@ Now the simulations should be complete, and a timeline of the simulation and fin
 
 3. Click the start button to automatically walk through all snapshots, or the step forward and backward buttons to just view the relevant snapshot. Compromised nodes appear red, exposed nodes (neighbours of compromised nodes) appear yellow and normal nodes appear green. 
 
-4. To view aggregated results for the simulation, click one of the four buttons at the bottom of the container. These should display statistic graphs obtained at the end of the simulation. 
+4. To view aggregated results for the simulation, click one of the four buttons at the bottom of the container. These should display statistic graphs obtained at the end of the simulation.
+    1. Network - Displays the layout of the network
+    2. MTD record - Displays the MTD techniques used by the defender  
+    3. Attack record - Displays the attack techniques attempted by the attacker 
+    4. Attack action - Shows which attack operations were used on which nodes
 ![Statistics display](./imgs/stats.png)
 
 

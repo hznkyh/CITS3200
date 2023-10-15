@@ -156,12 +156,6 @@ async def test_token(client: Annotated[User, Depends(get_current_active_user)]):
     """
     return JSONResponse(content=client.uuid, status_code=status.HTTP_200_OK)
 
-
-#   TODO: Remove this endpoint
-# @app.get("/sessions/")
-# async def all_sessions():
-#     return JSONResponse(content=sessions, status_code=status.HTTP_200_OK)
-
 #   TODO: Implement this for singleton pattern for process pool
 # @app.on_event("shutdown")
 # def shutdown_event():
